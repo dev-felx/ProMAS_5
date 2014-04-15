@@ -9,7 +9,7 @@
 
 /*
  * Author: Tesha Evance
- * Description: shows errors individually and proper styling
+ * Description: shows form errors individually and proper styling
  */
   function show_form_error($name){
      if(form_error($name) != null){ 
@@ -18,6 +18,25 @@
      }
   }
   
+  /*
+   * Author: Tesha Evance
+   * Description: Loads the header, sidebar, main_wrapper and footer views for you
+   * Arguments:1 - Receives an assosiative array which contains an element called "views".
+   *               "views" is an indexed array which contain views to be loaded in main_wrapper respective of their in order in the array
+   *               ie: first view in array will be loaded first.
+   *               The rest of the elements in the assosiative array can be application data.
+   * Returns: void
+   * Example: loading announcement page in a controller
+   *          //this is the title for the page
+   *          $data['title'] = 'ProMAS | Announcements';
+   *          //this is the views list
+   *          $data['views'] = array('project/announce','project/announce_foot');
+   *          //this is view data
+   *          $data['annoucement_list'] =  data from database;
+   *          //then call the helper
+   *          page_load($data);
+   * Note: "views" and "title" are fixed names, you can use any name instead of "data" 
+   */
   function page_load($data){
       
       //side bar location
@@ -83,6 +102,27 @@ function no_cache(){
  
 }
 
+/*
+ * Author: Tesha Evance
+ * Description: Creates system notifications based on occurance of certain sysytem events eg: change in supervisor etc
+ *              Can also send email for critical notifications.
+ * Arguments: NOTE! PROVIDE ARGUMENTS IN ORDER AS THEY ARE MENTIONED BELOW
+ *            *REQUIRED
+ *              $desc(string) - the actual notification message Eg: new administrator added
+ *              $scope(int) -  check table for allowed values and their meaning
+ *            *OPTIONAL
+ *              $email(boolean) - default: false; pass true if you want to send email
+ *              $sc_p1 - default: null; check table for allowed values and their meaning
+ *              $sc_p2 - default: null; check table for allowed values and their meaning
+ *              $url(string) - default: null; url linked to your notification, prepends site_url, dont put leading slash  
+ *              $glyph(string) - default: bell; glyhicon you want to be displayed with your notification 
+ * 
+ * CAUTION! : if you want to pass an optional argument but not the preceeding optional argument, pass the default value to the precedding 
+ *            argument. Example: I dont want email but i want to pass $sc_p1 so create_notif("hello",1,FALSE,4);
+ * Returns(boolean): true on success else false
+ * 
+*/
+
 function create_notif($desc,$scope,$email = FALSE,$sc_p1 = null,$sc_p2 = null,$url = null,$glyph = 'bell'){
     $CI =& get_instance();
     //prep data
@@ -111,7 +151,7 @@ function create_notif($desc,$scope,$email = FALSE,$sc_p1 = null,$sc_p2 = null,$u
         }else if($data['scope'] == 2 && $sc_p1 == 'non_stu'){
             $email_list = $CI->announcement_model->get_email_1_2($CI->session->userdata['space_id'],'non_stu');
         }else if($data['scope'] == 3 && $sc_p1 == 'non_stu'){
-            $email_list = $CI->announcement_model->get_email_3($CI->session->userdata['space_id'],$CI->session->userdata['user_id']);
+            $email_list = $CI->announcement_model->get_email_3($CI->session->userdata['space_id'],$sc_p1);
         }else if($data['scope'] == 5 && isset ($sc_p2)){
             $email_list = $CI->announcement_model->get_email_5($CI->session->userdata['space_id'],$CI->session->userdata['project_id'],$sc_p2);
         }else if($data['scope'] == 5 && !isset ($sc_p2)){
