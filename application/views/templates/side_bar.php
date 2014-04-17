@@ -127,7 +127,7 @@
     //=======ENGINE=========
 ?>
 
-<div class="col-sm-2 ">
+<div class="col-sm-2" style="padding-left: 4px; padding-right: 5px;">
     <!-- Role Box -->
     <div id="role_box" class="bottom_10" style="background-color: #fafafa">
         <button class="btn btn-circle center-block text-primary"><span class="glyphicon glyphicon-user"></span></button>
