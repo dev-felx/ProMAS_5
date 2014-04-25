@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Csv_reader extends CI_Controller{
+class Csv_reader{
     
     var $fields;            /** columns names retrieved after parsing */ 
     var $separator = ';';    /** separator used to explode each line */

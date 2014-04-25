@@ -167,9 +167,9 @@ class Login extends CI_Controller{
                        'fname' => $data['user_data'][0]['first_name'],
                        'lname' => $data['user_data'][0]['last_name'],
                        'email'     => $data['user_data'][0]['email'],
-                        'type'     => 'student',
-                        'status' => $data['user_data'][0]['reg_status'],
-                        'project_id' => $data['user_data'][0]['project_id']
+                       'type'     => 'student',
+                       'status' => $data['user_data'][0]['reg_status'],
+                       'project_id' => $data['user_data'][0]['project_id']
                     );
                     
                     if ($user_data['status'] == 1 ){
