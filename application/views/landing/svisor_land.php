@@ -1,2 +1,2 @@
 <?php
-echo 'welcome supervisor';
+$this->load->view('timeline/calender_wrap');

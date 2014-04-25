@@ -1,28 +1,36 @@
-<link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/font-awesome-4.0.3/css/font-awesome.min.css" media='screen'>
-<style>
-    .ann{
-        border-radius: 3px;
-        background-color: #FFFFFF;
-        border: #bbbbbb solid 1px;
-        height: 130px;
-    }
-</style>
+<?php
+if(isset($message)){  
+    echo $message;
+}
+?>
 
-<div class="container">
-    <div class="col-sm-8 ann" style=" ">
-        <div class="col-sm-3" style="border-right: #bbbbbb solid 1px; height: 130px; padding: 10px 0px 0px 0px; font-size: 115%">
-            <div><span class="glyphicon glyphicon-user push_right_bit"></span>Evance Tesha</div>
-            <div><span class="glyphicon glyphicon-registration-mark push_right_bit"></span>Student</div>
-            <div><span class="glyphicon glyphicon-calendar push_right_bit"></span>2014-03-27 16:39:00</div>
-        </div>
-        <div class="col-sm-9" >
-            <p class="ann_title">Hello Students</p>
-            <hr/>
-            <p>dslavbdvlabsdvlbdslvbasldbvldasdbvals
-            sdkbvldbsvjbdslvkbsdlkbvdblaksdbvlkdbsvlkdbs
-            dsv sd vzs v  cx;v zsc;v z;xcv;zv v;cxv z; 
-            zsvn;knv;vxnv;lkznxv;ldfns;vn;dsvn;kvn;dskvn
-            </p>
-        </div>
-    </div>
-</div>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/timeline/css/jquery-ui.min.css" />
+<link href="<?php echo base_url(); ?>assets/css/timeline/css/fullcalendar.css" rel="stylesheet" />
+<link href="<?php echo base_url(); ?>assets/css/timeline/css/fullcalendar.print.css" rel="stylesheet" media="print"/>
+<script src="<?php echo base_url(); ?>assets/css/timeline/js/jquery-ui.custom.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/css/timeline/js/fullcalendar.min.js"></script>
+<script>
+$(document).ready(function() {
+        $('#calendar').fullCalendar({
+            eventSources: [
+                // your event source
+                {
+                    url: "<?php echo site_url(); ?>/test/c_event", // use the `url` property
+                    type: 'POST',
+                    data: {
+                        custom_param1: 'something',
+                        custom_param2: 'somethingelse'
+                    },
+                    color: 'yellow',    // an option!
+                    textColor: 'black'  // an option!
+                },
+                {
+                    url: "<?php echo site_url(); ?>/test/s_event", // use the `url` property
+                    color: 'green',    // an option!
+                    textColor: 'black'  // an option!
+                }
+            ]
+        });		
+});
+</script>
+<div id='calendar' class="col-sm-10 bottom_10 col-sm-offset-2"></div>
