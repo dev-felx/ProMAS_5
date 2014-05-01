@@ -112,7 +112,7 @@
                             $('#edit_msg').removeClass('alert-info');
                             $('#edit_msg').addClass('alert-success');
                             $('#edit_msg').html('Event saved');
-                            $('#calendar').fullCalendar('render');
+                            $('#calendar').fullCalendar( 'refetchEvents' );
                         }
                     
                     },"json");
