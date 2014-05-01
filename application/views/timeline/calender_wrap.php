@@ -17,7 +17,7 @@
 <!-- Calender wrap side bar -->
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
-        <p>Upcoming events</p>
+        <div id="msg" class="alert alert-info text-center">Upcoming Events</div>
     </div>
     <div id="add_new" class="sider hidden">
         <?php $this->load->view('timeline/add_event_view'); ?>

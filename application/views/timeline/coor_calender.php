@@ -29,7 +29,7 @@
                     {
                         url: "<?php echo site_url(); ?>/timeline/timeline/c_event", // use the `url` property
                         color: 'green',    // an option!
-                        textColor: 'black'  // an option!
+                        textColor: 'white'  // an option!
                     }
                 ]
         });		

@@ -47,10 +47,10 @@ class Timeline extends CI_Controller {
         }else{
             //prepare data
             $data = array(
-                        'name' => $_POST['title'],
-                        'description' => $_POST['description'],
-                        'start_date' => $_POST['date_start'],
-                        'end_date' => $_POST['date_end'],
+                        'title' => $_POST['title'],
+                        'desc' => $_POST['description'],
+                        'start' => $_POST['date_start'],
+                        'end' => $_POST['date_end'],
                         'space_id' => $this->session->userdata('space_id'),
                         'creator_id' => $this->session->userdata('user_id'),
             );
@@ -70,8 +70,11 @@ class Timeline extends CI_Controller {
     
     
     public function c_event(){
-        //$this->load->modal('event_model');
-        //print_r($_POST);die();
+        
+        //print_r($this->event_model->load_events());
+        echo json_encode($this->event_model->load_events());
+        
+        /*/print_r($_POST);die();
         $year = date('Y');
 	$month = date('m');
 
@@ -81,7 +84,8 @@ class Timeline extends CI_Controller {
 			'id' => 111,
 			'title' => "Coordinator Event 1",
 			'start' => "$year-$month-10",
-			'url' => "http://yahoo.com/"
+			'url' => "http://yahoo.com/",
+			'desc' => "Progress Report submission"
 		),
 		
 		array(
@@ -89,10 +93,11 @@ class Timeline extends CI_Controller {
 			'title' => "Coordinator Event 2",
 			'start' => "$year-$month-20",
 			'end' => "$year-$month-22",
-			'url' => "http://yahoo.com/"
+			'url' => "http://yahoo.com/",
+                        'desc' => "Progress Presentations"
 		)
 	
-	));
+	));*/
     }
     
     public function s_event(){
@@ -106,7 +111,8 @@ class Timeline extends CI_Controller {
 			'id' => 111,
 			'title' => "Supervisor Event 1",
 			'start' => "$year-$month-25",
-			'url' => "http://yahoo.com/"
+			'url' => "http://yahoo.com/",
+                        'desc' => "Prepare report first draft"
 		),
 		
 		array(
@@ -114,7 +120,8 @@ class Timeline extends CI_Controller {
 			'title' => "Supervisor Event 2",
 			'start' => "$year-$month-14",
 			'end' => "$year-$month-16",
-			'url' => "http://yahoo.com/"
+			'url' => "http://yahoo.com/",
+                        'desc' => "Progress Report submission"
 		)
 	
 	));
