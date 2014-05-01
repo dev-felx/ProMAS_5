@@ -18,7 +18,6 @@
         <form method="POST" class=" form-horizontal" role="form" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload">
                <div class="form-group">
                     <div class='col-sm-8 '>
-                        <label class="control-label" for="uploadForm_file"></label>
                         <input type="file" name="userfile">
                     </div>
                 </div>  

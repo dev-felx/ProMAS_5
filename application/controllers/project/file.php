@@ -19,14 +19,13 @@ class File extends CI_Controller{
         
     public function index($message=NULL){
         
-        if($this->session->userdata['type']=='supervisor'){
+        if($this->session->userdata['type']!=='student'){
             
             $values = array(
                 'file_creator_id'=>  $this->session->userdata['user_id'],
-                'file_status'=>1 
             );
             
-            $data['table_head']= array('#','Title','Due date','Group #');
+            $data['table_head']= array('#','Name','Group','Due date','Status');
             $data['documents']=  $this->file_model->get_file($values);
             
             
@@ -61,7 +60,7 @@ class File extends CI_Controller{
     
         if($this->form_validation->run()==FALSE){
             
-            $message='<div class="alert alert-warning text-center">Fields can not be empty</div>';
+            $message='<div class="text-danger text-center"><b>Fields can not be empty</b></div>';
             $this->index($message);
             
         }else{
@@ -70,7 +69,6 @@ class File extends CI_Controller{
                 'file_name' => $_POST['title'],
                 'space_id' => $this->session->userdata['space_id'],
                 'file_creator_id' => $this->session->userdata['user_id'],
-               // 'creator_role' => $this->session->userdata['type'],
                 'file_due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
             );
             

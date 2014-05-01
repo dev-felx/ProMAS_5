@@ -42,7 +42,7 @@
         'Project' => array(
                                     array('menu-item1' => 'menuitem_link1'),
                                     array('menu-item1' => 'menuitem_link1'),
-                                    array('menu-item1' => 'menuitem_link1'),
+                                    array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                )
         
@@ -61,7 +61,7 @@
         'Project' => array(
                                     array('menu-item1' => 'menuitem_link1'),
                                     array('menu-item1' => 'menuitem_link1'),
-                                    array('menu-item1' => 'menuitem_link1'),
+                                    array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                )
         
@@ -77,7 +77,7 @@
         'Project' => array(
                                     array('menu-item1' => 'menuitem_link1'),
                                     array('menu-item1' => 'menuitem_link1'),
-                                    array('menu-item1' => 'menuitem_link1'),
+                                    array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                ),
         'Timeline' => array(

@@ -37,30 +37,6 @@
         <?php } ?>
     </div>
     <h4 class="pull-">Current <?php echo ucfirst($user); ?>s</h4>
-    
-<!--    <div class="row-fluid">        
-    <form class="form-horizontal" role="form">
-            <div class="form-group ">
-            <label for="filter" class="control-label col-sm-1 ">Filter by</label>
-                <div class="col-sm-2">
-                    <select id="filter" class="form-control ">
-                        <option>All</option>
-                        <option>Groups</option>
-                        <option>Supervisors</option>
-                    </select>
-                </div>
-            
-            <button type="submit" class=" col-sm-1 col-sm-offset-0 col-xs-10 col-xs-offset-1 btn btn-primary btn-sm"><span class="glyphicon glyphicon-cog push_right_bit"></span>Filter</button>
-            
-            <a type="button" onclick="return confirm('Are you sure you want to delete all <?php echo ucfirst($user); ?>s')" href="<?php echo site_url(); ?>/manage_users/manage/delete_all/" class="col-sm-1 col-sm-offset-1 col-xs-10 col-xs-offset-1 action_del btn_edge badge_link btn btn-danger btn-sm">
-                <span class="glyphicon glyphicon-trash push_right_bit"></span>Delete all</a>
-            
-        
-            </div>
-    </form>
-        </div>
-    -->
-
     <div class="row">
         <div id='user_list' class="table-responsive col-sm-12">
             <table id="table_id" class=" table table-bordered table-striped dataTable">
