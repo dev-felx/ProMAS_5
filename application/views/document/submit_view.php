@@ -7,9 +7,23 @@
  */
 ?>
 
-<div class=" col-sm-7" >
-<div class=" text- text-info" ><b>Required Documents</b></div>    
-<table id="table_id" class=" table table-bordered table-striped ">
+<script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.dataTables.js"></script>
+
+<div class="container-fluid">
+<div class="row" >
+        <div class='pull-left'><h4>Project Documents</h4></div>
+<!--        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-success pull-right push_right_bit" >Share Document</button>
+            <button type="button" class="btn btn-success pull-right push_right_bit " >Request Document</button>
+        </div>-->
+    </div>
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="hr"><hr/></div>
+    </div>
+
+<div class=" col-sm-8" >
+
+<table id="table_id" class=" table table-bordered table-striped dataTable">
              <!--table heading--> 
             <thead >
             <tr>
@@ -31,11 +45,24 @@
                    $doc_id = $row['file_id'];
                    $file_name = $row['file_name'];
                    
-                   $row = array_slice($row, 1, 2);
-                   
                    echo '<tr>';
                    echo '<td>'.$i.'</td>';
-                   foreach ($row as $value) {
+                   
+                   foreach ($row as $key=> $value) {
+                   if(($key == 'file_id')||($key == 'file_type')||($key == 'file_creator_id')||($key == 'file_path')||($key == 'space_id')||($key == 'file_owner_id')){
+                       continue;
+                   }
+                   if(($key=='file_status')&& $value==0){
+                       echo '<td>Not Submited</td>';
+                       continue;
+                   }elseif(($key=='file_status')&& $value==1){
+                       echo '<td>Submited</td>';
+                       continue;
+                   }
+                   elseif(($key=='file_status')&& $value==2){
+                       echo '<td>Approved</td>';
+                       continue;
+                   }
                       echo '<td>'.$value.'</td>';
                    }
                    echo '<td>';
@@ -50,4 +77,14 @@
             </tbody>
             </table>
            </div>
-    
+    </div>
+<script>
+$(document).ready(function(){
+        
+        $('#table_id').dataTable({
+            "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
+            "bJQueryUI": true,
+        });
+    });
+
+</script>

@@ -184,6 +184,7 @@
     $(document).ready(function(){
         
         $('#table_id').dataTable({
+            "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
             "bJQueryUI": true,
         });
     });

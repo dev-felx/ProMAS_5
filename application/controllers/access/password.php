@@ -95,7 +95,7 @@ class Password extends CI_Controller{
 
                    $from = "admin@promas.com";
                    //$to = $email;
-                   $to = 'coord@localhost';
+                   $to = $email;
                    $subject = "Change password";
                    $message = " 
                         <html>

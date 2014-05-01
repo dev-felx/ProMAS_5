@@ -98,8 +98,8 @@
     $accordion['student'] = array(
         
         'Timeline' => array(
-                                    array('menu-item1' => 'menuitem_link1'),
-                                    array('menu-item1' => 'menuitem_link1'),
+                                    array('Event' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calender' => 'home'),
                                ),
         'Project' => array(
                                     array('Documents' => 'project/file'),

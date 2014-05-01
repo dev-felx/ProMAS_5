@@ -36,7 +36,7 @@
         <h4 class="text-center text-success"><strong><?php echo $message; ?></strong></h4>
         <?php } ?>
     </div>
-    <h4 class="pull-">Current <?php echo ucfirst($user); ?>s</h4>
+<!--    <h4 class="pull-">Current <?php //echo ucfirst($user); ?>s</h4>-->
     <div class="row">
         <div id='user_list' class="table-responsive col-sm-12">
             <table id="table_id" class=" table table-bordered table-striped dataTable">
@@ -94,6 +94,8 @@
     $(document).ready(function(){
         
         $('#table_id').dataTable({
+            "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
+            "bJQueryUI": true,
             //"sDom": '<"H"lfrT>t<"F"ip>T', // this adds TableTool in the center of the header and after the footer
 //                "oLanguage": { "sSearch": "Search the Features:" },
 //                "iDisplayLength": 25,

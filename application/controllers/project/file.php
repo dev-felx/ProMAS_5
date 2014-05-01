@@ -40,11 +40,11 @@ class File extends CI_Controller{
         }elseif ($this->session->userdata['type']=='student'){
             $values= array(
                 'file_owner_id'=>  $this->session->userdata['project_id'],
-                'file_status'=>0 //document has been requested but not submitted
+                
             );
             
             $data['documents']=  $this->file_model->get_file($values);
-            $data['table_head']= array('#','Title','Due date');
+            $data['table_head']= array('#','Name','Due date','Status');
             $data['views']=array('/document/submit_view');
             page_load($data);
             
