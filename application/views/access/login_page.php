@@ -22,18 +22,7 @@
     <body data-twttr-rendered="true">
         
         <div id="header-content">
-            <div class="navbar navbar-fixed-top">
-                <div class="navbar-inner">
-            <div class="container">
-                <a class="brand" href="#">
-                    <img src="<?php echo base_url(); ?>assets/images/promas.png" alt="Logo">
-                </a>
-            <a class="pull-right" href="#">
-                <img alt="image" src="<?php echo base_url(); ?>assets/images/udsm_logo.png.png">
-            </a>
-                </div>
-               </div>
-                </div>     
+            
         </div>
         
         
@@ -44,7 +33,7 @@
                     
                         <div class="btn  btn-block">
                             <button type="button" class="btn btn-primary col-sm-1 " data-toggle="modal" data-target="#myOverview">Overview</button>
-                            <button type="button" class="btn btn-primary col-sm-1 " >Archive</button>
+                            <button type="button" class="btn btn-primary col-sm-1" style="margin-left: 5px;">Archive</button>
                         </div>
                 </div>
                 

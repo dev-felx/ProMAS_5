@@ -94,7 +94,7 @@ class Register_user extends CI_Controller {
                         'first_name' => $_POST['fname'],
                         'last_name' => $_POST['lname'],
                         'phone_no' => $_POST['phone'],
-                        'password' => $_POST['password'],
+                        'password' => md5($_POST['password']),
                         'course_id' => $_POST['course'],
                         'reg_status' => 1
                         );

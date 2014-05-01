@@ -176,7 +176,7 @@ class Add_group extends CI_Controller{
                                 'first_name' =>$field['Firstname'] ,
                                 'last_name' =>$field['Lastname'] ,
                                 'registration_no' =>$field['Registration no'] ,
-                                'password' =>md5(lcfirst($field['Lastname'])) ,
+                                'password' =>md5(strtolower($field['Lastname'])) ,
                                 'email' => $field['Email'],
                                 'group_id' =>$field['Group no'],
                                 'space_id'=>$this->session->userdata['space_id'],
@@ -190,13 +190,13 @@ class Add_group extends CI_Controller{
                         $this->miscellaneous_model->add_student_id($userdata[0]['student_id']);
                         
                        $fname= $userdata[0]['first_name'];
-                       $lname= lcfirst($userdata[0]['last_name']);
+                       $lname= strtolower($userdata[0]['last_name']);
                        $reg_no= $userdata[0]['registration_no'];
                        $email = $userdata[0]['email'];
                        
                        $from = "admin@promas.com";
                        //$to = $email;
-                       $to = 'coord@localhost';
+                       $to = $email;
                        $subject = "ProMAS | Account registration";
                                 $message = " 
                                     <html>
@@ -263,7 +263,7 @@ class Add_group extends CI_Controller{
                            $values = array(
                               'first_name' =>$field['Firstname'] ,
                               'last_name' =>$field['Lastname'] ,
-                              'password' =>md5($field['Lastname']) ,
+                              'password' =>md5(strtolower($field['Lastname'])) ,
                               'email' => $field['Email']  ,
                               'username'=> $field['Email'],
                               'space_id'=>$this->session->userdata['space_id'],
@@ -279,12 +279,12 @@ class Add_group extends CI_Controller{
                                     $this->miscellaneous_model->add_non_student_id($userdata[0]['user_id']);
 
                                     $fname= $userdata[0]['first_name'];
-                                    $lname= lcfirst($userdata[0]['last_name']);
+                                    $lname= strtolower($userdata[0]['last_name']);
                                     $email = $userdata[0]['email'];
 
                                     $from = "admin@promas.com";
                                     //$to = $email;
-                                    $to = 'coord@localhost';
+                                    $to = $email;
                                     $subject = "ProMAS | Account registration";
                                     $message = " 
                                         <html>

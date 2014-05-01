@@ -143,7 +143,7 @@ class Login extends CI_Controller{
                     }//end if keeped_logged
 
                     //redirecting to registration page
-                    redirect('/home/complete_reg', 'location');
+                    redirect('/manage_users/register_user', 'location');
                     
                 }//end $user_data['type'] == admin||coordinator||supervisor status ==0
                 
@@ -169,7 +169,9 @@ class Login extends CI_Controller{
                        'email'     => $data['user_data'][0]['email'],
                        'type'     => 'student',
                        'status' => $data['user_data'][0]['reg_status'],
-                       'project_id' => $data['user_data'][0]['project_id']
+                       'project_id' => $data['user_data'][0]['project_id'],
+                        'space_id' => $data['user_data'][0]['space_id'] 
+                        
                     );
                     
                     if ($user_data['status'] == 1 ){
@@ -199,7 +201,7 @@ class Login extends CI_Controller{
                                 }//end if keeped_logged
 
                                 //redirecting user to complete registration first
-                                redirect('/home/complete_reg', 'location');
+                                redirect('/manage_users/register_user', 'location');
                     
                                 
                                 }//end inner else

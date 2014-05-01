@@ -106,7 +106,7 @@ class Add_user extends CI_Controller {
                        
                        $from = "admin@promas.com";
                        //$to = $email;
-                       $to = 'coord@localhost';
+                       $to = $email;
                        $subject = "ProMAS | Account registration";
                        $message = " 
                             <html>
@@ -198,8 +198,8 @@ class Add_user extends CI_Controller {
                                    $email = $userdata[0]['email'];
 
                                    $from = "admin@promas.com";
-                                   //$to = $email;
-                                   $to = 'coord@localhost';
+                                  
+                                   $to = $email;
                                    $subject = "ProMAS | Account registration";
                                    $message = " 
                                         <html>

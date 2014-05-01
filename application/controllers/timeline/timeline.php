@@ -138,7 +138,9 @@ class Timeline extends CI_Controller {
     }
     
     public function c_event(){
-        
+        $values= array(
+            'creator_id'=>  $this->session->userdata['user_id']
+         );
         //print_r($this->event_model->load_events());
         echo json_encode($this->event_model->load_events());
         
@@ -173,27 +175,9 @@ class Timeline extends CI_Controller {
         $year = date('Y');
 	$month = date('m');
 
-	echo json_encode(array(
+	/*echo json_encode(array(
 	
-		array(
-			'id' => 111,
-			'title' => "Supervisor Event 1",
-			'start' => "$year-$month-25",
-			'url' => "http://yahoo.com/",
-                        'desc' => "Prepare report first draft",
-                    'class_' => 'cl_event'
-		),
-		
-		array(
-			'id' => 222,
-			'title' => "Supervisor Event 2",
-			'start' => "$year-$month-14",
-			'end' => "$year-$month-16",
-			'url' => "http://yahoo.com/",
-                        'desc' => "Progress Report submission",
-                        'class_' => 'cl_event'
-		)
 	
-	));
+	));*/
     }
 }

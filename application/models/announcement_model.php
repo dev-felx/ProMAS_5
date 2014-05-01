@@ -143,7 +143,9 @@ public function get_ann_unread_stu($user_id,$keep_last) {
             //get supervisor
             $visor= $this->db->get_where('student_projects',array('student_projects.project_id' =>$this->session->userdata('project_id')));
             $result5 =  $visor->row_array();
-            $sup_id = $result5['supervisor_id'];
+            
+                $sup_id = $result5['supervisor_id'];
+            
             //Get the last annoucement check
             $last_check = $this->db->get_where('miscellaneous_stu',array('user_id' => $user_id));
             $last = $last_check->row_array();

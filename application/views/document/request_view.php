@@ -15,10 +15,10 @@
 <div class="container-fluid">
     <div class="row" >
         <div class='pull-left'><h4>Project Documents</h4></div>
-        <div class="btn-group pull-right">
+<!--        <div class="btn-group pull-right">
             <button type="button" class="btn btn-success pull-right push_right_bit" >Share Document</button>
             <button type="button" class="btn btn-success pull-right push_right_bit " >Request Document</button>
-        </div>
+        </div>-->
     </div>
     <div class="row" style="margin-bottom: 15px;">
         <div class="hr"><hr/></div>
@@ -26,7 +26,7 @@
 
 
 <div class="row-fluid">
-<div class="" >
+<div class="col-sm-8" >
 <table id="table_id" class=" table table-bordered table-striped dataTable">
              <!--table heading--> 
             <thead >
@@ -71,8 +71,8 @@
                    echo '<td>';
                    ?>
                       
-            <a type="button" href="<?php echo site_url(); ?>/project/file/preview/<?php echo base64_encode($file_path); ?>" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span></a>
-            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($file_path);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span></a>
+            <!--<a type="button" href="<?php //echo site_url(); ?>/project/file/preview/<?php// echo base64_encode($file_path); ?>" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span></a>-->
+            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($file_path);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit">Download</span></a>
                         
                   <?php echo '</td>';
                    echo '</tr>'; 
@@ -83,7 +83,7 @@
             </table>
     </div>
 
-<div class=" hidden col-sm-4 " >
+<div class=" col-sm-4 " >
     
     <div id="doc_form">
     <div id="flip_req" >Request document</div>
