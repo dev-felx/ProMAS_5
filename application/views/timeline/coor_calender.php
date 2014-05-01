@@ -13,6 +13,7 @@
                     html:true,
                     trigger : 'click',
                     animation : 'true',
+                    container: '#calender_cont',
                     content: pop_up(event.desc)
                 });
                 
@@ -22,6 +23,7 @@
                 });
               },
                 eventClick: function(event) {
+                    curr_event  = event;
                     return false;
                 },
                 eventSources: [

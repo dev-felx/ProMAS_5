@@ -60,27 +60,31 @@
         <hr/>
         <div class="checkbox" id="res_qn">
             <label>
-                <input type="checkbox"> Does this event/activity give output?
+                <input type="checkbox" name="output" value="1"> Does this event give output?
             </label>
         </div>
-        <div class="form-group">
-            <select id="res" name="res" class="form-control">
-                <option>Choose type of output</option>
-                <option>Report Document</option>
-                <option>Presentation Document</option>
-                <option>Picture</option>
-                <option>url</option>
-            </select>
+        <div id="res_wrap">
+            <div class="form-group">
+                <select id="res" name="res" class="form-control">
+                    <option value="1">Report Document</option>
+                    <option value="2">Presentation Document</option>
+                    <option value="3">Picture</option>
+                    <option value="4">url</option>
+                </select>
+            </div>
+            <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Output Name..." id="res_name" name="res_name">
+            </div>
         </div>
         <div class="form-group">
             <button id="add_btn" class=" col-sm-4 btn btn-success pull-right" type="button">Add</button>
-            <button class="show_def col-sm-4 btn btn-warning pull-right push_right_bit" type="button">Cancel</button>
+            <button class="show_def col-sm-4 btn btn-danger pull-right push_right_bit" type="button">Cancel</button>
         </div>
        </div>
         <div class="clearfix"></div>
 </form>
 <script>
-    $('#res').hide();
+    $('#res_wrap').hide();
     var ajax_alive = false;
     $(document).ready(function(){
         $( "#date_start" ).datepicker({
@@ -112,6 +116,7 @@
                             $('#msg').removeClass('alert-info');
                             $('#msg').addClass('alert-success');
                             $('#msg').html('Event created');
+                            $('#calendar').fullCalendar( 'refetchEvents' );
                         }
                     
                     },"json");
@@ -122,7 +127,7 @@
         });
         
         $('#res_qn').change(function() {
-                $('#res').slideToggle(300);
+                $('#res_wrap').slideToggle(300);
         });
         });
 </script>

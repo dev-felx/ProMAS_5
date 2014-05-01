@@ -32,6 +32,10 @@ class Timeline extends CI_Controller {
         $this->form_validation->set_rules("date_end","End date","required");
         $this->form_validation->set_message('required','%s is required here');
         $this->form_validation->set_error_delimiters('', '');
+        
+        if(isset($_POST['output'])){
+            $this->form_validation->set_rules("res_name","Output Name","required");
+        }
         if ($this->form_validation->run('reg') == FALSE){
                 $errors = array();
                 // Loop through $_POST and get the keys
@@ -45,6 +49,10 @@ class Timeline extends CI_Controller {
 
                 
         }else{
+            //Check if output  is present
+            if(isset($_POST['output'])){
+                    
+            }
             //prepare data
             $data = array(
                         'title' => $_POST['title'],
@@ -56,6 +64,7 @@ class Timeline extends CI_Controller {
             );
             $res = $this->event_model->new_event($data);    
             if($res){
+                
                 $response['status'] = 'success';
             }
         }
@@ -65,9 +74,68 @@ class Timeline extends CI_Controller {
     }
     
     public function get_for_edit(){
-        echo json_encode((array('title'=> 'hello')));
+       $res = $this->event_model->get_event($_POST['id']);
+       echo json_encode($res);
     }
     
+    public function edit_event(){
+        //validate form
+        $this->form_validation->set_rules("title","Event title","required");
+        $this->form_validation->set_rules("description","Event desciption","required");
+        $this->form_validation->set_rules("date_start","Start date","required");
+        $this->form_validation->set_rules("date_end","End date","required");
+        $this->form_validation->set_message('required','%s is required here');
+        $this->form_validation->set_error_delimiters('', '');
+        
+        if(isset($_POST['output'])){
+            $this->form_validation->set_rules("res_name","Output Name","required");
+        }
+        if ($this->form_validation->run('reg') == FALSE){
+                $errors = array();
+                // Loop through $_POST and get the keys
+                foreach ($this->input->post() as $key => $value)
+                {
+                    // Add the error message for this field
+                    $errors[$key] = form_error($key);
+                }
+                $response['errors'] = array_filter($errors); // Some might be empty
+                $response['status'] = 'not_valid';
+
+                
+        }else{
+            //Check if output  is present
+            if(isset($_POST['output'])){
+                    
+            }
+            //prepare data
+            $data = array(
+                        'title' => $_POST['title'],
+                        'desc' => $_POST['description'],
+                        'start' => $_POST['date_start'],
+                        'end' => $_POST['date_end'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'creator_id' => $this->session->userdata('user_id'),
+            );
+            $res = $this->event_model->update_event($_POST['id'],$data);    
+            if($res){  
+                $response['status'] = 'success';
+            }
+        }
+        // You can use the Output class here too
+        header('Content-type: application/json');
+        exit(json_encode($response));
+    }
+    
+    public function del_event(){
+        $res = $this->event_model->del_event($_POST['id']);
+        if($res){
+            $response['status'] = 'success';
+        }else{
+            $response['status'] = 'fail';
+        }
+        header('Content-type: application/json');
+        exit(json_encode($response));
+    }
     
     public function c_event(){
         
@@ -112,7 +180,8 @@ class Timeline extends CI_Controller {
 			'title' => "Supervisor Event 1",
 			'start' => "$year-$month-25",
 			'url' => "http://yahoo.com/",
-                        'desc' => "Prepare report first draft"
+                        'desc' => "Prepare report first draft",
+                    'class_' => 'cl_event'
 		),
 		
 		array(
@@ -121,7 +190,8 @@ class Timeline extends CI_Controller {
 			'start' => "$year-$month-14",
 			'end' => "$year-$month-16",
 			'url' => "http://yahoo.com/",
-                        'desc' => "Progress Report submission"
+                        'desc' => "Progress Report submission",
+                        'class_' => 'cl_event'
 		)
 	
 	));

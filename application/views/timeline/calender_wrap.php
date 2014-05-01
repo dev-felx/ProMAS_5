@@ -17,7 +17,7 @@
 <!-- Calender wrap side bar -->
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
-        <div id="msg" class="alert alert-info text-center">Upcoming Events</div>
+            <div class="alert-info alert text-center">Upcoming events</div>
     </div>
     <div id="add_new" class="sider hidden">
         <?php $this->load->view('timeline/add_event_view'); ?>
@@ -39,6 +39,7 @@
 </div>
 <div id="popover_content_wrapper" class="hidden"><div class="clearfix"></div><a id="edit_btn" href="#" class="pull-left">Edit</a><a id="del_event" href="#" class="pull-right">Delete</a><br/></div>
 <script>   
+    var curr_event;
     //wrapper js
     function pop_up(desc){
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
@@ -79,12 +80,34 @@
                 $('#calendar').fullCalendar('render');
             }
             function show_edit(){
-                $.post( "<?php echo site_url() ?>/timeline/timeline/get_for_edit" , function( data ) {
-                     $('#etitle').attr('value',data.name);
+                $.post( "<?php echo site_url() ?>/timeline/timeline/get_for_edit" ,{ id: curr_event.id}, function( data ) {
+                     $('#etitle').attr('value',data.title);
+                     $('#edate_end').attr('value',data.end);
+                     $('#edate_start').attr('value',data.start);
+                     $('#eid').attr('value',data.id);
+                     $('#edescription').html(data.desc);
                 },"json");
                 $('#edit_event').fadeIn(1000).removeClass('hidden');
-            }       
+                
+            }   
+            $(this).parent().parent().hide();
              return false;
+        });
+        
+        $('body').on('click', '#del_event', function () {
+            //alert($(this).attr('id'));
+            var x = confirm('Delete Event?');
+            if(x){
+                $.post( "<?php echo site_url() ?>/timeline/timeline/del_event" ,{ id: curr_event.id}, function( data ) {
+                    if(data.status === 'success'){
+                        $('#calendar').fullCalendar( 'removeEvents' , curr_event.id );
+                        
+                    }
+                    
+                });
+            }
+            $(this).parent().parent().hide();
+            return false;
         });
     });
 </script>

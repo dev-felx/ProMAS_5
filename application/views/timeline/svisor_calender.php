@@ -4,7 +4,8 @@
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/jquery-ui.custom.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/fullcalendar.min.js"></script>
 <script>
-    $(document).ready(function() {
+    
+    $(document).ready(function() { 
         $('#calendar').fullCalendar({
             eventRender: function (event, element) {
                 element.popover({
@@ -13,6 +14,7 @@
                     html:true,
                     trigger : 'click',
                     animation : 'true',
+                    container: '#calender_cont',
                     content: pop_up(event.desc)
                 });
                 
@@ -22,6 +24,7 @@
                 });
               },
                 eventClick: function(event) {
+                    curr_event  = event;
                     return false;
                 },
                 eventSources: [
