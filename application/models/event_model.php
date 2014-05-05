@@ -24,10 +24,10 @@ class Event_model extends CI_Model{
        return  $this->db->delete('events', array('id' => $id)); 
     }
     
-    public function load_events(){
+    public function load_events($data){
         $this->db->select('*');
         $this->db->from('events');
-        //$this->db->where($data);
+        $this->db->where($data);
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){

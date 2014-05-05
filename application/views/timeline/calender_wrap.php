@@ -29,12 +29,9 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-    <?php 
-    if($this->session->userdata('type') == 'coordinator'){
-        $this->load->view('timeline/coor_calender');  
-    }else if($this->session->userdata('type') == 'supervisor'){
-        $this->load->view('timeline/svisor_calender');
-    }
+    
+    <?php
+        $this->load->view('timeline/calender');  
     ?>
 </div>
 <div id="popover_content_wrapper" class="hidden"><div class="clearfix"></div><a id="edit_btn" href="#" class="pull-left">Edit</a><a id="del_event" href="#" class="pull-right">Delete</a><br/></div>

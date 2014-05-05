@@ -1,4 +1,2 @@
-<?php
-
-echo 'welcome student';
+<?php $this->load->view('timeline/calender_wrap'); ?>
 

@@ -4,7 +4,8 @@
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/jquery-ui.custom.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/fullcalendar.min.js"></script>
 <script>
-    $(document).ready(function() {
+    
+    $(document).ready(function() { 
         $('#calendar').fullCalendar({
             eventRender: function (event, element) {
                 element.popover({
@@ -27,12 +28,32 @@
                     return false;
                 },
                 eventSources: [
-                    // your event source
+                // your event source
+                    
                     {
                         url: "<?php echo site_url(); ?>/timeline/timeline/c_event", // use the `url` property
-                        color: 'green',    // an option!
+                        color: '#5CB85C',    // an option!
+                        textColor: 'white'  // an option!
+                    },
+                    <?php if($this->session->userdata('type') == 'supervisor'){?>
+                    {
+                        url: "<?php echo site_url(); ?>/timeline/timeline/s_event", // use the `url` property
+                        color: '#0093D0',    // an option!
                         textColor: 'white'  // an option!
                     }
+                    <?php } 
+                    if($this->session->userdata('type') == 'student'){?>
+                    {
+                        url: "<?php echo site_url(); ?>/timeline/timeline/s_event", // use the `url` property
+                        color: '#0093D0',    // an option!
+                        textColor: 'white'  // an option!
+                    },
+                    {
+                        url: "<?php echo site_url(); ?>/timeline/timeline/st_event", // use the `url` property
+                        color: '#BCE8F1',    // an option!
+                        textColor: '#31708F'  // an option!
+                    }
+                    <?php } ?>
                 ]
         });		
     });
