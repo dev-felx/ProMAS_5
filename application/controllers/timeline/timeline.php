@@ -49,10 +49,6 @@ class Timeline extends CI_Controller {
 
                 
         }else{
-            //Check if output  is present
-            if(isset($_POST['output'])){
-                    
-            }
             //prepare data
             $data = array(
                         'title' => $_POST['title'],
@@ -63,9 +59,20 @@ class Timeline extends CI_Controller {
                         'creator_id' => $this->session->userdata('user_id'),
                         'creator_type' => $this->session->userdata('type')
             );
+            
+            //Check if output  is present
+            if(isset($_POST['output'])){
+                    $data_2 = array(
+                        'file_name' => $_POST['res_name'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'file_creator_id' => $this->session->userdata('user_id'),
+                        'file_due_date'=>$_POST['date_end']
+                    );
+                    $this->load->model('file_model');
+                    //$this->file_model->new_file($data_2);
+            }
             $res = $this->event_model->new_event($data);    
             if($res){
-                
                 $response['status'] = 'success';
             }
         }

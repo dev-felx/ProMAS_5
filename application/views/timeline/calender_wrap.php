@@ -10,9 +10,7 @@
     .dummy:hover{
         color: #cccccc;
         text-decoration: none;
-    }
-    
-    
+    }   
 </style>
 <!-- Calender wrap header -->
 <div>
@@ -128,6 +126,9 @@
             }
             $(this).parent().parent().hide();
             return false;
+        });
+        $( window ).resize(function() {
+             $('.fc-event').popover('hide');
         });
     });
 </script>
