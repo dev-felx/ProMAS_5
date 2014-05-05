@@ -3,6 +3,16 @@
         z-index: 1001 !important;
         width: 400px;
     }
+    
+    .dummy{
+        color: #cccccc;
+    }
+    .dummy:hover{
+        color: #cccccc;
+        text-decoration: none;
+    }
+    
+    
 </style>
 <!-- Calender wrap header -->
 <div>
@@ -34,11 +44,24 @@
         $this->load->view('timeline/calender');  
     ?>
 </div>
-<div id="popover_content_wrapper" class="hidden"><div class="clearfix"></div><a id="edit_btn" href="#" class="pull-left">Edit</a><a id="del_event" href="#" class="pull-right">Delete</a><br/></div>
-<script>   
+<div id="popover_content_wrapper" class="hidden">
+    <div class="clearfix"></div>
+    <a id="edit_btn" href="#" class="pull-left">Edit</a>
+    <a id="del_event" href="#" class="pull-right">Delete</a>
+    
+    <a class="pull-left disabled dummy hidden">Edit</a>
+    <a class="pull-right disabled dummy hidden">Delete</a>
+    <br/>
+</div>
+<script>
     var curr_event;
     //wrapper js
-    function pop_up(desc){
+    function pop_up(desc,creator_id){
+        var user_id = <?php echo $this->session->userdata('user_id'); ?>;
+        if(user_id != creator_id){
+            $('#edit_btn, #del_event').hide();
+            $('.dummy').removeClass('hidden');
+        }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }
     
@@ -87,7 +110,7 @@
                 $('#edit_event').fadeIn(1000).removeClass('hidden');
                 
             }   
-            $(this).parent().parent().hide();
+             $(this).parent().parent().hide();
              return false;
         });
         
