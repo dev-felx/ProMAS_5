@@ -57,6 +57,7 @@
                     <input type="text" id="date_end"  class="datepicker form-control" name="date_end" placeholder="End Date">                
                 </div>
         </div>
+        <?php if($this->session->userdata('type') == 'supervisor' || $this->session->userdata('type') == 'student'){ ?>
         <hr/>
         <div class="checkbox" id="res_qn">
             <label>
@@ -76,6 +77,7 @@
                     <input class="form-control" type="text" placeholder="Output Name..." id="res_name" name="res_name">
             </div>
         </div>
+        <?php } ?>
         <div class="form-group">
             <button id="add_btn" class=" col-sm-4 btn btn-success pull-right" type="button">Add</button>
             <button class="show_def col-sm-4 btn btn-danger pull-right push_right_bit" type="button">Cancel</button>
