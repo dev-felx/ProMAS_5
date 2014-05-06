@@ -50,10 +50,7 @@ class Timeline extends CI_Controller {
 
                 
         }else{
-            //Check if output  is present
-            if(isset($_POST['output'])){
-                    
-            }
+            if(!isset($_POST['receiver']) || $_POST['receiver'] == '1'){
             //prepare data
             $data = array(
                         'title' => $_POST['title'],
@@ -64,10 +61,46 @@ class Timeline extends CI_Controller {
                         'creator_id' => $this->session->userdata('user_id'),
                         'creator_type' => $this->session->userdata('type')
             );
+            if($this->session->userdata('type') == 'student'){
+                $data['project_id'] = $this->session->userdata('project_id');
+            }
+            //Check if output  is present
+            if(isset($_POST['output'])){
+                    $data_2 = array(
+                        'file_name' => $_POST['res_name'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'file_creator_id' => $this->session->userdata('user_id'),
+                        'file_due_date'=>$_POST['date_end']
+                    );
+                    $this->load->model('file_model');
+                    //$this->file_model->new_file($data_2);
+            }
             $res = $this->event_model->new_event($data);    
             if($res){
-                
                 $response['status'] = 'success';
+            }
+            }else{
+                if(!isset($_POST['groups'])){
+                    $response['status'] = 'g_err';
+                }else{
+                    $data = array(
+                        'title' => $_POST['title'],
+                        'desc' => $_POST['description'],
+                        'start' => $_POST['date_start'],
+                        'end' => $_POST['date_end'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'creator_id' => $this->session->userdata('user_id'),
+                        'creator_type' => $this->session->userdata('type')
+                    );
+                    foreach ($_POST['groups'] as $value) {
+                        $data['project_id'] = $value;
+                        $res = $this->event_model->new_event($data); 
+                        if($res){
+                            $response['status'] = 'success';
+                        }
+                    }
+                    
+                }
             }
         }
         // You can use the Output class here too

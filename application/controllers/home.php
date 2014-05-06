@@ -52,8 +52,11 @@ class Home extends CI_Controller{
             
         }
         else if($this->session->userdata['type']=='supervisor'){
+            $this->load->model('announcement_model');
             //prepare data to be sent to view
             $data['views'] = array('landing/svisor_land');
+            $data['receiver'] = array('All groups calenders','Choose groups calenders');
+            $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
   
             //load user's views
             page_load($data);

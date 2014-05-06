@@ -15,7 +15,7 @@
                     trigger : 'click',
                     animation : 'true',
                     container: '#calender_cont',
-                    content: pop_up(event.desc)
+                    content: pop_up(event.desc,event.creator_id)
                 });
                 
                 $('body').on('click', function (e) {
@@ -25,6 +25,7 @@
               },
                 eventClick: function(event) {
                     curr_event  = event;
+                    $('.fc-event').not(this).popover('hide');
                     return false;
                 },
                 eventSources: [

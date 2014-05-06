@@ -3,6 +3,31 @@
         z-index: 1001 !important;
         width: 400px;
     }
+    
+    .dummy{
+        color: #cccccc;
+    }
+    .dummy:hover{
+        color: #cccccc;
+        text-decoration: none;
+    } 
+    
+    .pad_10{
+        padding: 10px !important;
+    }
+    
+    .up_event{
+        border: #cccccc solid 1px;
+        border-radius: 4px;
+        padding: 5px 5px 5px 5px;
+        margin-top: -10px;
+    }
+    .up_event_item{
+        border-bottom: #cccccc solid 1px;
+    }
+    .up_event_item:last-child{
+        border-bottom: 0px;
+    }
 </style>
 <!-- Calender wrap header -->
 <div>
@@ -32,7 +57,22 @@
 <!-- Calender wrap side bar -->
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
-            <div class="alert-info alert text-center">Upcoming events</div>
+            <div class="alert-info alert text-center pad_10">Upcoming events</div>
+            <div class="col-sm-12 up_event">
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation</div>
+                        </div>
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation</div>
+                        </div>
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation</div>
+                        </div>
+                        
+            </div>
     </div>
     <div id="add_new" class="sider hidden">
         <?php $this->load->view('timeline/add_event_view'); ?>
@@ -49,11 +89,24 @@
         $this->load->view('timeline/calender');  
     ?>
 </div>
-<div id="popover_content_wrapper" class="hidden"><div class="clearfix"></div><a id="edit_btn" href="#" class="pull-left">Edit</a><a id="del_event" href="#" class="pull-right">Delete</a><br/></div>
-<script>   
+<div id="popover_content_wrapper" class="hidden">
+    <div class="clearfix"></div>
+    <a id="edit_btn" href="#" class="pull-left">Edit</a>
+    <a id="del_event" href="#" class="pull-right">Delete</a>
+    
+    <a class="pull-left disabled dummy hidden">Edit</a>
+    <a class="pull-right disabled dummy hidden">Delete</a>
+    <br/>
+</div>
+<script>
     var curr_event;
     //wrapper js
-    function pop_up(desc){
+    function pop_up(desc,creator_id){
+        var user_id = <?php echo $this->session->userdata('user_id'); ?>;
+        if(user_id != creator_id){
+            $('#edit_btn, #del_event').hide();
+            $('.dummy').removeClass('hidden');
+        }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }
     
@@ -102,13 +155,13 @@
                 $('#edit_event').fadeIn(1000).removeClass('hidden');
                 
             }   
-            $(this).parent().parent().hide();
+             $(this).parent().parent().hide();
              return false;
         });
         
         $('body').on('click', '#del_event', function () {
             //alert($(this).attr('id'));
-            var x = confirm('Delete Event?');
+            var x = confirm('Are you sure you want to delete event?');
             if(x){
                 $.post( "<?php echo site_url() ?>/timeline/timeline/del_event" ,{ id: curr_event.id}, function( data ) {
                     if(data.status === 'success'){
@@ -120,6 +173,9 @@
             }
             $(this).parent().parent().hide();
             return false;
+        });
+        $( window ).resize(function() {
+             $('.fc-event').popover('hide');
         });
     });
 </script>
