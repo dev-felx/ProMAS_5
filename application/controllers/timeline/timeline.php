@@ -49,10 +49,7 @@ class Timeline extends CI_Controller {
 
                 
         }else{
-            //Check if output  is present
-            if(isset($_POST['output'])){
-                    
-            }
+            if(!isset($_POST['receiver']) || $_POST['receiver'] == '1'){
             //prepare data
             $data = array(
                         'title' => $_POST['title'],
@@ -61,11 +58,48 @@ class Timeline extends CI_Controller {
                         'end' => $_POST['date_end'],
                         'space_id' => $this->session->userdata('space_id'),
                         'creator_id' => $this->session->userdata('user_id'),
+                        'creator_type' => $this->session->userdata('type')
             );
+            if($this->session->userdata('type') == 'student'){
+                $data['project_id'] = $this->session->userdata('project_id');
+            }
+            //Check if output  is present
+            if(isset($_POST['output'])){
+                    $data_2 = array(
+                        'file_name' => $_POST['res_name'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'file_creator_id' => $this->session->userdata('user_id'),
+                        'file_due_date'=>$_POST['date_end']
+                    );
+                    $this->load->model('file_model');
+                    //$this->file_model->new_file($data_2);
+            }
             $res = $this->event_model->new_event($data);    
             if($res){
-                
                 $response['status'] = 'success';
+            }
+            }else{
+                if(!isset($_POST['groups'])){
+                    $response['status'] = 'g_err';
+                }else{
+                    $data = array(
+                        'title' => $_POST['title'],
+                        'desc' => $_POST['description'],
+                        'start' => $_POST['date_start'],
+                        'end' => $_POST['date_end'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'creator_id' => $this->session->userdata('user_id'),
+                        'creator_type' => $this->session->userdata('type')
+                    );
+                    foreach ($_POST['groups'] as $value) {
+                        $data['project_id'] = $value;
+                        $res = $this->event_model->new_event($data); 
+                        if($res){
+                            $response['status'] = 'success';
+                        }
+                    }
+                    
+                }
             }
         }
         // You can use the Output class here too
@@ -114,7 +148,7 @@ class Timeline extends CI_Controller {
                         'start' => $_POST['date_start'],
                         'end' => $_POST['date_end'],
                         'space_id' => $this->session->userdata('space_id'),
-                        'creator_id' => $this->session->userdata('user_id'),
+                        'creator_id' => $this->session->userdata('user_id')
             );
             $res = $this->event_model->update_event($_POST['id'],$data);    
             if($res){  
@@ -139,45 +173,27 @@ class Timeline extends CI_Controller {
     
     public function c_event(){
         $values= array(
-            'creator_id'=>  $this->session->userdata['user_id']
+            'space_id'=>  $this->session->userdata['space_id'],
+            'creator_type'=>  'coordinator'
          );
-        //print_r($this->event_model->load_events());
-        echo json_encode($this->event_model->load_events());
-        
-        /*/print_r($_POST);die();
-        $year = date('Y');
-	$month = date('m');
-
-	echo json_encode(array(
-	
-		array(
-			'id' => 111,
-			'title' => "Coordinator Event 1",
-			'start' => "$year-$month-10",
-			'url' => "http://yahoo.com/",
-			'desc' => "Progress Report submission"
-		),
-		
-		array(
-			'id' => 222,
-			'title' => "Coordinator Event 2",
-			'start' => "$year-$month-20",
-			'end' => "$year-$month-22",
-			'url' => "http://yahoo.com/",
-                        'desc' => "Progress Presentations"
-		)
-	
-	));*/
+        echo json_encode($this->event_model->load_events($values));
     }
     
     public function s_event(){
-        //print_r($_POST);die();
-        $year = date('Y');
-	$month = date('m');
-
-	/*echo json_encode(array(
-	
-	
-	));*/
+        $values= array(
+            'space_id'=>  $this->session->userdata['space_id'],
+            'creator_id'=>  $this->session->userdata['user_id'],
+            'creator_type'=>  'supervisor'
+         );
+        echo json_encode($this->event_model->load_events($values));
+    }
+    
+    public function st_event(){
+        $values= array(
+            'space_id'=>  $this->session->userdata['space_id'],
+            'creator_id'=>  $this->session->userdata['user_id'],
+            'creator_type'=>  'student'
+         );
+        echo json_encode($this->event_model->load_events($values));
     }
 }

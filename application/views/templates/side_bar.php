@@ -74,9 +74,9 @@
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                ),
-        'Timeline' => array(
-                                    array('Event' => 'timeline/timeline/event'),    // Modified by Minja Junior
-                                    array('Calender' => 'home'),
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
                                )
         
     );
@@ -84,22 +84,26 @@
      //for supervisor
     $accordion['supervisor'] = array(
         
-        'Timeline' => array(
-                                    array('Event' => 'timeline/timeline/event'),    // Modified by Minja Junior
-                                    array('Calender' => 'home'),
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
                                ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
-                               )
+                               ),
+        'Assesment' => array(
+                                    array('Student' => ''),
+                                    array('Groups' => ''),
+                        )
         
     );
     
     $accordion['student'] = array(
         
-        'Timeline' => array(
-                                    array('Event' => 'timeline/timeline/event'),    // Modified by Minja Junior
-                                    array('Calender' => 'home'),
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
                                ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
