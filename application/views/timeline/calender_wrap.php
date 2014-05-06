@@ -19,7 +19,7 @@
     .up_event{
         border: #cccccc solid 1px;
         border-radius: 4px;
-        padding: 0px 0px 0px 5px;
+        padding: 5px 0px 5px 5px;
         margin-top: -10px;
     }
     .up_event_item{
@@ -43,16 +43,17 @@
             <div class="col-sm-12 up_event">
                         <div class="up_event_item">
                             <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation so sos</div>
+                            <div>Presentation Preparation</div>
                         </div>
                         <div class="up_event_item">
                             <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation so sos</div>
+                            <div>Presentation Preparation</div>
                         </div>
                         <div class="up_event_item">
                             <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation so sos</div>
+                            <div>Presentation Preparation</div>
                         </div>
+                        
             </div>
     </div>
     <div id="add_new" class="sider hidden">
