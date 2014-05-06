@@ -19,11 +19,14 @@
     .up_event{
         border: #cccccc solid 1px;
         border-radius: 4px;
-        padding: 5px 0px 5px 5px;
+        padding: 5px 5px 5px 5px;
         margin-top: -10px;
     }
     .up_event_item{
         border-bottom: #cccccc solid 1px;
+    }
+    .up_event_item:last-child{
+        border-bottom: 0px;
     }
 </style>
 <!-- Calender wrap header -->
@@ -143,7 +146,7 @@
         
         $('body').on('click', '#del_event', function () {
             //alert($(this).attr('id'));
-            var x = confirm('Delete Event?');
+            var x = confirm('Are you sure you want to delete event?');
             if(x){
                 $.post( "<?php echo site_url() ?>/timeline/timeline/del_event" ,{ id: curr_event.id}, function( data ) {
                     if(data.status === 'success'){

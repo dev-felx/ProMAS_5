@@ -60,7 +60,9 @@ class Timeline extends CI_Controller {
                         'creator_id' => $this->session->userdata('user_id'),
                         'creator_type' => $this->session->userdata('type')
             );
-            
+            if($this->session->userdata('type') == 'student'){
+                $data['project_id'] = $this->session->userdata('project_id');
+            }
             //Check if output  is present
             if(isset($_POST['output'])){
                     $data_2 = array(
