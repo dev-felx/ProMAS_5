@@ -49,6 +49,7 @@ class Timeline extends CI_Controller {
 
                 
         }else{
+            if(!isset($_POST['receiver']) || $_POST['receiver'] == '1'){
             //prepare data
             $data = array(
                         'title' => $_POST['title'],
@@ -74,6 +75,29 @@ class Timeline extends CI_Controller {
             $res = $this->event_model->new_event($data);    
             if($res){
                 $response['status'] = 'success';
+            }
+            }else{
+                if(!isset($_POST['groups'])){
+                    $response['status'] = 'g_err';
+                }else{
+                    $data = array(
+                        'title' => $_POST['title'],
+                        'desc' => $_POST['description'],
+                        'start' => $_POST['date_start'],
+                        'end' => $_POST['date_end'],
+                        'space_id' => $this->session->userdata('space_id'),
+                        'creator_id' => $this->session->userdata('user_id'),
+                        'creator_type' => $this->session->userdata('type')
+                    );
+                    foreach ($_POST['groups'] as $value) {
+                        $data['project_id'] = $value;
+                        $res = $this->event_model->new_event($data); 
+                        if($res){
+                            $response['status'] = 'success';
+                        }
+                    }
+                    
+                }
             }
         }
         // You can use the Output class here too

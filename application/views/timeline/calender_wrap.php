@@ -10,7 +10,21 @@
     .dummy:hover{
         color: #cccccc;
         text-decoration: none;
-    }   
+    } 
+    
+    .pad_10{
+        padding: 10px !important;
+    }
+    
+    .up_event{
+        border: #cccccc solid 1px;
+        border-radius: 4px;
+        padding: 0px 0px 0px 5px;
+        margin-top: -10px;
+    }
+    .up_event_item{
+        border-bottom: #cccccc solid 1px;
+    }
 </style>
 <!-- Calender wrap header -->
 <div>
@@ -25,7 +39,21 @@
 <!-- Calender wrap side bar -->
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
-            <div class="alert-info alert text-center">Upcoming events</div>
+            <div class="alert-info alert text-center pad_10">Upcoming events</div>
+            <div class="col-sm-12 up_event">
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation so sos</div>
+                        </div>
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation so sos</div>
+                        </div>
+                        <div class="up_event_item">
+                            <div><strong>25th April</strong></div>
+                            <div>Presentation Preparation so sos</div>
+                        </div>
+            </div>
     </div>
     <div id="add_new" class="sider hidden">
         <?php $this->load->view('timeline/add_event_view'); ?>

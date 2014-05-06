@@ -57,6 +57,30 @@
                     <input type="text" id="date_end"  class="datepicker form-control" name="date_end" placeholder="End Date">                
                 </div>
         </div>
+       
+        <div class="form-group">
+            <?php if($this->session->userdata['type']=='supervisor'){ ?>
+            <label for="receiver">Create for</label>
+            <select id="receiver" class="form-control" name="receiver">
+                <?php
+                    $i = 1;
+                    foreach ($receiver as $value) {
+                        echo "<option value=".$i.">".$value."</option>";
+                        $i++;
+                    }
+                ?>
+           </select>
+        </div>
+        <div id='groups' class="form-group hidden">
+            <div id="g_err" class="text-danger text-center hidden">Choose atleast one group</div>
+        <?php 
+                    echo '<select multiple name="groups[]" class="form-control">';
+                    foreach ($groups as $value) { ?>
+                    <option value="<?php echo $value['project_id']; ?>"><?php echo $value['title']; ?></option> 
+                  <?php  }
+                  echo '</select>';
+                } ?>
+        </div>
         <?php if($this->session->userdata('type') == 'supervisor' || $this->session->userdata('type') == 'student'){ ?>
         <hr/>
         <div class="checkbox" id="res_qn">
@@ -111,14 +135,21 @@
                             $.each(data.errors, function(key, val) {
                                 $('[name="'+ key +'"]', '#add_event_form').attr('placeholder',val);
                                 $('[name="'+ key +'"]', '#add_event_form').addClass('err');
-                                $('[name="'+ key +'"]', '#add_event_form').parent('div').addClass('has-error');
-                                $('#msg').html('We need more data');
+                                $('[name="'+ key +'"]', '#add_event_form').parent('div').addClass('has-error');     
                             });
+                            $('#g_err').addClass('hidden');
+                            $('#msg').html('We need more data');
                         }else if(data.status === 'success') {
                             $('#msg').removeClass('alert-info');
                             $('#msg').addClass('alert-success');
                             $('#msg').html('Event created');
+                            $('#g_err').addClass('hidden');
                             $('#calendar').fullCalendar( 'refetchEvents' );
+                        }else if(data.status === 'g_err') {
+                            $('#g_err').removeClass('hidden');
+                            $('#msg').removeClass('alert-success');
+                            $('#msg').addClass('alert-info');
+                            $('#msg').html('We need more data');
                         }
                     
                     },"json");
@@ -133,3 +164,16 @@
         });
         });
 </script>
+<?php if($this->session->userdata['type']=='supervisor') {?>
+<script>
+    $( "#receiver" ).change(function() {
+        if($(this).val() == '2'){
+            $("#groups").removeClass('hidden');
+        }else{
+            $("#groups").addClass('hidden');
+        }
+    });
+    
+    
+</script>
+<?php } ?>
