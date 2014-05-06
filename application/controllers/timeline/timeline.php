@@ -17,6 +17,7 @@ class Timeline extends CI_Controller {
          
         parent::__construct();
         $this->load->model('event_model');
+        $this->load->model('project_model');
     }
     
     public function event(){
@@ -150,6 +151,16 @@ class Timeline extends CI_Controller {
         $values= array(
             'space_id'=>  $this->session->userdata['space_id'],
             'creator_id'=>  $this->session->userdata['user_id'],
+            'creator_type'=>  'supervisor'
+         );
+        echo json_encode($this->event_model->load_events($values));
+    }
+    
+    public function ss_event(){
+        
+        $values= array(
+            'space_id'=>  $this->session->userdata['space_id'],
+            'creator_id'=> $this->project_model->get_supervisor($this->session->userdata['project_id']),
             'creator_type'=>  'supervisor'
          );
         echo json_encode($this->event_model->load_events($values));

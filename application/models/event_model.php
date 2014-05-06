@@ -25,6 +25,7 @@ class Event_model extends CI_Model{
     }
     
     public function load_events($data){
+        
         $this->db->select('*');
         $this->db->from('events');
         $this->db->where($data);

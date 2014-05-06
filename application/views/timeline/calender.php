@@ -44,7 +44,7 @@
                     <?php } 
                     if($this->session->userdata('type') == 'student'){?>
                     {
-                        url: "<?php echo site_url(); ?>/timeline/timeline/s_event", // use the `url` property
+                        url: "<?php echo site_url(); ?>/timeline/timeline/ss_event", // use the `url` property
                         color: '#0093D0',    // an option!
                         textColor: 'white'  // an option!
                     },
