@@ -110,11 +110,11 @@
 </div>
 <div id="popover_content_wrapper" class="hidden">
     <div class="clearfix"></div>
-    <a id="edit_btn" href="#" class="pull-left">Edit</a>
-    <a id="del_event" href="#" class="pull-right">Delete</a>
+    <a id="edit_btn" href="#" class="pull-left hidden">Edit</a>
+    <a id="del_event" href="#" class="pull-right hidden">Delete</a>
     
-    <a class="pull-left disabled dummy hidden">Edit</a>
-    <a class="pull-right disabled dummy hidden">Delete</a>
+    <a class="pull-left disabled dummy ">Edit</a>
+    <a class="pull-right disabled dummy">Delete</a>
     <br/>
 </div>
 <script>
@@ -122,9 +122,10 @@
     //wrapper js
     function pop_up(desc,creator_id){
         var user_id = <?php echo $this->session->userdata('user_id'); ?>;
-        if(user_id != creator_id){
-            $('#edit_btn, #del_event').hide();
-            $('.dummy').removeClass('hidden');
+        if(user_id == creator_id){
+           // alert(user_id + " "+ creator_id );
+            $('#edit_btn, #del_event').removeClass('hidden');
+            $('.dummy').hide();
         }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }

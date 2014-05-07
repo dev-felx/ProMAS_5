@@ -63,6 +63,10 @@
                        echo '<td>Approved</td>';
                        continue;
                    }
+                   elseif(($key=='file_status')&& $value==4){
+                       echo '<td>Shared</td>';
+                       continue;
+                   }
                       echo '<td>'.$value.'</td>';
                    }
                    echo '<td>';

@@ -30,7 +30,6 @@ class File extends CI_Controller{
             
             
             $this->load->model('announcement_model');
-            $data['receiver'] = array('All groups','Choose groups');
             $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
             $data['message']=$message;
             
@@ -54,14 +53,20 @@ class File extends CI_Controller{
     public function request(){
         
         $this->form_validation->set_rules("title","Document title","required");
-        $this->form_validation->set_rules("receiver","Receiver","required");
+        $this->form_validation->set_rules("group","Receiver","required");
         $this->form_validation->set_rules("duedate","Receiver","required");
         $this->form_validation->set_message('required','*');
     
         if($this->form_validation->run()==FALSE){
-            
-            $message='<div class="text-danger text-center"><b>Fields can not be empty</b></div>';
-            $this->index($message);
+            $errors = array();
+                // Loop through $_POST and get the keys
+                foreach ($this->input->post() as $key => $value)
+                {
+                    // Add the error message for this field
+                    $errors[$key] = form_error($key);
+                }
+                $response['errors'] = array_filter($errors); // Some might be empty
+                $response['status'] = 'not_valid';
             
         }else{
             
@@ -72,24 +77,25 @@ class File extends CI_Controller{
                 'file_due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
             );
             
-            if($_POST['receiver'] == 'All groups'){
-            
-                
-            }else if($_POST['receiver'] == 'Choose groups'){
+            if($_POST['group'] == 'All groups'){
+                $values['file_owner_id']=0;
+                $result = $this->file_model->new_file($values);
+            }else if($_POST['group'] == 'Choose groups'){
                 
                 foreach ($_POST['groups'] as $value) {
                     $data['file_owner_id'] = $value;
                     $result = $this->file_model->new_file($data);
-
                 }
-                
-                if($result){
-                    $message='<div class="alert alert-warning text-center">Request sent successfully</div>';
-                    $this->index($message);
-                    
+            }
+            if($result){
+                    $response['status'] = 'success';
                 }
-            }    
         }
+        
+        // You can use the Output class here too
+        header('Content-type: application/json');
+        exit(json_encode($response));
+        
     }
     
     public function upload_view($doc_id,$file_name){
@@ -155,7 +161,80 @@ class File extends CI_Controller{
             }//end outer else
    
             }//end function do upload
+    public function share_doc(){
+        $this->form_validation->set_rules("file_name","Document title","required");
+        $this->form_validation->set_rules("group","Receiver","required");
+        $this->form_validation->set_message('required','*');
     
+        if($this->form_validation->run()==FALSE){
+            
+            $errors = array();
+                // Loop through $_POST and get the keys
+                foreach ($this->input->post() as $key => $value)
+                {
+                    // Add the error message for this field
+                    $errors[$key] = form_error($key);
+                }
+            $response['errors'] = array_filter($errors); // Some might be empty
+            $response['status'] = 'not_valid';
+        }else{
+        
+        
+            $this->load->library('upload');
+            $config['upload_path']= './files/uploads/documents/';
+            $config['allowed_types']= 'pdf|doc|docx';
+            $config['max_size']='2048';
+            $config['file_name']=$_POST['file_name'];;
+            
+            $this->upload->initialize($config);
+
+            if(!$this->upload->do_upload()){
+                //if unseccessfully load view and display errors
+                
+                $response['errors'] = $this->upload->display_errors(); // Some might be empty
+                $response['status'] = 'not_valid';
+                
+                
+            } else {
+                //obtaining a file extension
+                $path_parts = pathinfo($_FILES["userfile"]["name"]);
+                $extension = $path_parts['extension'];
+                //replaccing white space with _
+                $file_name =  str_replace(' ', '_', $_POST['file_name']);
+                
+                
+                $values = array(
+                    'file_name'=>$_POST['file_name'],
+                    'file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                    'file_status'=>4, //document has been shared value
+                    'space_id' => $this->session->userdata['space_id'],
+                    'file_creator_id' => $this->session->userdata['user_id'],
+                    );
+                
+                if($_POST['group'] == 'All groups'){
+                    $values['file_owner_id']=0;
+                    $result = $this->file_model->new_file($values);
+                }else if($_POST['group'] == 'Choose groups'){
+                    foreach($_POST['groups'] as $value) {
+                        $values['file_owner_id'] = $value;
+                        $result = $this->file_model->new_file($values);
+                    }
+                }
+                
+                if($result !== NULL){
+                    $response['status'] = 'success';
+                }
+                
+            }
+            }//end outer else form validation
+   
+            // You can use the Output class here too
+            header('Content-type: application/json');
+            exit(json_encode($response));
+            
+            
+                }//end function do upload
+     
  
             public function preview($file_path){
                 
