@@ -35,22 +35,25 @@
     <button class="btn btn-success pull-right push_left_bit glyph_big"><span class="glyphicon glyphicon-cog"></span></button>
     <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
-    <!--here i come-->
+    <!-- modified by Minja Junior -->
+    <?php if($this->session->userdata('type') == 'supervisor'){?>
     <div class="btn-group pull-right push_right_bit">
         <button type="button" class="btn btn-success">View by Group</button>
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
         </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+        <ul class="dropdown-menu" id="myTab">
+            <?php //foreach ($groups as $value) { ?>
+            <li><a href="#5" data-toggle="tab">5</a></li>
+            <li><a href="#6" data-toggle="tab">6</a></li>
+            <?php // } ?>
         </ul>
     </div>
+    <?php } ?>
 </div>
+<!-- end of Minja Junior Modification -->
+
 <div class="clearfix"></div>
 <hr style="border: none; height: 1px; background:#0093D0;">
 
@@ -84,9 +87,25 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-    
-    <?php
-        $this->load->view('timeline/calender');  
+    <?php if($this->session->userdata('type') == 'supervisor'){ ?>
+    <div class="tab-content">
+            <div id="5" class="tab-pane fade in active">
+            <?php $da['pid'] = 5;
+            $this->load->view('timeline/calender', $da); ?>
+        </div>
+        <div id="6" class="tab-pane fade">
+            <?php 
+            $da['pid'] = 6;
+            $this->load->view('timeline/calender', $da); ?>
+            <h3>Section B</h3>
+            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+        </div>
+    </div>
+
+        <?php     
+        }else {
+            $this->load->view('timeline/calender');
+        }
     ?>
 </div>
 <div id="popover_content_wrapper" class="hidden">

@@ -189,6 +189,15 @@ class Timeline extends CI_Controller {
         echo json_encode($this->event_model->load_events($values));
     }
     
+    public function ts_event($data){
+        $values= array(
+            'space_id'=>  $this->session->userdata['space_id'],
+            'project_id' => $data,
+            'creator_type'=>  'student'
+         );
+        echo json_encode($this->event_model->load_events($values));
+    }
+    
     public function ss_event(){
         
         $values= array(
@@ -202,7 +211,7 @@ class Timeline extends CI_Controller {
     public function st_event(){
         $values= array(
             'space_id'=>  $this->session->userdata['space_id'],
-            'creator_id'=>  $this->session->userdata['user_id'],
+            'project_id'=>  $this->session->userdata['project_id'],
             'creator_type'=>  'student'
          );
         echo json_encode($this->event_model->load_events($values));
