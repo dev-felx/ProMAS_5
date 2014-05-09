@@ -93,8 +93,9 @@
                                     array('Announcements' => 'project/announce'),
                                ),
         'Assesment' => array(
-                                    array('Student' => ''),
-                                    array('Groups' => ''),
+                                    array('Weekly Progress' => 'assessment/assess/'),
+                                    array('Project Reports' => 'assessment/assess/'),
+                                    array('Project Presenations' => 'assessment/assess_panel/')
                         )
         
     );
