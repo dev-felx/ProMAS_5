@@ -37,16 +37,16 @@
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
     <!-- modified by Minja Junior -->
     <?php if($this->session->userdata('type') == 'supervisor'){?>
-    <div class="btn-group pull-right push_right_bit">
+    <div class="btn-group pull-right push_right_bit" id="myTab">
         <button type="button" class="btn btn-success">View by Group</button>
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
         </button>
-        <ul class="dropdown-menu" id="myTab">
+        <ul class="dropdown-menu">
             <?php //foreach ($groups as $value) { ?>
-            <li><a href="#5" data-toggle="tab">5</a></li>
-            <li><a href="#6" data-toggle="tab">6</a></li>
+            <li><a href="#5" onclick="show_gc('#5')">5</a></li>
+            <li><a href="#6" onclick="show_gc('#6')">6</a></li>
             <?php // } ?>
         </ul>
     </div>
@@ -89,19 +89,18 @@
 <div id="calender_cont" class="col-sm-10 bottom_10">
     <?php if($this->session->userdata('type') == 'supervisor'){ ?>
     <div class="tab-content">
-            <div id="5" class="tab-pane fade in active">
-            <?php $da['pid'] = 5;
-            $this->load->view('timeline/calender', $da); ?>
-        </div>
-        <div id="6" class="tab-pane fade">
+        <div id="5" class="tab-pane">
+                <?php $da['pid'] = 5;
+                $this->load->view('timeline/calender', $da); ?>
+                <p>Hallow group 5</p>
+            </div>
+            <div id="6" class="tab-pane">
             <?php 
-            $da['pid'] = 6;
-            $this->load->view('timeline/calender', $da); ?>
-            <h3>Section B</h3>
-            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
-        </div>
-    </div>
-
+                //$da['pid'] = 6;
+                //$this->load->view('timeline/calender', $da); 
+                echo 'Hallow group 6';?>
+            </div>
+    </div> 
         <?php     
         }else {
             $this->load->view('timeline/calender');
@@ -197,5 +196,12 @@
         $( window ).resize(function() {
              $('.fc-event').popover('hide');
         });
+
     });
+    });
+</script>
+<script>
+    function show_gc(id){
+            $(id).toggle();
+    }
 </script>
