@@ -35,18 +35,18 @@
     <button class="btn btn-success pull-right push_left_bit glyph_big"><span class="glyphicon glyphicon-cog"></span></button>
     <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
+    
     <!-- modified by Minja Junior -->
     <?php if($this->session->userdata('type') == 'supervisor'){?>
-    <div class="btn-group pull-right push_right_bit" id="myTab">
+    <div class="btn-group pull-right push_right_bit">
         <button type="button" class="btn btn-success">View by Group</button>
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" id="myTab">
             <?php //foreach ($groups as $value) { ?>
-            <li><a href="#5" onclick="show_gc('#5')">5</a></li>
-            <li><a href="#6" onclick="show_gc('#6')">6</a></li>
+            <li><a href="#" data-value="5" class="link">5</a></li>
             <?php // } ?>
         </ul>
     </div>
@@ -87,25 +87,12 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-    <?php if($this->session->userdata('type') == 'supervisor'){ ?>
-    <div class="tab-content">
-        <div id="5" class="tab-pane">
-                <?php $da['pid'] = 5;
-                $this->load->view('timeline/calender', $da); ?>
-                <p>Hallow group 5</p>
-            </div>
-            <div id="6" class="tab-pane">
-            <?php 
-                //$da['pid'] = 6;
-                //$this->load->view('timeline/calender', $da); 
-                echo 'Hallow group 6';?>
-            </div>
-    </div> 
+    <div id="demo">
+        <input name="value" type="hidden">
         <?php     
-        }else {
             $this->load->view('timeline/calender');
-        }
     ?>
+    </div>
 </div>
 <div id="popover_content_wrapper" class="hidden">
     <div class="clearfix"></div>
@@ -121,16 +108,21 @@
     //wrapper js
     function pop_up(desc,creator_id){
         var user_id = <?php echo $this->session->userdata('user_id'); ?>;
-        if(user_id == creator_id){
-           // alert(user_id + " "+ creator_id );
-            $('#edit_btn, #del_event').removeClass('hidden');
-            $('.dummy').hide();
+        if(user_id != creator_id){
+            $('#edit_btn, #del_event').hide();
+            $('.dummy').removeClass('hidden');
         }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }
     
     //Header button click functions
     $(document).ready(function() {
+        
+        $('.link').click(function(){
+          $('[name="value"]','#demo').attr('value',$(this).data('value'));  
+        });
+        
+        
         $("#new_btn").click(function(){
             $('.sider').hide();
             $('#calender_left').switchClass('col-sm-2','col-sm-3',700,show_new);
@@ -197,11 +189,8 @@
              $('.fc-event').popover('hide');
         });
 
+        $('link').click(function(){//element to be click to load the page in the div
+            $(your_div_element).load('controller/method');
+        });
     });
-    });
-</script>
-<script>
-    function show_gc(id){
-            $(id).toggle();
-    }
 </script>
