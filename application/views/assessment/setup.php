@@ -37,10 +37,10 @@
 
               <!-- Tab panes -->
               <div class="tab-content">
-                  <div class="tab-pane active" id="ind">
+                  <div class="tab-pane active col-sm-8 col-sm-offset-1" id="ind">
                       <?php $this->load->view('assessment/ind_form'); ?>
                   </div>
-                  <div class="tab-pane" id="grp">
+                  <div class="tab-pane col-sm-8 col-sm-offset-1" id="grp">
                       <?php $this->load->view('assessment/grp_form'); ?>
                   </div>
               </div>
