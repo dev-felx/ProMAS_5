@@ -10,6 +10,7 @@
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/js/jquery-ui.js"></script>
 <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/css/jquery-ui.css" media="screen">
 <script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.dataTables.js"></script>
+<!--<link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatable/jquery.dataTables.css">-->
 
 <div class="container-fluid">
     <div class="row" >
@@ -35,45 +36,67 @@
                         echo '<th class=\'sorting_asc\' role="columnheader" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="'.ucwords(str_replace('_', ' ',$key )). ':activate to sort column descending">'
                         .ucwords(str_replace('_', ' ',$key )).'</th>';
                     }
+                    
                     echo '<th>Actions</th>';
                 ?>
-                
             </tr>
             </thead>
+            
+                <?php
+                echo '<thead><tr id="filter_global">';
+                    foreach ($filter_fields as $key ) {
+                        if($key=='#'){
+                            echo '<th></th>';
+                            continue;
+                        }
+                        echo '<th>'.$key.'</th>';
+                    }
+                    echo '</tr></thead>';
+                    ?>
+                    
              <!--table body--> 
             <tbody>
+                 
             <?php $i=1; 
                foreach ($documents as $row ){
                    
-                   $file_path = $row['file_path'];
-                   
+                   if($row['doc_status']==4){//skip rows with shared files
+                       break;
+                   }
                    echo '<tr>';
                    echo '<td>'.$i.'</td>';
                    
                    foreach ($row as $key=> $value) {
-                   if(($key == 'file_id')||($key == 'file_type')||($key == 'file_creator_id')||($key == 'file_path')||($key == 'space_id')){
+                       
+                   if(($key == 'name')||($key == 'project_id')||($key == 'due_date')||($key == 'doc_status')){
+                   
+                       if(($key=='doc_status')&& $value==0){
+                            echo '<td>Not Submited</td>';
+                            continue;
+                        }elseif(($key=='doc_status')&& $value==1){
+                            echo '<td>Submited</td>';
+                       continue;
+                        }elseif(($key=='doc_status')&& $value==2){
+                            echo '<td>Approved</td>';
+                            continue;
+                        }
+                       echo '<td>'.$value.'</td>'; 
+                   }else{
+                       
                        continue;
                    }
-                   if(($key=='file_status')&& $value==0){
-                       echo '<td>Not Submited</td>';
-                       continue;
-                   }elseif(($key=='file_status')&& $value==1){
-                       echo '<td>Submited</td>';
-                       continue;
-                   }
-                   elseif(($key=='file_status')&& $value==2){
-                       echo '<td>Approved</td>';
-                       continue;
-                   }
-                      echo '<td>'.$value.'</td>';
                    }
                    echo '<td>';
-                   ?>
-                      
+                   if($row['doc_status']=='1'){ //if document submitted show buttons below 
+                       $file_path = $row['rev_file_path'];
+                       ?>
             <!--<a type="button" href="<?php //echo site_url(); ?>/project/file/preview/<?php// echo base64_encode($file_path); ?>" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span></a>-->
-            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($file_path);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit">Download</span></a>
-                        
-                  <?php echo '</td>';
+            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($file_path);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
+            <a  data-status="<?php echo $row['doc_status']; ?>" data-rev_id="<?php echo $row['rev_id']; ?>" data-rev_status="<?php echo $row['rev_status']; ?>" data-rev_no="<?php echo $row['rev_no']; ?>" data-doc_name="<?php echo $row['name']; ?>" data-doc_id="<?php echo $row['doc_id']; ?>" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a> 
+                <?php 
+                    }else{// if document not submitted
+                       echo 'No action';
+                   } echo '</td>';
                    echo '</tr>'; 
                    $i++;
                 } 
@@ -186,29 +209,103 @@
         </div>
     </div>
     
+    <div id="upload_modal" class=" modal fade in" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="upload_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload_document" method="POST">
+                    
+                    <input name="status" type="hidden">
+                    <input name="rev_id" type="hidden">
+                    <input name="rev_status" type="hidden">
+                    <input name="rev_no" type="hidden">
+                    <input name="doc_name" type="hidden">
+                    <input name="doc_id" type="hidden">
+                <div class="modal-header">
+                    <div id="msg_upload" class="alert alert-info text-center">Upload a revised version of this document<span id="msg_upload_span"></span></div>
+                </div>
+                <div class="modal-body">
+                   
+                    <div class="form-group">    
+                       <input type="file" name="userfile">
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="upload_document">Upload</button>
+                    <a href="#" class="btn" data-dismiss="modal">Close</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
 <script>
     $( "#groups" ).hide();
     $( "#groups_share" ).hide();
     $(document).ready(function(){
         
+        $('.upload_m').click(function() {
+        $('[name="status"]','#upload_form').attr('value',$(this).data('status'));
+        $('[name="rev_id"]','#upload_form').attr('value',$(this).data('rev_id'));
+        $('[name="rev_status"]','#upload_form').attr('value',$(this).data('rev_status'));
+        $('[name="rev_no"]','#upload_form').attr('value',$(this).data('rev_no'));
+        $('[name="doc_name"]','#upload_form').attr('value',$(this).data('doc_name'));
+        $('[name="doc_id"]','#upload_form').attr('value',$(this).data('doc_id'));
+        if($('[name="status"]','#upload_form').attr('value') == '0'){
+            $('#msg_upload_span').html('<p>Upload new document</p>');
+        }else if($('[name="status"]','#upload_form').attr('value') == '1'){
+            $('msg_upload_span').html('<p>Upload a new version of the previous document</p>');
+        }
+        $('#upload_modal').modal();
+        return false;
+    });
+    
+    $('#upload_document').click(function() {
+        $("#upload_form").submit(function(){
+            var formData = new FormData($(this)[0]);
+            var formUrl = $("#upload_form").attr("action");
+            $.ajax({
+                url: formUrl,
+                type: 'POST',
+                data: formData,
+                async: false,
+                 success:function(data){
+                     if(data.status === 'success') {
+                        $('#msg_upload').removeClass('alert-info');
+                        $('#msg_upload').addClass('alert-success');
+                        $('#msg_upload').html('Document successfuly uploaded');
+                        setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload();},3000);
+
+                    }else if(data.status === 'file_error') {
+                      //  $.each(data.file_errors, function(key,val){
+                        $('#msg_upload').removeClass('alert-info');
+                        $('#msg_upload').addClass('alert-warning');
+                        $('#msg_upload').html(data.file_errors);
+                    //});
+                    }
+                 },
+                 cache: false,
+                 contentType: false,
+                 processData: false
+            });
+            return false;
+        });
+        });
+        
+        
         $('#send_req').click(function() {
-            
         var url = $("#req_form").attr("action");
         $.post( url, $("#req_form").serialize()).done(function(data) {
         if(data.status === 'not_valid'){
-            $.each(data.errors, function(key,val){
             $('#msg').removeClass('alert-info');
             $('#msg').addClass('alert-warning');
-            $('#msg').html('All fields are required');
-            });
+            $('#msg').html('Name, Group or Date can not be empty');
         }else if(data.status === 'success') {
             $('#msg').removeClass('alert-info');
             $('#msg').addClass('alert-success');
             $('#msg').html('Request sent');
-            setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload();},3000);
-            
-
-            
+            setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload(); },3000);
         }
         
         },"json");
@@ -226,17 +323,22 @@
                 async: false,
                  success:function(data){
                      if(data.status === 'not_valid'){
-                        $.each(data.errors, function(key,val){
-                        $('#msg').removeClass('alert-info');
-                        $('#msg').addClass('alert-warning');
-                        $('#msg').html('All fields are required');
-                        });
+                        $('#msg_share').removeClass('alert-info');
+                        $('#msg_share').addClass('alert-warning');
+                        $('#msg_share').html("Name or Group can not be empty");
+                        
                     }else if(data.status === 'success') {
-                        $('#msg').removeClass('alert-info');
-                        $('#msg').addClass('alert-success');
-                        $('#msg').html('Request sent');
+                        $('#msg_share').removeClass('alert-info');
+                        $('#msg_share').addClass('alert-success');
+                        $('#msg_share').html('Document successfuly shared');
                         setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload();},3000);
 
+                    }else if(data.status === 'file_error') {
+                      //  $.each(data.file_errors, function(key,val){
+                        $('#msg_share').removeClass('alert-info');
+                        $('#msg_share').addClass('alert-warning');
+                        $('#msg_share').html(data.file_errors);
+                    //});
                     }
                  },
                  cache: false,
@@ -246,9 +348,10 @@
             return false;
         });
         });
-     
-    $('#table_id').dataTable({
+      
+    var table = $('#table_id').dataTable({
         "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
+        //"order": [[ 3, "desc" ]]
         "bJQueryUI": true
         });
     });

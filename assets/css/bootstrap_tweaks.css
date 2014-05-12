@@ -275,15 +275,15 @@ hr{
 #head_not{
       min-width: 250px;
   }
-    #head_not > li{
-      margin: 2px;
-      border: #cccccc solid 1px;
-      border-radius: 2px;
-      color: #245269;
-      padding-left: 10px;
-      cursor: pointer;
-    } 
-    .tito_nt{
-      text-decoration: underline;
-    }
+#head_not > li{
+  margin: 2px;
+  border: #cccccc solid 1px;
+  border-radius: 2px;
+  color: #245269;
+  padding-left: 10px;
+  cursor: pointer;
+} 
+.tito_nt{
+  text-decoration: underline;
+}
 
