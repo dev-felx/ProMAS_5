@@ -13,7 +13,7 @@ class File extends CI_Controller{
     
         $roles = array('superuser','administrator','coordinator','supervisor','student');
         check_session_roles($roles);
-        $this->load->model('file_model');
+        $this->load->model('document_model');
     }
 
         
@@ -22,11 +22,13 @@ class File extends CI_Controller{
         if($this->session->userdata['type']!=='student'){
             
             $values = array(
-                'file_creator_id'=>  $this->session->userdata['user_id'],
+                'creator_id'=>  $this->session->userdata['user_id'],
+                'creator_role'=>  $this->session->userdata['type'],
             );
             
             $data['table_head']= array('#','Name','Group','Due date','Status');
-            $data['documents']=  $this->file_model->get_file($values);
+            $data['filter_fields']= array('#','Name','Group','Due date','Status');
+            $data['documents']=  $this->document_model->get_document($values);
             
             
             $this->load->model('announcement_model');
@@ -38,12 +40,11 @@ class File extends CI_Controller{
         
         }elseif ($this->session->userdata['type']=='student'){
             $values= array(
-                'file_owner_id'=>  $this->session->userdata['project_id'],
-                
+                'project_id'=>  $this->session->userdata['project_id'],
             );
             
-            $data['documents']=  $this->file_model->get_file($values);
-            $data['table_head']= array('#','Name','Due date','Status');
+            $data['documents']=  $this->document_model->get_document($values);
+            $data['table_head']= array('#','Name','Created by','Due date','Status');
             $data['views']=array('/document/submit_view');
             page_load($data);
             
@@ -69,22 +70,39 @@ class File extends CI_Controller{
                 $response['status'] = 'not_valid';
             
         }else{
-            
+           
             $data = array(
-                'file_name' => $_POST['title'],
+                'name' => $_POST['title'],
                 'space_id' => $this->session->userdata['space_id'],
-                'file_creator_id' => $this->session->userdata['user_id'],
-                'file_due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
+                'creator_id' => $this->session->userdata['user_id'],
+                'creator_role' => $this->session->userdata['type'],
+                'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
+                
             );
             
             if($_POST['group'] == 'All groups'){
-                $values['file_owner_id']=0;
-                $result = $this->file_model->new_file($values);
+                if($this->session->userdata['type']=='supervisor'){
+                    $this->load->model('announcement_model');
+                    $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
+                    foreach ($groups as $value){ 
+                        $data['project_id']=$value['project_id'];
+                        $result = $this->document_model->new_doc($data);
+                    }
+                }elseif($this->session->userdata['type']=='coordinator'){
+                    $this->load->model('project_model');
+                    $value_proj = array(
+                        'student_projects.project_id >'=>0);
+                    $projects = $this->project_model->get_all_project($value_proj);
+                    foreach ($projects as $value){
+                        $data['project_id'] = $value['project_id'];
+                        $result = $this->document_model->new_doc($data);
+                    }
+                }
             }else if($_POST['group'] == 'Choose groups'){
                 
                 foreach ($_POST['groups'] as $value) {
-                    $data['file_owner_id'] = $value;
-                    $result = $this->file_model->new_file($data);
+                    $data['project_id'] = $value;
+                    $result = $this->document_model->new_doc($data);
                 }
             }
             if($result){
@@ -97,74 +115,128 @@ class File extends CI_Controller{
         exit(json_encode($response));
         
     }
-    
-    public function upload_view($doc_id,$file_name){
-        $data['doc_id']= $doc_id;
-        $data['file_name']= $file_name;
-        
-        $data['views']=array('document/upload_file');
-        page_load($data);
-    }
 
-    public function upload(){
+    public function upload_document(){
         
         $this->load->library('upload');
         
-            $config['upload_path']= './files/uploads/documents/';
+        if($this->session->userdata['type']=='student'){
+            
+            //controlling version no of a document by counting existing versions
+            $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
+            if(($exist_revs>=1)&&($_POST['rev_status']==0)){
+               $rev_no=$_POST['rev_no']; 
+            }else if(($exist_revs>=1)&& ($_POST['rev_status']==1)){
+               $rev_no=$_POST['rev_no']+1;
+            }
+            //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
+            $config['upload_path']= './files/documents/group_no_1/';
             $config['allowed_types']= 'pdf|doc|docx';
             $config['max_size']='2048';
-            $config['file_name']=$_POST['file_name'];;
+            $config['file_name']=$_POST['doc_name'].'_v'.$rev_no.'_modified_by_student';
             
             $this->upload->initialize($config);
 
             if(!$this->upload->do_upload()){
-                //if unseccessfully load view and display errors
-                
-                $data['doc_id'] = $_POST['doc_id'];
-                $data['file_name'] = $_POST['file_name'];
-                $data['message'] = $this->upload->display_errors();
-                $data['views']= array('document/upload_file');
-                page_load($data);
-                
+                $response['file_errors'] = $this->upload->display_errors();
+                $response['status'] = 'file_error';
                 
             } else {
                 //obtaining a file extension
                 $path_parts = pathinfo($_FILES["userfile"]["name"]);
                 $extension = $path_parts['extension'];
                 //replaccing white space with _
-                $file_name =  str_replace(' ', '_', $_POST['file_name']);
+                $file_name =  str_replace(' ', '_', $config['file_name']);
                 
-                
-                $values = array(
-                    'file_path'=>$config['upload_path'].$file_name.'.'.$extension,
-                    'file_status'=>1 //document has been submited value
-                        );
-                
-                $result = $this->file_model->update_file($_POST['doc_id'],$values);
-                
-                if($result !== NULL){
-                
+                $data_doc= array(
+                    'doc_status' =>1,//status of the document submitted
+                    );
                     
-                    $data['doc_id'] = $_POST['doc_id'];
-                    $data['file_name'] = $_POST['file_name'];
+                    $data_rev = array(
+                        'doc_id'=>$_POST['doc_id'],
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>0,//status of the revision if approved or not
+                        'rev_file_name'=>$file_name,
+                        'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                        'rev_no'=>$rev_no
+                    );
+                    //controlling number existing version of the document to be only 2
+                    if(($_POST['rev_status']==0)){
+                        $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
+                    }else if($_POST['rev_status']==1){
+                        $result = $this->document_model->insert_new_revision($data_rev);
+                    }
                     
-                    $data['message'] = 'File successful uploaded';
-                    $data['views']= array('document/upload_file');
-                    page_load($data);
+                    if($result !== NULL){
+                        $response['status'] = 'success';
+                    }
+            
+                    }//end else file uploaded successfully
+            
+                    }else{// else if user not student
+                        //controlling version no of a document by counting existing versions
+                        $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
+                        if(($exist_revs>=1)&&($_POST['rev_status']==0)){
+                           $rev_no=$_POST['rev_no']; 
+                        }else if(($exist_revs==2)&& ($_POST['rev_status']==1)){
+                           $rev_no=$_POST['rev_no'];
+                        }
+                        //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
+                        $config['upload_path']= './files/documents/group_no_1/';
+                        $config['allowed_types']= 'pdf|doc|docx';
+                        $config['max_size']='2048';
+                        $config['file_name']=$_POST['doc_name'].'_v'.$rev_no.'_modified_by_'.$this->session->userdata['type'];
 
-                }
-               
-            
-        
-        
-            
-            }//end outer else
-   
-            }//end function do upload
+                        $this->upload->initialize($config);
+
+                        if(!$this->upload->do_upload()){
+                            $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
+                            $response['status'] = 'file_error';
+
+                        } else {
+                            //obtaining a file extension
+                            $path_parts = pathinfo($_FILES["userfile"]["name"]);
+                            $extension = $path_parts['extension'];
+                            //replaccing white space with _
+                            $file_name =  str_replace(' ', '_', $config['file_name']);
+                            $data_doc= array(
+                                'doc_status' =>1,//status of the document submitted
+                            );
+                            $data_rev = array(
+                                'doc_id'=>$_POST['doc_id'],
+                                'rev_date_upload'=>date("Y-m-d",time()),
+                                'rev_status'=>1,//status of the document that has been revised and uploaded
+                                'rev_file_name'=>$file_name,
+                                'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                                'rev_no'=>$rev_no
+                            );
+                            
+                            //controlling number existing version of the document to be only 2
+                            if(($_POST['rev_status']==1)&& $exist_revs==2){
+                                $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
+                            }else if(($_POST['rev_status']==0)&& $exist_revs==1){
+                                $result = $this->document_model->insert_new_revision($data_rev);
+                            }
+
+
+                            if($result !== NULL){
+                                $response['status'] = 'success';
+                            }
+
+                            }//end else file uploaded successfully
+
+                            }//end else user not a student
+
+
+                            header('Content-type: application/json');
+                            exit(json_encode($response));
+
+                                }//end function do upload
+                        
     public function share_doc(){
-        $this->form_validation->set_rules("file_name","Document title","required");
-        $this->form_validation->set_rules("group","Receiver","required");
-        $this->form_validation->set_message('required','*');
+        $this->form_validation->set_rules("file_name","Name","required");
+        $this->form_validation->set_rules("group","Group","required");
+        $this->form_validation->set_message('required','%s');
     
         if($this->form_validation->run()==FALSE){
             
@@ -184,15 +256,13 @@ class File extends CI_Controller{
             $config['upload_path']= './files/uploads/documents/';
             $config['allowed_types']= 'pdf|doc|docx';
             $config['max_size']='2048';
-            $config['file_name']=$_POST['file_name'];;
+            $config['file_name']=$_POST['file_name'];
             
             $this->upload->initialize($config);
 
             if(!$this->upload->do_upload()){
-                //if unseccessfully load view and display errors
-                
-                $response['errors'] = $this->upload->display_errors(); // Some might be empty
-                $response['status'] = 'not_valid';
+                $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
+                $response['status'] = 'file_error';
                 
                 
             } else {
@@ -203,8 +273,8 @@ class File extends CI_Controller{
                 $file_name =  str_replace(' ', '_', $_POST['file_name']);
                 
                 
-                $values = array(
-                    'file_name'=>$_POST['file_name'],
+                $data = array(
+                    'name'=>$_POST['file_name'],
                     'file_path'=>$config['upload_path'].$file_name.'.'.$extension,
                     'file_status'=>4, //document has been shared value
                     'space_id' => $this->session->userdata['space_id'],
@@ -212,9 +282,29 @@ class File extends CI_Controller{
                     );
                 
                 if($_POST['group'] == 'All groups'){
-                    $values['file_owner_id']=0;
-                    $result = $this->file_model->new_file($values);
+                if($this->session->userdata['type']=='supervisor'){
+                    $this->load->model('announcement_model');
+                    $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
+                    foreach ($groups as $value){ 
+                        $data['project_id']=$value['project_id'];
+                        $result = $this->document_model->new_doc($data);
+                    }
+                }elseif($this->session->userdata['type']=='coordinator'){
+                    $this->load->model('project_model');
+                    $value_proj = array(
+                        'student_projects.project_id >'=>0);
+                    $projects = $this->project_model->get_all_project($value_proj);
+                    foreach ($projects as $value){
+                        $data['project_id'] = $value['project_id'];
+                        $result = $this->document_model->new_doc($data);
+                    }
+                }
                 }else if($_POST['group'] == 'Choose groups'){
+                    foreach($_POST['groups'] as $value) {
+                        $values['file_owner_id'] = $value;
+                        $result = $this->file_model->new_file($values);
+                    }
+                }else if($_POST['group'] == 'All supervisors'){
                     foreach($_POST['groups'] as $value) {
                         $values['file_owner_id'] = $value;
                         $result = $this->file_model->new_file($values);
@@ -233,7 +323,7 @@ class File extends CI_Controller{
             exit(json_encode($response));
             
             
-                }//end function do upload
+                }//end function share doc
      
  
             public function preview($file_path){
