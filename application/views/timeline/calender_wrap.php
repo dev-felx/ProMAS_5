@@ -45,9 +45,9 @@
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" id="myTab">
-            <?php //foreach ($groups as $value) { ?>
-            <li><a href="#" data-value="5" class="link">5</a></li>
-            <?php // } ?>
+            <?php foreach ($groups as $value) { ?>
+            <li><a href="?pid=<?php echo $value['project_id']; ?>"><?php echo $value['title']; ?></a></li>
+            <?php  } ?>
         </ul>
     </div>
     <?php } ?>
@@ -87,12 +87,10 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-    <div id="demo">
-        <input name="value" type="hidden">
-        <?php     
+        <?php
+            //echo $this->input->get('pid', TRUE);
             $this->load->view('timeline/calender');
     ?>
-    </div>
 </div>
 <div id="popover_content_wrapper" class="hidden">
     <div class="clearfix"></div>
@@ -189,8 +187,8 @@
              $('.fc-event').popover('hide');
         });
 
-        $('link').click(function(){//element to be click to load the page in the div
+        /*$('link').click(function(){//element to be click to load the page in the div
             $(your_div_element).load('controller/method');
-        });
+        });*/ 
     });
 </script>

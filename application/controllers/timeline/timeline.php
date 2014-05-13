@@ -189,10 +189,10 @@ class Timeline extends CI_Controller {
         echo json_encode($this->event_model->load_events($values));
     }
     
-    public function ts_event(){
+    public function ts_event($data){
         $values= array(
             'space_id'=>  $this->session->userdata['space_id'],
-            'project_id' => '',
+            'project_id' => $data,
             'creator_type'=>  'student'
          );
         echo json_encode($this->event_model->load_events($values));
