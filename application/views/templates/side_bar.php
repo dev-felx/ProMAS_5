@@ -93,9 +93,9 @@
                                     array('Announcements' => 'project/announce'),
                                ),
         'Assesment' => array(
-                                    array('Weekly Progress' => 'assessment/assess/'),
-                                    array('Project Reports' => 'assessment/assess/'),
-                                    array('Project Presenations' => 'assessment/assess_panel/')
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Average Assessment' => 'assessment/assess/average')
                         )
         
     );

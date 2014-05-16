@@ -1,5 +1,4 @@
 <form id="" class="form-horizontal" role="form">
-    <div class="alert alert-info fade in text-center pad_5">Project Information</div>
     <div class="form-group">
         <label for="inputEnd Date" class="col-sm-4 control-label">Project Title</label>
         <div class="col-sm-8">
@@ -12,7 +11,7 @@
             <input type="Week No" class="form-control" id="inputEmail3" placeholder="Week No">
         </div>
     </div>
-    <div class="alert alert-info fade in text-center pad_5">Project Report Assessment</div>
+    <div class="col-sm-10 col-sm-offset-1 bottom_10"><hr/></div>
     <div class="form-group">
         <label for="inputAbstract" class="col-sm-4 control-label">Abstract</label>
         <div class="col-sm-8">
@@ -56,8 +55,8 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-10">
-            <button type="Submit" class="btn btn-success">Submit</button>
+         <div class="col-sm-2 col-sm-offset-10">
+            <button type="Submit" class="btn btn-success pull-right">Submit</button>
         </div>
     </div>
 </form>

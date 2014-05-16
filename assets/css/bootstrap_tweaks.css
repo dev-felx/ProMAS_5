@@ -287,3 +287,17 @@ hr{
   text-decoration: underline;
 }
 
+/*assessment*/
+.stu_btn{
+    cursor: pointer;
+}
+
+.stu_btn:hover{
+    background-color: #0093D0;
+    color: #FFFFFF;
+}
+
+.stu_btn_active{
+    background-color: #0093D0 !important;
+    color: #FFFFFF !important;
+}
