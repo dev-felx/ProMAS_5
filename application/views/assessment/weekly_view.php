@@ -76,6 +76,7 @@
                          $('#spec').attr('value',forms[i].contribution);
                          $('#qn').attr('value',forms[i].qna);
                          $('#com').html(forms[i].comments);
+                         $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
                      }
                  }
         });

@@ -27,7 +27,7 @@
                         <?php 
                             echo '<option></option>';
                             foreach ($forms as $value){
-                                echo '<option value="'.$value['form_id'].'">'.$value['type'].'</option>';
+                                echo '<option value="'.$value['type'].'">'.$value['type'].'</option>';
                             }
                         ?>
                      </select>
@@ -48,15 +48,45 @@
     </div>
 <script>
     var forms = <?php echo json_encode($forms); ?>;
+    console.log(forms);
     var curr_form;
+    $('#grp_form').hide();
     $(document).ready(function(){ 
-        $( "#pro" ).change(function() {
-            curr_form = $(this).val();
-            
+        $( "#type" ).change(function() {
+            var id = $(this).val(); 
+            var pro = $('#pro').val();
+            $('#grp_form').slideDown();
+            $('#msg_grp').html('');
+            for (var i=0; i < forms.length; i++){
+                if (forms[i]['project_id'] == pro && forms[i]['type'] == id){
+                    $('#title').html(forms[i].project_name);
+                     $('#type_').html(forms[i].type);;
+                     $('[name="abs"]', '#grp_form').attr('value',forms[i].abs);
+                     $('[name="ack"]', '#grp_form').attr('value',forms[i].ack);
+                     $('[name="con"]', '#grp_form').attr('value',forms[i].t_content);
+                     $('[name="intro"]', '#grp_form').attr('value',forms[i].intro);
+                     $('[name="main"]', '#grp_form').attr('value',forms[i].main);
+                     $('[name="ref"]', '#grp_form').attr('value',forms[i].ref);
+                     $('[name="com"]', '#grp_form').html(forms[i].comments);
+                     $('[name="form_id"]', '#grp_form').attr('value',forms[i].form_id);
+                     
+                }
+            }
         });
         
-        $( "#pro" ).change(function() {
-            var id = $(this).val();   
+        
+        $('#sav_form').click(function(){
+            $('#msg_grp').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
+             setTimeout(function(){
+                 var t = "<?php echo site_url(); ?>";
+                 var c = t+"/assessment/assess/save_form_grp";
+                 $.post( c, $("#grp_form").serialize()).done(function(data) {
+                     if(data.status == 'cool'){
+                         $('#msg_grp').html('<div class="alert alert-success text-center">Saved</div>');
+                     }
+                 },'json');
+             },400);
+             return false;
         });
     }); 
 </script>

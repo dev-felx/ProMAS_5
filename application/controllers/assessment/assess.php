@@ -113,6 +113,23 @@ class Assess extends CI_Controller{
         page_load($data);
         
     }
+        
+        
+    public function pres(){
+        //get data
+        $data['forms'] = $this->assessment_model->get_report($this->session->userdata('user_id'));
+        $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
+        
+        if($data['forms'] ==  NULL){
+            redirect('assessment/assess', 'location');
+        }
+        //prepare views
+        $data['sub_title'] = 'Presentation Assessment';
+        $data['views'] = array('/assessment/pres_view');
+        //load view
+        page_load($data);
+        
+    }
     
     public function get_pro_stu(){
         $id = $_POST['id'];
@@ -132,6 +149,25 @@ class Assess extends CI_Controller{
             'form_id' => $_POST['form_id']
         );
         $res = $this->assessment_model->save_form($data);
+        if($res){
+            $response['status'] = 'cool';
+        }
+        header('Content-type: application/json');
+        exit(json_encode($response));
+    }
+    
+    public function save_form_grp() {
+        $data = array(
+            'abs' => $_POST['abs'],
+            'ack' => $_POST['ack'],
+            'comments' => $_POST['com'],
+            't_content' => $_POST['con'],
+            'intro' => $_POST['intro'],
+            'main' => $_POST['main'],
+            'ref' => $_POST['ref']
+        );
+        $form_id = $_POST['form_id'];
+        $res = $this->assessment_model->save_form_grp($data,$form_id);
         if($res){
             $response['status'] = 'cool';
         }

@@ -51,6 +51,11 @@ class Assessment_model extends CI_Model{
         $this->db->where('form_id', $data['form_id']);
         return $this->db->update('asses_week', $data);
     }
+    
+    public function save_form_grp($data,$id) {
+        $this->db->where('form_id', $id);
+        return $this->db->update('assess_groups', $data);
+    }
         
         
 }

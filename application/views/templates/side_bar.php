@@ -95,6 +95,7 @@
         'Assesment' => array(
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
                                     array('Average Assessment' => 'assessment/assess/average')
                         )
         
