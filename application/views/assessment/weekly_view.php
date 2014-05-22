@@ -41,7 +41,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title text-center">Student Assessment Form</h3>
             </div>
-            <div class="panel-body">
+            <div id="form_cont" class="panel-body">
                 <?php $this->load->view('assessment/ind_form'); ?>
             </div>
         </div>
@@ -59,26 +59,43 @@
         $( "#pro" ).change(function() {
             var id = $(this).val();
             get_stu(id);
+            $('#ind_form').hide();
         });
         
         $( "#week" ).change(function() {
-            var week = $(this).val(); 
-            $('#ind_form').slideDown();
-            $('#msg_frm').html('');
-            for (var i=0; i < forms.length; i++){
-                     if (forms[i]['student'] == curr_stu && forms[i]['week_no'] == week){
-                         $('#name').html(forms[i].student_name);
-                         $('#reg_no').html(forms[i].student);
-                         $('#wik').html(forms[i].week_no);
-                         $('#pro_name').html(forms[i].project_name);
-                         $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
-                         $('[name="gen"]', '#ind_form').attr('value',forms[i].understand);
-                         $('#spec').attr('value',forms[i].contribution);
-                         $('#qn').attr('value',forms[i].qna);
-                         $('#com').html(forms[i].comments);
-                         $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
+            var week = $(this).val();
+            if(week == ''){
+                $('#ind_form').hide();
+            }else{
+                $('#ind_form').slideDown();
+                $('#msg_frm').html('');               
+                for (var i=0; i < forms.length; i++){
+                         if (forms[i]['student'] == curr_stu && forms[i]['week_no'] == week){
+                             $('#name').html(forms[i].student_name);
+                             $('#reg_no').html(forms[i].student);
+                             $('#wik').html(forms[i].week_no);
+                             $('#pro_name').html(forms[i].project_name);
+                             
+                             $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
+                             $('[name="init"]', '#ind_form').val(forms[i].initiative);
+                             
+                             $('[name="gen"]', '#ind_form').attr('value',forms[i].understand);
+                             $('[name="gen"]', '#ind_form').val(forms[i].understand);
+                             
+                             $('#spec').attr('value',forms[i].contribution);
+                             $('#spec').val(forms[i].contribution);
+                             
+                             $('#qn').attr('value',forms[i].qna);
+                             $('#qn').val(forms[i].qna);
+                             
+                             $('#com').html(forms[i].comments);
+                             $('#com').val(forms[i].comments);
+                             
+                             
+                             $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
+                         }
                      }
-                 }
+             }
         });
         
         function get_stu(id){
@@ -96,7 +113,6 @@
                     //activate first student
                     curr_stu = $('#'+data['students'][0].registration_no).attr('id');
                     $('#'+data['students'][0].registration_no).addClass('stu_btn_active');
-                    
                     $('#week').html('');
                     $('#week').html('<option></option>');
                     for(var i = 0; i < data['week'].length; i++){
@@ -114,6 +130,9 @@
                  $.post( c, $("#ind_form").serialize()).done(function(data) {
                      if(data.status == 'cool'){
                          $('#msg_frm').html('<div class="alert alert-success text-center">Saved</div>');
+                         forms = data.forms;
+                     }else{
+                         $('#msg_frm').html('<div class="alert alert-danger text-center">'+data+'</div>');
                      }
                  },'json');
              },400);
@@ -125,6 +144,7 @@
             $('.stu_btn').removeClass('stu_btn_active');
             $(this).addClass('stu_btn_active');
             curr_stu = $(this).attr('id');
+            $( "#week" ).trigger('change');
         });
 
     });

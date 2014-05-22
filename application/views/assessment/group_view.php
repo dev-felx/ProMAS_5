@@ -24,12 +24,10 @@
                 <div class="form-group">
                     <label>Report type</label>
                     <select id="type" class="form-control">
-                        <?php 
-                            echo '<option></option>';
-                            foreach ($forms as $value){
-                                echo '<option value="'.$value['type'].'">'.$value['type'].'</option>';
-                            }
-                        ?>
+                        <option></option>
+                        <option value="Project proposal">Project‌ proposal</option>
+                        <option value="Project progress report">Project‌ progress‌ report</option>
+                        <option value="Final Project report">Final‌ Project‌ report</option>
                      </select>
                 </div>
                 
@@ -48,28 +46,49 @@
     </div>
 <script>
     var forms = <?php echo json_encode($forms); ?>;
-    console.log(forms);
     var curr_form;
     $('#grp_form').hide();
     $(document).ready(function(){ 
+        $( "#pro" ).change(function() {
+            $( "#type" ).trigger('change');
+        });
         $( "#type" ).change(function() {
             var id = $(this).val(); 
-            var pro = $('#pro').val();
-            $('#grp_form').slideDown();
-            $('#msg_grp').html('');
-            for (var i=0; i < forms.length; i++){
-                if (forms[i]['project_id'] == pro && forms[i]['type'] == id){
-                    $('#title').html(forms[i].project_name);
-                     $('#type_').html(forms[i].type);;
-                     $('[name="abs"]', '#grp_form').attr('value',forms[i].abs);
-                     $('[name="ack"]', '#grp_form').attr('value',forms[i].ack);
-                     $('[name="con"]', '#grp_form').attr('value',forms[i].t_content);
-                     $('[name="intro"]', '#grp_form').attr('value',forms[i].intro);
-                     $('[name="main"]', '#grp_form').attr('value',forms[i].main);
-                     $('[name="ref"]', '#grp_form').attr('value',forms[i].ref);
-                     $('[name="com"]', '#grp_form').html(forms[i].comments);
-                     $('[name="form_id"]', '#grp_form').attr('value',forms[i].form_id);
-                     
+            if(id == ''){
+                $('#grp_form').hide();
+            }else{
+                var pro = $('#pro').val();
+                $('#grp_form').slideDown();
+                $('#msg_grp').html('');
+                for (var i=0; i < forms.length; i++){
+                    if (forms[i]['project_id'] == pro && forms[i]['type'] == id){
+                        $('#title').html(forms[i].project_name);
+                         $('#type_').html(forms[i].type);
+                         
+                         $('[name="abs"]', '#grp_form').attr('value',forms[i].abs);
+                         $('[name="abs"]', '#grp_form').val(forms[i].abs);
+                         
+                         $('[name="ack"]', '#grp_form').attr('value',forms[i].ack);
+                         $('[name="ack"]', '#grp_form').val(forms[i].ack);
+                         
+                         $('[name="con"]', '#grp_form').attr('value',forms[i].t_content);
+                         $('[name="con"]', '#grp_form').val(forms[i].t_content);
+                         
+                         $('[name="intro"]', '#grp_form').attr('value',forms[i].intro);
+                         $('[name="intro"]', '#grp_form').val(forms[i].intro);
+                         
+                         $('[name="main"]', '#grp_form').attr('value',forms[i].main);
+                         $('[name="main"]', '#grp_form').val(forms[i].main);
+                         
+                         $('[name="ref"]', '#grp_form').attr('value',forms[i].ref);
+                         $('[name="ref"]', '#grp_form').val(forms[i].ref);
+                         
+                         $('[name="com"]', '#grp_form').html(forms[i].comments);
+                         $('[name="com"]', '#grp_form').val(forms[i].comments);
+                         
+                         $('[name="form_id"]', '#grp_form').attr('value',forms[i].form_id);
+
+                    }
                 }
             }
         });
@@ -83,6 +102,9 @@
                  $.post( c, $("#grp_form").serialize()).done(function(data) {
                      if(data.status == 'cool'){
                          $('#msg_grp').html('<div class="alert alert-success text-center">Saved</div>');
+                         forms = data.forms;
+                     }else{
+                         $('#msg_grp').html('<div class="alert alert-danger text-center">'+data+'</div>');
                      }
                  },'json');
              },400);

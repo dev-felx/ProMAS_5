@@ -114,23 +114,6 @@ class Assess extends CI_Controller{
         
     }
         
-        
-    public function pres(){
-        //get data
-        $data['forms'] = $this->assessment_model->get_report($this->session->userdata('user_id'));
-        $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
-        
-        if($data['forms'] ==  NULL){
-            redirect('assessment/assess', 'location');
-        }
-        //prepare views
-        $data['sub_title'] = 'Presentation Assessment';
-        $data['views'] = array('/assessment/pres_view');
-        //load view
-        page_load($data);
-        
-    }
-    
     public function get_pro_stu(){
         $id = $_POST['id'];
         $response['students'] = $this->assessment_model->get_project_stu($id);
@@ -139,39 +122,79 @@ class Assess extends CI_Controller{
         exit(json_encode($response));
     }
     
-    public function save_form() {
-        $data = array(
-            'initiative' => $_POST['init'],
-            'understand' => $_POST['gen'],
-            'contribution' => $_POST['spec'],
-            'qna' => $_POST['init'],
-            'comments' => $_POST['com'],
-            'form_id' => $_POST['form_id']
-        );
-        $res = $this->assessment_model->save_form($data);
-        if($res){
-            $response['status'] = 'cool';
+    public function average(){
+        $data['forms'] = $this->assessment_model->get_weekly($this->session->userdata('user_id'));
+        $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
+        
+        if($data['forms'] ==  NULL){
+            redirect('assessment/assess', 'location');
         }
-        header('Content-type: application/json');
-        exit(json_encode($response));
+        
+        //prepare views
+        $data['sub_title'] = 'Average for weekly Assessment';
+        $data['views'] = array('/assessment/ave_view');
+        //load view
+        page_load($data);
+        
     }
     
-    public function save_form_grp() {
-        $data = array(
-            'abs' => $_POST['abs'],
-            'ack' => $_POST['ack'],
-            'comments' => $_POST['com'],
-            't_content' => $_POST['con'],
-            'intro' => $_POST['intro'],
-            'main' => $_POST['main'],
-            'ref' => $_POST['ref']
-        );
-        $form_id = $_POST['form_id'];
-        $res = $this->assessment_model->save_form_grp($data,$form_id);
-        if($res){
-            $response['status'] = 'cool';
+    public function save_form() {
+        $this->form_validation->set_rules("init","Initiative","required|is_natural|less_than[6]");
+        $this->form_validation->set_rules("gen","General Project Understanding","required|is_natural|less_than[6]");
+        $this->form_validation->set_rules("spec","Specific Contribution","required|is_natural|less_than[11]");
+        $this->form_validation->set_rules("qn"," Questions and Answers","required|is_natural|less_than[6]");
+        $this->form_validation->set_message('required','%s marks are required');
+        $this->form_validation->set_message('is_natural','%s marks have to a natural number');
+        if ($this->form_validation->run('reg') == FALSE){
+                echo validation_errors();        
+        }else {
+            $data = array(
+                'initiative' => $_POST['init'],
+                'understand' => $_POST['gen'],
+                'contribution' => $_POST['spec'],
+                'qna' => $_POST['qn'],
+                'comments' => $_POST['com'],
+                'form_id' => $_POST['form_id']
+            );
+            $res = $this->assessment_model->save_form($data);
+            if($res){
+                $response['forms'] = $this->assessment_model->get_weekly($this->session->userdata('user_id'));
+                $response['status'] = 'cool';
+            }
+            header('Content-type: application/json');
+            exit(json_encode($response));
         }
-        header('Content-type: application/json');
-        exit(json_encode($response));
+    }
+    
+    public function save_form_grp(){ 
+        $this->form_validation->set_rules("abs","Abstract","required|is_natural|less_than[4]");
+        $this->form_validation->set_rules("ack","Acknowledgment","required|is_natural|less_than[3]");
+        $this->form_validation->set_rules("con","Table Of Contents","required|is_natural|less_than[4]");
+        $this->form_validation->set_rules("intro","General Introduction","required|is_natural|less_than[5]");
+        $this->form_validation->set_rules("main","Main Body","required|is_natural|less_than[16]");
+        $this->form_validation->set_rules("ref","References","required|is_natural|less_than[4]");
+        $this->form_validation->set_message('required','%s marks are required');
+        $this->form_validation->set_message('is_natural','%s marks have to a natural number');
+        if ($this->form_validation->run('reg') == FALSE){
+                echo validation_errors();        
+        }else {
+            $data = array(
+                'abs' => $_POST['abs'],
+                'ack' => $_POST['ack'],
+                'comments' => $_POST['com'],
+                't_content' => $_POST['con'],
+                'intro' => $_POST['intro'],
+                'main' => $_POST['main'],
+                'ref' => $_POST['ref']
+            );
+            $form_id = $_POST['form_id'];
+            $res = $this->assessment_model->save_form_grp($data,$form_id);
+            if($res){  
+                $response['forms'] = $this->assessment_model->get_report($this->session->userdata('user_id'));
+                $response['status'] = 'cool';
+            }
+            header('Content-type: application/json');
+            exit(json_encode($response));
+        }
     }
 }
