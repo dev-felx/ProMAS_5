@@ -24,9 +24,9 @@
         <div class="hr"><hr/></div>
     </div>
 
-    <div class="row-fluid">
-        <div class="btn-group col-sm-2">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Group #<span class="caret"></span></button>
+    <div class="row-fluid col-sm-10">
+        <div class="btn-group col-sm-4">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Choose Group #<span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
             <?php if($this->session->userdata['type']=='coordinator'){
                 foreach ($all_groups as $value) {
