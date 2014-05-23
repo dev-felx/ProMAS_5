@@ -68,6 +68,7 @@
         'Manage users' => array(
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel head' => 'manage_users/manage/users/student'),
                                     
                                ),
         'Project' => array(
@@ -77,7 +78,13 @@
         'Schedule' => array(
                                     array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
                                     array('Calendar' => 'home'),
-                               )
+                               ),
+        'Assesment' => array(
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Average Assessment' => 'assessment/assess/average')
+                        )
         
     );
     
@@ -93,9 +100,11 @@
                                     array('Announcements' => 'project/announce'),
                                ),
         'Assesment' => array(
-                                    array('Weekly Progress' => 'assessment/assess/'),
-                                    array('Project Reports' => 'assessment/assess/'),
-                                    array('Project Presenations' => 'assessment/assess_panel/')
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Export Assessment Forms' => 'assessment/assess/average'),
                         )
         
     );
@@ -113,12 +122,21 @@
         
     );
     
+    $accordion['panel_head'] = array(
+        
+       'Assesment' => array(
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Export Assessment Forms' => 'assessment/assess/average'),
+                        )
+        
+    );
+    
     //=======ENGINE=========
 ?>
 
 <div class="col-sm-2" style="padding-left: 4px; padding-right: 5px;">
     <!-- Role Box -->
-    <div id="role_box" class="bottom_10" style="background-color: #fafafa">
+    <div id="role_box" class="bottom_10">
         <button class="btn btn-circle center-block text-primary"><span class="glyphicon glyphicon-user"></span></button>
         <p id="role_btn" class="text-center text-primary"><?php echo ucfirst($this->session->userdata['type']); ?> <span class="glyphicon glyphicon-chevron-down"></span></p>
         <?php if($this->session->userdata['type'] != 'student' && count($this->session->userdata['roles']) > 1) { $roles = $this->session->userdata['roles'];?>

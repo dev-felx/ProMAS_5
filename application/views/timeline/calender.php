@@ -43,7 +43,7 @@
                         textColor: 'white'  // an option!
                     },
                     {
-                        url: "<?php echo site_url(); ?>/timeline/timeline/ts_event/<?php echo $pid ?>", // use the `url` property
+                        url: "<?php echo site_url(); ?>/timeline/timeline/ts_event/<?php echo $this->input->get('pid', TRUE) ?>", // use the `url` property
                         color: '#BCE8F1',    // an option!
                         textColor: '#31708F'  // an option!
                     }

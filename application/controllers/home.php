@@ -13,6 +13,7 @@ class Home extends CI_Controller{
     }
     
     public function index(){
+        
        $url = $this->session->flashdata('url');
        if(($url != null)){
            redirect($this->session->flashdata('url'), 'location');
@@ -69,6 +70,11 @@ class Home extends CI_Controller{
   
             //load user's views
             page_load($data);
+        }
+        else if($this->session->userdata['type']=='panel_head'){
+            
+            redirect('assessment/assess_panel/pres', 'location');
+            
         }
         else{
            

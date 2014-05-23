@@ -1,5 +1,4 @@
 <?php
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -92,9 +91,8 @@
           </div>
 
         </div>
-     
 
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
               <!-- Title Bart Start -->
               <!-- Title Bart End -->
    <form id="add_timeline" class="" action="#" method="post">
@@ -136,11 +134,6 @@
 </div>
 </form>
                 <!-- New Project Form End -->
-      </div>
-       
-            
-
-            </div>
-
-        <!-- Row End -->
-
+    </div>
+</div>
+<!-- Row End -->

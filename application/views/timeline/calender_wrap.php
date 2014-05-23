@@ -35,6 +35,7 @@
     <button class="btn btn-success pull-right push_left_bit glyph_big"><span class="glyphicon glyphicon-cog"></span></button>
     <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
+    
     <!-- modified by Minja Junior -->
     <?php if($this->session->userdata('type') == 'supervisor'){?>
     <div class="btn-group pull-right push_right_bit">
@@ -44,10 +45,9 @@
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" id="myTab">
-            <?php //foreach ($groups as $value) { ?>
-            <li><a href="#5" data-toggle="tab">5</a></li>
-            <li><a href="#6" data-toggle="tab">6</a></li>
-            <?php // } ?>
+            <?php foreach ($groups as $value) { ?>
+            <li><a href="?pid=<?php echo $value['project_id']; ?>"><?php echo $value['title']; ?></a></li>
+            <?php  } ?>
         </ul>
     </div>
     <?php } ?>
@@ -87,25 +87,9 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-    <?php if($this->session->userdata('type') == 'supervisor'){ ?>
-    <div class="tab-content">
-            <div id="5" class="tab-pane fade in active">
-            <?php $da['pid'] = 5;
-            $this->load->view('timeline/calender', $da); ?>
-        </div>
-        <div id="6" class="tab-pane fade">
-            <?php 
-            $da['pid'] = 6;
-            $this->load->view('timeline/calender', $da); ?>
-            <h3>Section B</h3>
-            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
-        </div>
-    </div>
-
-        <?php     
-        }else {
+        <?php
+            //echo $this->input->get('pid', TRUE);
             $this->load->view('timeline/calender');
-        }
     ?>
 </div>
 <div id="popover_content_wrapper" class="hidden">
@@ -122,16 +106,21 @@
     //wrapper js
     function pop_up(desc,creator_id){
         var user_id = <?php echo $this->session->userdata('user_id'); ?>;
-        if(user_id == creator_id){
-           // alert(user_id + " "+ creator_id );
-            $('#edit_btn, #del_event').removeClass('hidden');
-            $('.dummy').hide();
+        if(user_id != creator_id){
+            $('#edit_btn, #del_event').hide();
+            $('.dummy').removeClass('hidden');
         }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }
     
     //Header button click functions
     $(document).ready(function() {
+        
+        $('.link').click(function(){
+          $('[name="value"]','#demo').attr('value',$(this).data('value'));  
+        });
+        
+        
         $("#new_btn").click(function(){
             $('.sider').hide();
             $('#calender_left').switchClass('col-sm-2','col-sm-3',700,show_new);
@@ -197,5 +186,9 @@
         $( window ).resize(function() {
              $('.fc-event').popover('hide');
         });
+
+        /*$('link').click(function(){//element to be click to load the page in the div
+            $(your_div_element).load('controller/method');
+        });*/ 
     });
 </script>
