@@ -34,7 +34,7 @@
                 }
             }else if($this->session->userdata['type']=='supervisor'){
                 foreach ($groups as $value) {
-                    echo '<li><a class="group_no" data-number="'.$value['group_no'].'">'.$value['group_no'].'</a></li>';
+                    echo '<li><a id="group_no_id" class="group_no" data-number="'.$value['group_no'].'">'.$value['group_no'].'</a></li>';
                 }
             } ?>
         </ul>
