@@ -12,7 +12,7 @@ class Assess extends CI_Controller{
         parent::__construct();
         
         //checking session and allowed roles
-        $roles = array('supervisor');
+        $roles = array('supervisor','panel_head');
         check_session_roles($roles);
         $this->load->model('assessment_model');
         $this->load->model('announcement_model');

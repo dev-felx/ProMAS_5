@@ -103,7 +103,8 @@
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
                                     array('Presentation' => 'assessment/assess_panel/pres'),
-                                    array('Average Assessment' => 'assessment/assess/average')
+                                    array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Export Assessment Forms' => 'assessment/assess/average'),
                         )
         
     );
@@ -118,6 +119,15 @@
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                )
+        
+    );
+    
+    $accordion['panel_head'] = array(
+        
+       'Assesment' => array(
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Export Assessment Forms' => 'assessment/assess/average'),
+                        )
         
     );
     
