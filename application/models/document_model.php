@@ -18,25 +18,39 @@ class Document_model extends CI_Model{
         }
         
     }
+    public function share_doc($data_doc,$data_rev){
+        
+        $query_doc = $this->db->insert('documents', $data_doc);
+        if(isset($query_doc) && $query_doc == 1){
+            $id = $this->db->insert_id();
+            $data_rev['doc_id']= $id;
+            $query_rev = $this->db->insert('revisions',$data_rev);
+            return $query_rev;
+        }
+        
+    }
     
     public function get_document($data){
         
         $this->db->select('*');
         $this->db->from('documents');
         $this->db->where($data);
-        $this->db->join('revisions', "revisions.doc_id =documents.doc_id",'inner');
+        $this->db->join('revisions',"revisions.doc_id =documents.doc_id",'inner');
+        //$this->db->where("(SELECT MAX(rev_no) FROM revisions WHERE revisions.doc_id =documents.doc_id )");
+        
+        
         $query= $this->db->get();
             
             if($query->num_rows()>0){
                 return $query->result_array();
-                
-            }else{
-                $this->db->select('*');
-                $this->db->from('documents');
-                $this->db->where($data);
-                $query= $this->db->get();
-                return $query->result_array();
-            } 
+            }   
+//            else{
+//                $this->db->select('*');
+//                $this->db->from('documents');
+//                $this->db->where($data);
+//                $query= $this->db->get();
+//                return $query->result_array();
+//            } 
     }
     
     

@@ -28,8 +28,6 @@ class Project_model extends CI_Model{
             $this->db->from('student_projects');
             $this->db->where($data); 
             
-            $this->db->join('groups', "groups.project_id =student_projects.project_id",'inner');
-            
             $query = $this->db->get();
             return $query->result_array();
           

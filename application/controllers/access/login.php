@@ -170,7 +170,8 @@ class Login extends CI_Controller{
                        'type'     => 'student',
                        'status' => $data['user_data'][0]['reg_status'],
                        'project_id' => $data['user_data'][0]['project_id'],
-                        'space_id' => $data['user_data'][0]['space_id'] 
+                       'space_id' => $data['user_data'][0]['space_id'], 
+                       'group_no' => $data['user_data'][0]['group_no'] 
                         
                     );
                     

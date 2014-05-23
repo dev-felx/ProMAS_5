@@ -48,6 +48,10 @@ $('body').on('hidden.bs.modal', '.modal', function () {
             <?php $i=1; 
                foreach ($documents as $row){
                    
+                   if($row['doc_status']==2){//skip rows with shared files
+                       break;
+                   }
+                   
                    $doc_id = $row['doc_id'];
                    $file_name = $row['name'];
                    
@@ -95,6 +99,30 @@ $('body').on('hidden.bs.modal', '.modal', function () {
             </tbody>
             </table>
            </div>
+    
+    <div id="calender_left" class="col-sm-2 no_pad no_mag" >
+    <div id="flash_info" class="sider">
+            <div class="alert-info alert text-center pad_10">Shared Documents</div>
+            <div class="col-sm-12 up_event">
+                <?php foreach ($documents as $row){
+                echo '<div class="up_event_item">';
+                
+                   if($row['doc_status'] == 2){//skip rows with shared files
+                       foreach ($row as $key=> $value) {
+                       if($key == 'name'){
+                       echo '<div><strong>'.$value.'</strong></div>';
+                       }
+                   } ?>
+                   <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($row['rev_file_path']);  ?>" class="action_view btn_edge btn-link btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
+                   <div class="hr"><hr/></div></div>
+                   <?php
+                   }
+                   }
+                ?>
+                        
+            </div>
+    </div>
+</div>
     
     <div id="upload_modal" class=" modal fade in" >
         <div class="modal-dialog">

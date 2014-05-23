@@ -24,12 +24,15 @@ class File extends CI_Controller{
             $values = array(
                 'creator_id'=>  $this->session->userdata['user_id'],
                 'creator_role'=>  $this->session->userdata['type'],
+                
             );
             
             $data['table_head']= array('#','Name','Group','Due date','Status');
             $data['filter_fields']= array('#','Name','Group','Due date','Status');
             $data['documents']=  $this->document_model->get_document($values);
             
+            $this->load->model('project_model');
+            $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0));
             
             $this->load->model('announcement_model');
             $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
@@ -40,7 +43,7 @@ class File extends CI_Controller{
         
         }elseif ($this->session->userdata['type']=='student'){
             $values= array(
-                'project_id'=>  $this->session->userdata['project_id'],
+                'group_no'=>  $this->session->userdata['project_id'],
             );
             
             $data['documents']=  $this->document_model->get_document($values);
@@ -51,6 +54,25 @@ class File extends CI_Controller{
         }
     }
     
+    public function get_documents($group_no){
+        $values = array(
+                'creator_id'=>  $this->session->userdata['user_id'],
+                'creator_role'=>  $this->session->userdata['type'],
+                'group_no'=>$group_no,
+                'doc_status !='=>2
+            );
+        
+        $documents =  $this->document_model->get_document($values);
+        foreach ($documents as $key => $value) {
+           $documents[$key]['rev_file_path'] = base64_encode($value['rev_file_path']);
+        }
+        header('Content-type: application/json');
+        exit(json_encode($documents));
+
+        
+    }
+
+
     public function request(){
         
         $this->form_validation->set_rules("title","Document title","required");
@@ -93,6 +115,7 @@ class File extends CI_Controller{
                     $value_proj = array(
                         'student_projects.project_id >'=>0);
                     $projects = $this->project_model->get_all_project($value_proj);
+                    
                     foreach ($projects as $value){
                         $data['project_id'] = $value['project_id'];
                         $result = $this->document_model->new_doc($data);
@@ -124,9 +147,9 @@ class File extends CI_Controller{
             
             //controlling version no of a document by counting existing versions
             $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
-            if(($exist_revs>=1)&&($_POST['rev_status']==0)){
+            if(($_POST['rev_status']==0)){
                $rev_no=$_POST['rev_no']; 
-            }else if(($exist_revs>=1)&& ($_POST['rev_status']==1)){
+            }else if(($_POST['rev_status']==1)){
                $rev_no=$_POST['rev_no']+1;
             }
             //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
@@ -176,9 +199,9 @@ class File extends CI_Controller{
                     }else{// else if user not student
                         //controlling version no of a document by counting existing versions
                         $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
-                        if(($exist_revs>=1)&&($_POST['rev_status']==0)){
-                           $rev_no=$_POST['rev_no']; 
-                        }else if(($exist_revs==2)&& ($_POST['rev_status']==1)){
+                        if(($_POST['rev_status']==0)){
+                           $rev_no=$_POST['rev_no']+1; 
+                        }else if(($_POST['rev_status']==1)){
                            $rev_no=$_POST['rev_no'];
                         }
                         //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
@@ -212,9 +235,9 @@ class File extends CI_Controller{
                             );
                             
                             //controlling number existing version of the document to be only 2
-                            if(($_POST['rev_status']==1)&& $exist_revs==2){
+                            if(($_POST['rev_status']==1)){
                                 $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
-                            }else if(($_POST['rev_status']==0)&& $exist_revs==1){
+                            }else if(($_POST['rev_status']==0)){
                                 $result = $this->document_model->insert_new_revision($data_rev);
                             }
 
@@ -273,12 +296,19 @@ class File extends CI_Controller{
                 $file_name =  str_replace(' ', '_', $_POST['file_name']);
                 
                 
-                $data = array(
+                $data_doc = array(
                     'name'=>$_POST['file_name'],
-                    'file_path'=>$config['upload_path'].$file_name.'.'.$extension,
-                    'file_status'=>4, //document has been shared value
+                    'doc_status'=>2, //document has been shared value
                     'space_id' => $this->session->userdata['space_id'],
-                    'file_creator_id' => $this->session->userdata['user_id'],
+                    'creator_id' => $this->session->userdata['user_id'],
+                    'creator_role' => $this->session->userdata['type'],
+                    );
+                
+                $data_rev = array(
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>1,//status of the revision if approved or not
+                        'rev_file_name'=>$file_name,
+                        'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
                     );
                 
                 if($_POST['group'] == 'All groups'){
@@ -286,8 +316,8 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data['project_id']=$value['project_id'];
-                        $result = $this->document_model->new_doc($data);
+                        $data_doc['project_id']=$value['project_id'];
+                        $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }elseif($this->session->userdata['type']=='coordinator'){
                     $this->load->model('project_model');
@@ -295,14 +325,14 @@ class File extends CI_Controller{
                         'student_projects.project_id >'=>0);
                     $projects = $this->project_model->get_all_project($value_proj);
                     foreach ($projects as $value){
-                        $data['project_id'] = $value['project_id'];
-                        $result = $this->document_model->new_doc($data);
+                        $data_doc['project_id'] = $value['project_id'];
+                        $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }
                 }else if($_POST['group'] == 'Choose groups'){
                     foreach($_POST['groups'] as $value) {
-                        $values['file_owner_id'] = $value;
-                        $result = $this->file_model->new_file($values);
+                        $data_doc['project_id'] = $value;
+                        $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }else if($_POST['group'] == 'All supervisors'){
                     foreach($_POST['groups'] as $value) {

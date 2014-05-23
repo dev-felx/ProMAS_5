@@ -24,86 +24,38 @@
         <div class="hr"><hr/></div>
     </div>
 
+    <div class="row-fluid">
+        <div class="btn-group col-sm-2">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Group #<span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <?php if($this->session->userdata['type']=='coordinator'){
+                foreach ($all_groups as $value) {
+                    echo '<li><a id="group_no_id" class="group_no" data-number="'.$value['group_no'].'">'.$value['group_no'].'</a></li>';
+                }
+            }else if($this->session->userdata['type']=='supervisor'){
+                foreach ($groups as $value) {
+                    echo '<li><a class="group_no" data-number="'.$value['group_no'].'">'.$value['group_no'].'</a></li>';
+                }
+            } ?>
+        </ul>
+        </div>
+        <div id="msg_group" class=" col-sm-4" style=""></div>
+    </div>
 
 <div class="row-fluid">
-<div class="col-sm-10">
-<table id="table_id" class=" table table-bordered table-striped dataTable">
-             <!--table heading--> 
-            <thead >
-            <tr>
-                <?php            
-                    foreach ($table_head as $key ) {
-                        echo '<th class=\'sorting_asc\' role="columnheader" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="'.ucwords(str_replace('_', ' ',$key )). ':activate to sort column descending">'
-                        .ucwords(str_replace('_', ' ',$key )).'</th>';
-                    }
-                    
-                    echo '<th>Actions</th>';
-                ?>
-            </tr>
-            </thead>
-            
-                <?php
-                echo '<thead><tr id="filter_global">';
-                    foreach ($filter_fields as $key ) {
-                        if($key=='#'){
-                            echo '<th></th>';
-                            continue;
-                        }
-                        echo '<th>'.$key.'</th>';
-                    }
-                    echo '</tr></thead>';
-                    ?>
-                    
-             <!--table body--> 
-            <tbody>
-                 
-            <?php $i=1; 
-               foreach ($documents as $row ){
-                   
-                   if($row['doc_status']==4){//skip rows with shared files
-                       break;
-                   }
-                   echo '<tr>';
-                   echo '<td>'.$i.'</td>';
-                   
-                   foreach ($row as $key=> $value) {
-                       
-                   if(($key == 'name')||($key == 'project_id')||($key == 'due_date')||($key == 'doc_status')){
-                   
-                       if(($key=='doc_status')&& $value==0){
-                            echo '<td>Not Submited</td>';
-                            continue;
-                        }elseif(($key=='doc_status')&& $value==1){
-                            echo '<td>Submited</td>';
-                       continue;
-                        }elseif(($key=='doc_status')&& $value==2){
-                            echo '<td>Approved</td>';
-                            continue;
-                        }
-                       echo '<td>'.$value.'</td>'; 
-                   }else{
-                       
-                       continue;
-                   }
-                   }
-                   echo '<td>';
-                   if($row['doc_status']=='1'){ //if document submitted show buttons below 
-                       $file_path = $row['rev_file_path'];
-                       ?>
-            <!--<a type="button" href="<?php //echo site_url(); ?>/project/file/preview/<?php// echo base64_encode($file_path); ?>" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span></a>-->
-            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($file_path);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
-            <a  data-status="<?php echo $row['doc_status']; ?>" data-rev_id="<?php echo $row['rev_id']; ?>" data-rev_status="<?php echo $row['rev_status']; ?>" data-rev_no="<?php echo $row['rev_no']; ?>" data-doc_name="<?php echo $row['name']; ?>" data-doc_id="<?php echo $row['doc_id']; ?>" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a> 
-                <?php 
-                    }else{// if document not submitted
-                       echo 'No action';
-                   } echo '</td>';
-                   echo '</tr>'; 
-                   $i++;
-                } 
-            ?>
-            </tbody>
-            </table>
-    </div>
+<div id="display_table" class="col-sm-10">
+    <table id="table_id" class=" table table-bordered table-striped dataTable">
+     <thead>
+        <tr>
+            <th>Name</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+</table>
+</div>
 
 
     
@@ -182,7 +134,7 @@
                         <?php
                             if($this->session->userdata['type']=='coordinator'){
                                 echo '<div class="checkbox"><label><input name="group" type="checkbox" value="All groups">All groups</label></div>';
-                                echo '<div class="checkbox"><label><input name="group" type="checkbox" value="All supervisors">All supervisors</label></div>';
+//                                echo '<div class="checkbox"><label><input name="group" type="checkbox" value="All supervisors">All supervisors</label></div>';
                             } else if($this->session->userdata['type']=='supervisor'){
                                 echo '<div class="checkbox"><label><input name="group" type="checkbox" value="All groups">All groups</label></div>';
                                 echo '<div class="checkbox"><label><input name="group" id="choose_group_share" type="checkbox" value="Choose groups">Choose groups</label></div>';
@@ -243,9 +195,38 @@
 <script>
     $( "#groups" ).hide();
     $( "#groups_share" ).hide();
+    var site_url = "<?php echo site_url(); ?>";
     $(document).ready(function(){
+        $('.group_no').click(function(e) {
+        var group_no = $(this).data('number');
+        var function_url = "<?php echo site_url(); ?>/project/file/get_documents/".concat(group_no);
         
-        $('.upload_m').click(function() {
+            $('#msg_group').html('<strong><h4>Documents for Group # '+group_no+'<h4></strong>');
+            $('#msg_group').addClass('text-info');
+           $('#table_id > tbody').html('');
+        
+        
+    $.get( function_url).done(function(data) {
+            for(var i = 0; i < data.length; i++){
+                if(data[i].doc_status == '1'){
+                    var status = 'Submited';
+                    var path = site_url+'/project/file/download/'+data[i].rev_file_path;
+                    var x = '<a type="button" href="'+path+'" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>\n\
+                             <a  data-status="'+data[i].doc_status+'" data-rev_id="'+data[i].rev_id+'"data-rev_status="'+data[i].rev_status+'" data-rev_no="'+data[i].rev_no+'" data-doc_name="'+data[i].name+'" data-doc_id="'+data[i].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
+                }else if(data[i].doc_status == '0'){
+                    var status ='Not submitted';
+                    var x = 'Not Action';
+                }
+                $('#table_id > tbody').append('<tr><td>' + data[i].name +'</td><td>'+data[i].due_date+'</td><td>'+status+'</td><td>'+x+'</td></tr>');
+                
+            }
+        },"json");
+       
+    });
+    
+    $('#group_no_id').trigger('click');
+        
+        $('body').on('click', '.upload_m', function () {
         $('[name="status"]','#upload_form').attr('value',$(this).data('status'));
         $('[name="rev_id"]','#upload_form').attr('value',$(this).data('rev_id'));
         $('[name="rev_status"]','#upload_form').attr('value',$(this).data('rev_status'));
@@ -348,12 +329,11 @@
             return false;
         });
         });
-      
-    var table = $('#table_id').dataTable({
-        "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
-        //"order": [[ 3, "desc" ]]
-        "bJQueryUI": true
-        });
+//      
+//    var table = $('#table_id').dataTable({
+//        "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
+//        //"order": [[ 3, "desc" ]]
+//        });
     });
     
 
