@@ -38,4 +38,16 @@ class Event_model extends CI_Model{
             return FALSE;
         }
     }
+    
+    public function list_events(){
+        $this->db->select('*');
+        $this->db->from('events');
+        $res = $this->db->get();
+        if($res->num_rows() > 0) {
+            foreach ($res->result() as $row) {
+                $dt[] = $row;
+            }
+            return $dt;        
+        }
+    }
 }

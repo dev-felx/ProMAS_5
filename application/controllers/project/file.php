@@ -107,7 +107,7 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data['project_id']=$value['project_id'];
+                        $data['group_no']=$value['project_id'];
                         $result = $this->document_model->new_doc($data);
                     }
                 }elseif($this->session->userdata['type']=='coordinator'){
@@ -117,14 +117,14 @@ class File extends CI_Controller{
                     $projects = $this->project_model->get_all_project($value_proj);
                     
                     foreach ($projects as $value){
-                        $data['project_id'] = $value['project_id'];
+                        $data['group_no'] = $value['project_id'];
                         $result = $this->document_model->new_doc($data);
                     }
                 }
             }else if($_POST['group'] == 'Choose groups'){
                 
                 foreach ($_POST['groups'] as $value) {
-                    $data['project_id'] = $value;
+                    $data['group_no'] = $value;
                     $result = $this->document_model->new_doc($data);
                 }
             }
@@ -316,7 +316,7 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data_doc['project_id']=$value['project_id'];
+                        $data_doc['group_no']=$value['project_id'];
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }elseif($this->session->userdata['type']=='coordinator'){
@@ -325,13 +325,13 @@ class File extends CI_Controller{
                         'student_projects.project_id >'=>0);
                     $projects = $this->project_model->get_all_project($value_proj);
                     foreach ($projects as $value){
-                        $data_doc['project_id'] = $value['project_id'];
+                        $data_doc['group_no'] = $value['project_id'];
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }
                 }else if($_POST['group'] == 'Choose groups'){
                     foreach($_POST['groups'] as $value) {
-                        $data_doc['project_id'] = $value;
+                        $data_doc['group_no'] = $value;
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }else if($_POST['group'] == 'All supervisors'){
