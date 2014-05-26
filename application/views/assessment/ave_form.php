@@ -4,7 +4,7 @@
     }
 </style>
 <form id="ind_form" class="form-horizontal" role="form" method="POST">
-    <div id="msg_frm"></div>
+    <div class="alert alert-warning text-center"><Strong>Warning!</strong> Average on all form, both filled and not filled</div>
     <input type="hidden" id="form_id" name="form_id" class="form-control ">
     <div class="form-group">
         <label for="inputName" class="col-sm-4 control-label">Student Name.</label>
@@ -22,10 +22,7 @@
             <p id="pro_name" class="form-control-static">Project Management and archiving system</p>
         </div>
         
-        <label for="inputAssessment Week" class="col-sm-4 control-label">Week No.</label>
-            <div class="col-sm-6">
-                  <p id="wik" class="form-control-static">Project Management and archiving system</p>
-            </div>
+     
     </div>
     <div class="col-sm-10 col-sm-offset-1 bottom_10"><hr/></div>
     <div class="clearfix"></div>
@@ -58,16 +55,4 @@
         </div>
     </div>
     
-    <div class="form-group">
-        <label for="inputComments" class="col-sm-4 control-label">Comments</label>
-        <div class="col-sm-6">
-            <textarea id="com" name="com" class="form-control" rows="3"></textarea>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <div class="col-sm-2 col-sm-offset-8">
-            <button id="sav_form" type="Submit" class="btn btn-success pull-right">Save</button>
-        </div>
-    </div>
 </form>

@@ -78,13 +78,7 @@
         'Schedule' => array(
                                     array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
                                     array('Calendar' => 'home'),
-                               ),
-        'Assesment' => array(
-                                    array('Weekly Progress' => 'assessment/assess/weekly'),
-                                    array('Project Reports' => 'assessment/assess/report'),
-                                    array('Presentation' => 'assessment/assess_panel/pres'),
-                                    array('Average Assessment' => 'assessment/assess/average')
-                        )
+                               )
         
     );
     
@@ -102,9 +96,9 @@
         'Assesment' => array(
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
-                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    //array('Presentation Assessment' => 'assessment/assess_panel/pres'),
                                     array('Average Assessment' => 'assessment/assess/average'),
-                                    array('Export Assessment Forms' => 'assessment/assess/average'),
+                                    //array('Export Assessment Forms' => 'assessment/assess/export'),
                         )
         
     );
@@ -126,7 +120,7 @@
         
        'Assesment' => array(
                                     array('Presentation' => 'assessment/assess_panel/pres'),
-                                    array('Export Assessment Forms' => 'assessment/assess/average'),
+                                   // array('Export Assessment Forms' => 'assessment/assess/average'),
                         )
         
     );

@@ -28,12 +28,13 @@
                 <h3 class="panel-title text-center">Student Weekly Average Assessment</h3>
             </div>
             <div id="form_cont" class="panel-body">
-                <?php $this->load->view('assessment/ind_form'); ?>
+                <?php $this->load->view('assessment/ave_form'); ?>
             </div>
         </div>
     </div>
 <script> 
 var forms = <?php echo json_encode($forms); ?>;
+$('#ind_form').hide();
 $(document).ready(function(){  
     $( "#pro" ).change(function() {
             var id = $(this).val();
@@ -64,10 +65,9 @@ $(document).ready(function(){
             var curr_stu = $(this).attr('id');
            
             for (var i=0; i < forms.length; i++){
-                 if (forms[i]['student_id'] == curr_stu && forms[i]['week_no'] == week){
+                 if (forms[i]['student'] == curr_stu){
                      $('#name').html(forms[i].student_name);
                      $('#reg_no').html(forms[i].student);
-                     $('#wik').html(forms[i].week_no);
                      $('#pro_name').html(forms[i].project_name);
 
                      $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
@@ -81,12 +81,11 @@ $(document).ready(function(){
 
                      $('#qn').attr('value',forms[i].qna);
                      $('#qn').val(forms[i].qna);
+                     
+                     $('#ind_form').slideDown();
+                     
+                     
 
-                     $('#com').html(forms[i].comments);
-                     $('#com').val(forms[i].comments);
-
-
-                     $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
                  }
              }
         });
