@@ -129,7 +129,50 @@ class Assess extends CI_Controller{
         if($data['forms'] ==  NULL){
             redirect('assessment/assess', 'location');
         }
-        
+        //compute the average
+        $ave_forms = array();
+        foreach ($data['projects'] as $value) {
+            $students = $this->assessment_model->get_project_stu($value['project_id']);
+
+            foreach ($students as $sub_value) {
+                $student_forms = $this->assessment_model->get_stu_form($sub_value['registration_no']);
+                //average fields
+                $form = array(
+                    'student' => null,
+                    'student_name' => null,
+                    'project_id' => null,
+                    'project_name' => null,
+                    'initiative' => 0,
+                    'understand' => 0,
+                    'contribution' => 0,
+                    'qna' => 0,
+                );
+                
+                //sum all
+                foreach ($student_forms as $sub_sub_value) {
+                    $form['student'] = $sub_sub_value['student'];
+                    $form['student_name'] = $sub_sub_value['student_name']; 
+                    $form['project_id'] = $sub_sub_value['project_id']; 
+                    $form['project_name'] = $sub_sub_value['project_name']; 
+                    $form['initiative'] =  $form['initiative'] + $sub_sub_value['initiative'];
+                    $form['understand'] =  $form['understand'] + $sub_sub_value['understand'];
+                    $form['contribution'] = $form['contribution'] + $sub_sub_value['contribution'];
+                    $form['qna'] = $form['qna'] + $sub_sub_value['qna'];
+                }
+                
+                //average
+                $num  = count($student_forms);
+                $form['initiative'] =  $form['initiative'] / $num;
+                $form['understand'] =  $form['understand'] / $num;
+                $form['contribution'] = $form['contribution'] / $num;
+                $form['qna'] = $form['qna'] / $num;
+                    
+                array_push($ave_forms, $form);
+            }
+            
+            
+        }
+        $data['forms'] = $ave_forms;
         //prepare views
         $data['sub_title'] = 'Average for weekly Assessment';
         $data['views'] = array('/assessment/ave_view');
@@ -196,5 +239,13 @@ class Assess extends CI_Controller{
             header('Content-type: application/json');
             exit(json_encode($response));
         }
+    }
+    
+    
+    public function export(){
+        $data['sub_title'] = 'Export Assessment Documents';
+        $data['views'] = array('/assessment/export_view');
+        //load view
+        page_load($data);
     }
 }

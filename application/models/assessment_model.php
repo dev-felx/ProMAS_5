@@ -69,6 +69,14 @@ class Assessment_model extends CI_Model{
         $this->db->where('form_id', $data['form_id']);
         return $this->db->update('assess_pres', $data);
     }
-        
+     
+    public function get_stu_form($reg){
+        $this->db->select('*');
+        $this->db->from('asses_week');
+        $this->db->where(array('student' => $reg));
+        $query = $this->db->get();
+        $result =  $query->result_array();
+        return $result;
+    }
         
 }
