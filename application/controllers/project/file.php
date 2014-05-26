@@ -47,6 +47,7 @@ class File extends CI_Controller{
             );
             
             $data['documents']=  $this->document_model->get_document($values);
+            //print_r($data['documents']);            die();
             $data['table_head']= array('#','Name','Created by','Due date','Status');
             $data['views']=array('/document/submit_view');
             page_load($data);
@@ -63,8 +64,13 @@ class File extends CI_Controller{
             );
         
         $documents =  $this->document_model->get_document($values);
+        //print_r($documents[1][0]['rev_file_path']);
+        $i=0;
         foreach ($documents as $key => $value) {
-           $documents[$key]['rev_file_path'] = base64_encode($value['rev_file_path']);
+            
+           $documents[$i][0]['rev_file_path'] = base64_encode($documents[$i][0]['rev_file_path']);
+        
+           $i++;
         }
         header('Content-type: application/json');
         exit(json_encode($documents));
@@ -107,29 +113,39 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data['project_id']=$value['project_id'];
+                        $data['group_no']=$value['project_id'];
                         $result = $this->document_model->new_doc($data);
-                    }
+                    }//paramaters for notifications
+                    $scope= 3;
+                    $sc_p1 = $this->session->userdata['user_id'];
                 }elseif($this->session->userdata['type']=='coordinator'){
                     $this->load->model('project_model');
                     $value_proj = array(
                         'student_projects.project_id >'=>0);
-                    $projects = $this->project_model->get_all_project($value_proj);
+                        $projects = $this->project_model->get_all_project($value_proj);
                     
                     foreach ($projects as $value){
-                        $data['project_id'] = $value['project_id'];
+                        $data['group_no'] = $value['project_id'];
                         $result = $this->document_model->new_doc($data);
                     }
+                    $scope= 2;
+                    $sc_p1 = 'stu';
                 }
             }else if($_POST['group'] == 'Choose groups'){
                 
                 foreach ($_POST['groups'] as $value) {
-                    $data['project_id'] = $value;
+                    $data['group_no'] = $value;
                     $result = $this->document_model->new_doc($data);
                 }
             }
             if($result){
+                $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
+                $email= TRUE;
+                $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                
+                if($notify){
                     $response['status'] = 'success';
+                }
                 }
         }
         
@@ -316,22 +332,26 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data_doc['project_id']=$value['project_id'];
+                        $data_doc['group_no']=$value['project_id'];
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
+                    $scope= 3;
+                    $sc_p1 = $this->session->userdata['user_id'];
                 }elseif($this->session->userdata['type']=='coordinator'){
                     $this->load->model('project_model');
                     $value_proj = array(
                         'student_projects.project_id >'=>0);
                     $projects = $this->project_model->get_all_project($value_proj);
                     foreach ($projects as $value){
-                        $data_doc['project_id'] = $value['project_id'];
+                        $data_doc['group_no'] = $value['project_id'];
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
+                    $scope= 2;
+                    $sc_p1 = 'stu';
                 }
                 }else if($_POST['group'] == 'Choose groups'){
                     foreach($_POST['groups'] as $value) {
-                        $data_doc['project_id'] = $value;
+                        $data_doc['group_no'] = $value;
                         $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }else if($_POST['group'] == 'All supervisors'){
@@ -342,7 +362,14 @@ class File extends CI_Controller{
                 }
                 
                 if($result !== NULL){
+                    $desc = 'Document: ' .$_POST['file_name'].' shared by '.$this->session->userdata['type'];
+                    $email= TRUE;
+                    $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                
+                if($notify){
                     $response['status'] = 'success';
+                }
+                    
                 }
                 
             }

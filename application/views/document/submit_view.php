@@ -45,20 +45,20 @@ $('body').on('hidden.bs.modal', '.modal', function () {
             </thead>
              <!--table body--> 
             <tbody>
+                
             <?php $i=1; 
                foreach ($documents as $row){
-                   
-                   if($row['doc_status']==2){//skip rows with shared files
-                       break;
+                   if(($row[0]['doc_status'])==2){//skip rows with shared files
+                       continue;
                    }
                    
-                   $doc_id = $row['doc_id'];
-                   $file_name = $row['name'];
+                   $doc_id = $row[0]['doc_id'];
+                   $file_name = $row[0]['name'];
                    
                    echo '<tr>';
                    echo '<td>'.$i.'</td>';
                    
-                   foreach ($row as $key=> $value) {
+                   foreach ($row[0] as $key=> $value) {
                    
                        if(($key == 'name')||($key == 'creator_role')||($key == 'due_date')||($key == 'doc_status')){
                    
@@ -86,15 +86,15 @@ $('body').on('hidden.bs.modal', '.modal', function () {
                       
                    }
                    echo '<td>';
-                   if($row['doc_status']=='1'){ ?>
-            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($row['rev_file_path']);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
+                   if($row[0]['doc_status']=='1'){ ?>
+            <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($row[0]['rev_file_path']);  ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
                    <?php }
                    ?>
-                       <a  data-status="<?php echo $row['doc_status']; ?>" data-rev_status="<?php echo $row['rev_status']; ?>" data-rev_id="<?php echo $row['rev_id']; ?>" data-rev_no="<?php echo $row['rev_no']; ?>" data-doc_name="<?php echo $row['name']; ?>" data-doc_id="<?php echo $row['doc_id']; ?>" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>
+                       <a  data-status="<?php echo $row[0]['doc_status']; ?>" data-rev_status="<?php echo $row[0]['rev_status']; ?>" data-rev_id="<?php echo $row[0]['rev_id']; ?>" data-rev_no="<?php echo $row[0]['rev_no']; ?>" data-doc_name="<?php echo $row[0]['name']; ?>" data-doc_id="<?php echo $row[0]['doc_id']; ?>" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>
                   <?php echo '</td>';
                    echo '</tr>'; 
                    $i++;
-                } 
+                }
             ?>
             </tbody>
             </table>
@@ -107,13 +107,13 @@ $('body').on('hidden.bs.modal', '.modal', function () {
                 <?php foreach ($documents as $row){
                 echo '<div class="up_event_item">';
                 
-                   if($row['doc_status'] == 2){//skip rows with shared files
-                       foreach ($row as $key=> $value) {
+                   if($row[0]['doc_status'] == 2){//skip rows with shared files
+                       foreach ($row[0] as $key => $value) {
                        if($key == 'name'){
                        echo '<div><strong>'.$value.'</strong></div>';
                        }
                    } ?>
-                   <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($row['rev_file_path']);  ?>" class="action_view btn_edge btn-link btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
+                   <a type="button" href="<?php echo site_url(); ?>/project/file/download/<?php echo base64_encode($row[0]['rev_file_path']);  ?>" class="action_view btn_edge btn-link btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>
                    <div class="hr"><hr/></div></div>
                    <?php
                    }
