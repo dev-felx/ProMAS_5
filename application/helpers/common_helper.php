@@ -150,7 +150,7 @@ function create_notif($desc,$scope,$email = FALSE,$sc_p1 = null,$sc_p2 = null,$u
             $email_list = $CI->announcement_model->get_email_1_2($CI->session->userdata['space_id'],'stu');
         }else if($data['scope'] == 2 && $sc_p1 == 'non_stu'){
             $email_list = $CI->announcement_model->get_email_1_2($CI->session->userdata['space_id'],'non_stu');
-        }else if($data['scope'] == 3 && $sc_p1 == 'non_stu'){
+        }else if($data['scope'] == 3){
             $email_list = $CI->announcement_model->get_email_3($CI->session->userdata['space_id'],$sc_p1);
         }else if($data['scope'] == 5 && isset ($sc_p2)){
             $email_list = $CI->announcement_model->get_email_5($CI->session->userdata['space_id'],$CI->session->userdata['project_id'],$sc_p2);
