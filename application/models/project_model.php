@@ -18,9 +18,19 @@ class Project_model extends CI_Model{
                 return $query->result_array();
         
             }
+    }
+    public function get_project_id($group_no){
+        
+        $query = $this->db->get_where('student_projects',array('group_no' =>$group_no));
+            
+            if($query->num_rows()>0 ){
+                
+                return $query->result_array();
+        
+            }
             
     
-    }//end function get project
+    }//end function get project group_no
     
     public function get_all_project($data){
             

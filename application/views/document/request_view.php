@@ -329,11 +329,6 @@
             return false;
         });
         });
-//      
-//    var table = $('#table_id').dataTable({
-//        "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
-//        //"order": [[ 3, "desc" ]]
-//        });
     });
     
 

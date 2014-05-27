@@ -36,15 +36,12 @@ class Document_model extends CI_Model{
         if($result != NULL){
             $document=array();
             foreach ($result as $value) {
-                
-                $this->db->select('*');
-                $query_doc = $this->db->from('documents');
-                $this->db->where(array('revisions.doc_id'=>$value['doc_id']));
-                $this->db->select_max('revisions.rev_no');
-                $this->db->join('revisions',"revisions.doc_id =documents.doc_id",'inner');
-                $query= $this->db->get();
+                $doc_idd= $value['doc_id'];
+                $query_1 = "SELECT documents.*, revisions.* FROM documents  
+                            INNER JOIN revisions ON revisions.doc_id=documents.doc_id  
+                            WHERE revisions.doc_id=$doc_idd ORDER BY revisions.rev_no DESC LIMIT 1"; 
+                $query =  $this->db->query($query_1);
                 array_push($document, $query->result_array());
-                
             }
             return $document;
           

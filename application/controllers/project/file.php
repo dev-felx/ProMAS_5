@@ -67,7 +67,6 @@ class File extends CI_Controller{
         //print_r($documents[1][0]['rev_file_path']);
         $i=0;
         foreach ($documents as $key => $value) {
-            
            $documents[$i][0]['rev_file_path'] = base64_encode($documents[$i][0]['rev_file_path']);
         
            $i++;
@@ -139,10 +138,23 @@ class File extends CI_Controller{
                 }
             }
             if($result){
-                $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
-                $email= TRUE;
-                $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
                 
+                if($_POST['group']=='All groups'){
+                    $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
+                    $email= TRUE;
+                    $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                }else if($_POST['group'] == 'Choose groups'){
+                    foreach ($_POST['groups'] as $value) {
+                        $this->load->model('project_model');
+                        $project_id = $this->project_model->get_project_id($value);
+                        $scope = 5;
+                        $sc_p1=$project_id[0]['project_id'];
+                        $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
+                        $email= TRUE;
+                        $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                }
+                    
+                }
                 if($notify){
                     $response['status'] = 'success';
                 }
@@ -162,7 +174,7 @@ class File extends CI_Controller{
         if($this->session->userdata['type']=='student'){
             
             //controlling version no of a document by counting existing versions
-            $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
+            //$exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
             if(($_POST['rev_status']==0)){
                $rev_no=$_POST['rev_no']; 
             }else if(($_POST['rev_status']==1)){
@@ -214,7 +226,7 @@ class File extends CI_Controller{
             
                     }else{// else if user not student
                         //controlling version no of a document by counting existing versions
-                        $exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
+                        //$exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
                         if(($_POST['rev_status']==0)){
                            $rev_no=$_POST['rev_no']+1; 
                         }else if(($_POST['rev_status']==1)){
@@ -253,7 +265,7 @@ class File extends CI_Controller{
                             //controlling number existing version of the document to be only 2
                             if(($_POST['rev_status']==1)){
                                 $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
-                            }else if(($_POST['rev_status']==0)){
+                            }else if($_POST['rev_status']==0){
                                 $result = $this->document_model->insert_new_revision($data_rev);
                             }
 
@@ -362,10 +374,25 @@ class File extends CI_Controller{
                 }
                 
                 if($result !== NULL){
-                    $desc = 'Document: ' .$_POST['file_name'].' shared by '.$this->session->userdata['type'];
-                    $email= TRUE;
-                    $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
-                
+                    
+                        if($_POST['group']=='All groups'){
+                            $desc = 'Document: ' .$_POST['file_name'].' shared by '.$this->session->userdata['type'];
+                            $email= TRUE;
+                            $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                        }else if($_POST['group'] == 'Choose groups'){
+                            foreach ($_POST['groups'] as $value) {
+                                $this->load->model('project_model');
+                                $project_id = $this->project_model->get_project_id($value);
+                                $scope = 5;
+                                $sc_p1=$project_id[0]['project_id'];
+                                print_r($sc_p1);
+                                $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
+                                $email= TRUE;
+                                $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                        }
+
+                        }
+                    
                 if($notify){
                     $response['status'] = 'success';
                 }
@@ -441,4 +468,5 @@ class File extends CI_Controller{
     }//end function download
 
     
-        }
+}
+        
