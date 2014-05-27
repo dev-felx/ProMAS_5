@@ -248,4 +248,24 @@ class Assess extends CI_Controller{
         //load view
         page_load($data);
     }
+    
+    
+    
+      public function report_export(){
+        $this->load->dbutil();
+        $this->db->select('*');
+        $this->db->from('assess_groups');
+        $this->db->where(array('owner' => $this->session->userdata('user_id')));
+        $query = $this->db->get();
+
+        $delimiter = ",";
+        $newline = "\r\n";
+        $csv_data =  $this->dbutil->csv_from_result($query, $delimiter, $newline);
+        
+        $name = 'mytext.csv';
+        $this->load->helper('download');
+        force_download($name, $csv_data);
+    
+        
+    }
 }

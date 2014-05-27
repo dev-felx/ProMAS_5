@@ -96,9 +96,7 @@
         'Assesment' => array(
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
-                                    //array('Presentation Assessment' => 'assessment/assess_panel/pres'),
                                     array('Average Assessment' => 'assessment/assess/average'),
-                                    //array('Export Assessment Forms' => 'assessment/assess/export'),
                         )
         
     );

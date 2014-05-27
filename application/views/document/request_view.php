@@ -208,16 +208,16 @@
         
     $.get( function_url).done(function(data) {
             for(var i = 0; i < data.length; i++){
-                if(data[i].doc_status == '1'){
+                if(data[i][0].doc_status == '1'){
                     var status = 'Submited';
-                    var path = site_url+'/project/file/download/'+data[i].rev_file_path;
+                    var path = site_url+'/project/file/download/'+data[i][0].rev_file_path;
                     var x = '<a type="button" href="'+path+'" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>\n\
-                             <a  data-status="'+data[i].doc_status+'" data-rev_id="'+data[i].rev_id+'"data-rev_status="'+data[i].rev_status+'" data-rev_no="'+data[i].rev_no+'" data-doc_name="'+data[i].name+'" data-doc_id="'+data[i].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
-                }else if(data[i].doc_status == '0'){
+                             <a  data-status="'+data[i][0].doc_status+'" data-rev_id="'+data[i][0].rev_id+'"data-rev_status="'+data[i][0].rev_status+'" data-rev_no="'+data[i][0].rev_no+'" data-doc_name="'+data[i][0].name+'" data-doc_id="'+data[i][0].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
+                }else if(data[i][0].doc_status == '0'){
                     var status ='Not submitted';
                     var x = 'Not Action';
                 }
-                $('#table_id > tbody').append('<tr><td>' + data[i].name +'</td><td>'+data[i].due_date+'</td><td>'+status+'</td><td>'+x+'</td></tr>');
+                $('#table_id > tbody').append('<tr><td>' + data[i][0].name +'</td><td>'+data[i][0].due_date+'</td><td>'+status+'</td><td>'+x+'</td></tr>');
                 
             }
         },"json");
@@ -329,11 +329,6 @@
             return false;
         });
         });
-//      
-//    var table = $('#table_id').dataTable({
-//        "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
-//        //"order": [[ 3, "desc" ]]
-//        });
     });
     
 
