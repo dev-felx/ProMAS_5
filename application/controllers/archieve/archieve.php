@@ -28,13 +28,15 @@ class Archieve extends CI_Controller {
         $this->load->view('archieve/suggest', $data);
     }
 
-        public function search(){
-        
-        $this->load->view('archieve/search_result');
+    public function search(){
+        $searchterm = $this->input->post('search_key');
+        $search_term = mysql_real_escape_string(strip_tags($searchterm));
+        $data['res'] = $this->archieve_model->search($search_term);
+        $this->load->view('archieve/search_result', $data);
     }
     
-    public function profile(){
-        
-        $this->load->view('archieve/profile_view');
+    public function profile($id){
+        $data['res'] = $this->archieve_model->profile($id);
+        $this->load->view('archieve/profile_view', $data);
     }
 }
