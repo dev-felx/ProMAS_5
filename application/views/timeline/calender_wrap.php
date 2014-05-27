@@ -106,9 +106,9 @@
     //wrapper js
     function pop_up(desc,creator_id){
         var user_id = <?php echo $this->session->userdata('user_id'); ?>;
-        if(user_id != creator_id){
-            $('#edit_btn, #del_event').hide();
-            $('.dummy').removeClass('hidden');
+        if(user_id == creator_id){
+            $('#edit_btn, #del_event').removeClass('hidden');
+            $('.dummy').hide();
         }
         return $("<div class='text-center'>"+desc+"</div>").html() + $('#popover_content_wrapper').html();
     }

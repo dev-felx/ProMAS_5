@@ -44,6 +44,9 @@
             </div>
         </div>
     </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-10 col-sm-offset-1"><hr/></div>
+    <div class="col-sm-4 col-sm-offset-4 bottom_10"><a href="<?php echo site_url('assessment/assess/report_export'); ?>" class="btn btn-primary btn-block">Download Data in Excel File</a></div>
 <script>
     var forms = <?php echo json_encode($forms); ?>;
     var curr_form;
