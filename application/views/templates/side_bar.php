@@ -59,6 +59,7 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
+                                    array('Notifications' => 'project/notify'),
                                )
         
     );
@@ -68,17 +69,25 @@
         'Manage users' => array(
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
-                                    array('Panel head' => 'manage_users/manage/users/student'),
+                                    array('Panel Head' => 'manage_users/manage/users/student'),
+                                    array('Archive Users' => 'archive/users'),
                                     
                                ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
+                                    array('Notifications' => 'project/notify'),
                                ),
         'Schedule' => array(
                                     array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
                                     array('Calendar' => 'home'),
-                               )
+                               ),
+        'Archive' => array(
+                                    array('Archive Home' => 'archive/access/switcher'),
+                                    array('Access Manager' => 'archive/users'), 
+                                    array('Archive Publisher' => 'timeline/timeline/event'),
+                     ),
+        
         
     );
     
@@ -92,12 +101,17 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
+                                    array('Notifications' => 'project/notify'),
                                ),
         'Assesment' => array(
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
                                     array('Average Assessment' => 'assessment/assess/average'),
-                        )
+                        ),
+        'Archive' => array(
+                                    array('Archive Home' => 'home'),    // Modified by Minja Junior
+                                    array('Archive Publisher' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                               ),
         
     );
     
@@ -110,6 +124,7 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
+                                    array('Notifications' => 'project/notify'),
                                )
         
     );
