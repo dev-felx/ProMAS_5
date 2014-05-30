@@ -5,7 +5,7 @@
  *
  * @author Minja Junior
  */
-class Archieve_model extends CI_Model {
+class Archive_model extends CI_Model {
     
     public function st($term){
         $this->db->select('*');

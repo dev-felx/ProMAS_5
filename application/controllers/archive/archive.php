@@ -6,37 +6,37 @@
  * and open the template in the editor.
  */
 
-class Archieve extends CI_Controller {
+class Archive extends CI_Controller {
     
     public function __construct() {
         
         parent::__construct();
         
-        $this->load->model('archieve_model');
+        $this->load->model('archive_model');
     }
 
     public function index(){
         $data['view'] = 'suggest';
-        $this->load->view('archieve/homepage', $data);
+        $this->load->view('archive/search/homepage', $data);
     }
     
     public function suggestions(){
         $searchterm = $this->input->post('search_key');
         $data['ajax_req'] = TRUE;
         $search_term = mysql_real_escape_string(strip_tags($searchterm));
-        $data['res'] = $this->archieve_model->st($search_term);
-        $this->load->view('archieve/suggest', $data);
+        $data['res'] = $this->archive_model->st($search_term);
+        $this->load->view('archive/search/suggest', $data);
     }
 
     public function search(){
         $searchterm = $this->input->post('search_key');
         $search_term = mysql_real_escape_string(strip_tags($searchterm));
-        $data['res'] = $this->archieve_model->search($search_term);
-        $this->load->view('archieve/search_result', $data);
+        $data['res'] = $this->archive_model->search($search_term);
+        $this->load->view('archive/search/search_result', $data);
     }
     
     public function profile($id){
-        $data['res'] = $this->archieve_model->profile($id);
-        $this->load->view('archieve/profile_view', $data);
+        $data['res'] = $this->archive_model->profile($id);
+        $this->load->view('archive/search/profile_view', $data);
     }
 }
