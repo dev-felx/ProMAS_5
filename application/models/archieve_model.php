@@ -54,4 +54,13 @@ class Archieve_model extends CI_Model {
             return FALSE;
         }
     }
+    
+    /*========================================
+     * Access functions
+     */
+    
+    public function new_user($data){
+        $query = $this->db->insert('archive_users', $data);
+        return $query;
+    }
 }

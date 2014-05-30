@@ -188,7 +188,7 @@ class Assess extends CI_Controller{
         $this->form_validation->set_rules("qn"," Questions and Answers","required|is_natural|less_than[6]");
         $this->form_validation->set_message('required','%s marks are required');
         $this->form_validation->set_message('is_natural','%s marks have to a natural number');
-        if ($this->form_validation->run('reg') == FALSE){
+        if ($this->form_validation->run() == FALSE){
                 echo validation_errors();        
         }else {
             $data = array(

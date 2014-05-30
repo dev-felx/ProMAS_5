@@ -28,8 +28,8 @@ class Access extends CI_Controller{
         }else{
             $this->session->unset_userdata('archive_level');
             redirect('home','location');
-        }
-        
-        
+        }   
     }
+    
+    
 }
