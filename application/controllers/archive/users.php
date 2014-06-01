@@ -9,7 +9,7 @@ class Users extends CI_Controller{
     function __construct() {
          
         parent::__construct();
-        $this->load->model('archieve_model');
+        $this->load->model('archive_model');
     }
     
     public function index(){

@@ -69,7 +69,6 @@
 
 
 function check_session_roles($roles){
-    
     $CI =& get_instance();
     
     if($CI->session->userdata('user_id') && !in_array($CI->session->userdata('type'),$roles)){
@@ -88,7 +87,7 @@ function check_session_roles($roles){
         //$message='<div class="alert alert-warning text-center" >Invalid Username or Password</div>';
         redirect('access/login/', 'location');
         }
-        
+          
 }
 
 
@@ -166,4 +165,21 @@ function create_notif($desc,$scope,$email = FALSE,$sc_p1 = null,$sc_p2 = null,$u
         $result2 = $CI->email->send();
     }
     return true;
+}
+
+
+function force_ssl(){
+    $CI =& get_instance();   
+    if($CI->uri->segment(1) == 'assessment'){   
+        $CI->config->config['base_url'] = str_replace('http://', 'https://', $CI->config->config['base_url']);
+        if ($_SERVER['SERVER_PORT'] != 443){
+            redirect($CI->uri->uri_string());
+        }
+    }else{
+        
+        $CI->config->config['base_url'] = str_replace('https://', 'http://', $CI->config->config['base_url']);
+        if ($_SERVER['SERVER_PORT'] == 443){
+            redirect($CI->config->config['base_url'].'index.php/'.$CI->uri->uri_string());
+        }
+    }
 }

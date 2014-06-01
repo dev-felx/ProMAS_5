@@ -45,9 +45,6 @@
             </div>
         </div>
     </div>
-    <div class="clearfix"></div>
-    <div class="col-sm-10 col-sm-offset-1"><hr/></div>
-    <div class="col-sm-4 col-sm-offset-4 bottom_10"><a class="btn btn-primary btn-block">Download Data in Excel File</a></div>
 <script>
     var forms = <?php echo json_encode($forms); ?>;
     var curr_form;
@@ -108,22 +105,29 @@
                 }
             }
             
-            $('#sav_form').click(function(){
-            $('#msg_grp').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
-             setTimeout(function(){
-                 var t = "<?php echo site_url(); ?>";
-                 var c = t+"/assessment/assess_panel/save_form";
-                 $.post( c, $("#pres_form").serialize()).done(function(data) {
-                     if(data.status == 'cool'){
-                         $('#msg_grp').html('<div class="alert alert-success text-center">Saved</div>');
-                         forms = data.forms;
-                     }else{
-                         $('#msg_grp').html('<div class="alert alert-danger text-center">'+data+'</div>');
-                     }
-                 },'json');
-             },400);
-             return false;
-        });
+            <?php if($this->session->userdata('type') == 'panel_head'){ ?>
+                $('#sav_form').click(function(){
+                $('#msg_grp').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
+                 setTimeout(function(){
+                     var t = "<?php echo site_url(); ?>";
+                     var c = t+"/assessment/assess_panel/save_form";
+                     $.post( c, $("#pres_form").serialize()).done(function(data) {
+                         if(data.status == 'cool'){
+                             $('#msg_grp').html('<div class="alert alert-success text-center">Saved</div>');
+                             forms = data.forms;
+                         }else{
+                             $('#msg_grp').html('<div class="alert alert-danger text-center">'+data+'</div>');
+                         }
+                     },'json');
+                 },400);
+                 return false;
+            });
+           <?php }else{ ?>
+                $('#sav_form').click(function(){
+                $('#msg_grp').html('<div class="alert alert-danger text-center">You do not have access to edit these data</div>');
+                    return false;
+                });
+            <?php } ?>
     });
        
 </script>

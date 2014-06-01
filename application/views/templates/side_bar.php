@@ -82,6 +82,13 @@
                                     array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
                                     array('Calendar' => 'home'),
                                ),
+        'Assesment' => array(
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Export Assessment Data' => 'assessment/assess/export'),
+                        ),
         'Archive' => array(
                                     array('Archive Home' => 'archive/access/switcher'),
                                     array('Access Manager' => 'archive/users'), 
@@ -107,6 +114,7 @@
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
                                     array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Export Assessment Data' => 'assessment/assess/export'),
                         ),
         'Archive' => array(
                                     array('Archive Home' => 'home'),    // Modified by Minja Junior
@@ -133,7 +141,6 @@
         
        'Assesment' => array(
                                     array('Presentation' => 'assessment/assess_panel/pres'),
-                                   // array('Export Assessment Forms' => 'assessment/assess/average'),
                         )
         
     );

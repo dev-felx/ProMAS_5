@@ -67,7 +67,7 @@
     
     <div class="form-group">
         <div class="col-sm-2 col-sm-offset-8">
-            <button id="sav_form" type="Submit" class="btn btn-success pull-right">Save</button>
+            <button id="sav_form" type="button" class="btn btn-success pull-right">Save</button>
         </div>
     </div>
 </form>
