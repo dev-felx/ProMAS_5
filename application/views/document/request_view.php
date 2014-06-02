@@ -167,6 +167,7 @@
                 <form id="upload_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload_document" method="POST">
                     
                     <input name="status" type="hidden">
+                    <input name="group_no" type="hidden">
                     <input name="rev_id" type="hidden">
                     <input name="rev_status" type="hidden">
                     <input name="rev_no" type="hidden">
@@ -212,7 +213,7 @@
                     var status = 'Submited';
                     var path = site_url+'/project/file/download/'+data[i][0].rev_file_path;
                     var x = '<a type="button" href="'+path+'" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>\n\
-                             <a  data-status="'+data[i][0].doc_status+'" data-rev_id="'+data[i][0].rev_id+'"data-rev_status="'+data[i][0].rev_status+'" data-rev_no="'+data[i][0].rev_no+'" data-doc_name="'+data[i][0].name+'" data-doc_id="'+data[i][0].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
+                             <a data-group_no="'+data[i][0].group_no+'"  data-status="'+data[i][0].doc_status+'" data-rev_id="'+data[i][0].rev_id+'"data-rev_status="'+data[i][0].rev_status+'" data-rev_no="'+data[i][0].rev_no+'" data-doc_name="'+data[i][0].name+'" data-doc_id="'+data[i][0].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
                 }else if(data[i][0].doc_status == '0'){
                     var status ='Not submitted';
                     var x = 'Not Action';
@@ -228,6 +229,7 @@
         
         $('body').on('click', '.upload_m', function () {
         $('[name="status"]','#upload_form').attr('value',$(this).data('status'));
+        $('[name="group_no"]','#upload_form').attr('value',$(this).data('group_no'));
         $('[name="rev_id"]','#upload_form').attr('value',$(this).data('rev_id'));
         $('[name="rev_status"]','#upload_form').attr('value',$(this).data('rev_status'));
         $('[name="rev_no"]','#upload_form').attr('value',$(this).data('rev_no'));

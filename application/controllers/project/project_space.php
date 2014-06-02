@@ -18,16 +18,13 @@ class Project_space  extends CI_Controller {
     }
     
     public function index(){
-        
         $values= array(
             'space_id >' =>0
         );
         
         $data['space_data'] = $this->project_space_model->get_all_project_space($values);
-        
         $data['views'] = array('project/project_space');
         page_load($data);
-        
     }
 
     
@@ -56,11 +53,9 @@ class Project_space  extends CI_Controller {
                     'end_date' => date('Y-m-d',strtotime(mysql_real_escape_string($_POST['edate']))),
                 ); 
 
-                //adding project space and return maximum user_id
+                //adding project space and return maximum _id
                 $space_data = $this->project_space_model->add_project_space($values);
-
                 if($space_data !== NULL){
-
                     $newdata= array(
                         'space_id'=>$space_data[0]['space_id'],
                     );
@@ -69,6 +64,15 @@ class Project_space  extends CI_Controller {
                     
                     //if coodinator space id was updated successfully
                     if($userdata !== NULL){
+                        
+                        $acc_yr = str_replace('/','-' ,$space_data[0]['academic_year']);
+                        //directory for storing files for a specific academic year
+                        $dir_path = './sProMAS_documents/'.$acc_yr.'/';
+                        //if upload path does not exist create directories
+                       
+                        if (!is_dir($dir_path)) {
+                            mkdir($dir_path, 0777, TRUE);
+                        }
 
                         $this->session->set_userdata(array('space_id'=>$userdata[0]['space_id']));
                         $data['message']='<div class="alert alert-success fade in text-center">Project space was successfully created</div>';

@@ -22,19 +22,13 @@ class Project_space_model extends CI_Model{
     public function add_project_space($data){
         
         $result_insert = $this->db->insert('project_space', $data); 
-    
         if($result_insert != NULL){
-            
-            $this->db->select_max('space_id');
-            
-            $query = $this->db->get('project_space');
+            $id = $this->db->insert_id();
+            $query = $this->db->get_where('project_space', array('space_id' => $id));
             $result = $query->result_array();
-        }
-        else{
-            
+        }else{
             $result=NULL;
         }
-    
         return $result;
         }//end function add_project_space
 

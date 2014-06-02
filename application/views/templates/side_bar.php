@@ -74,6 +74,7 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
+                                    array('Publish Projects' => 'project/publish_project'),
                                ),
         'Schedule' => array(
                                     array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior

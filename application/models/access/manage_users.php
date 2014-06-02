@@ -110,37 +110,24 @@
             $this->db->select($filters['fields']);
             $this->db->from('non_student_users');
             $this->db->where('roles.role',$filters['type']);
-            
-            
             $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
             $query = $this->db->get();
-            
             return $query->result_array();
-          
         }
         
         public function get_all_student($filters=null){
-            
             $this->db->select($filters['fields']);
-            
             $query = $this->db->get('students');
-            
             return $query->result_array();
-          
         }
         
         public function add_non_student($data,$role){
-            
             $result_add = $this->db->insert('non_student_users', $data); 
-        
             if(isset($result_add) && $result_add == 1){
-                
                 $id = $this->db->insert_id();
                 $result_role = $this->db->insert('roles',array('role'=>$role,'user_id' =>$id));
-                
                 if(isset($result_role) && $result_role == 1){
                     $query = $this->db->get_where('non_student_users', array('user_id' => $id));
-                
                     return $query->result_array();
                 }
                
@@ -151,14 +138,10 @@
         public function add_student($data){
             
             $result = $this->db->insert('students', $data);
-            
             if(isset($result) && $result =1){
-            
                 $id = $this->db->insert_id();
                 $query = $this->db->get_where('students', array('student_id' => $id));
-            
                 return $query->result_array();
-                
             }// end if
             
         }// end function add_student
