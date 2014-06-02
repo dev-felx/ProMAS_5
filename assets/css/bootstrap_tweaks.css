@@ -301,10 +301,3 @@ hr{
     background-color: #0093D0 !important;
     color: #FFFFFF !important;
 }
-
-/*Archive access*/
-#add_single{
-    border: solid #0093D0 1px;
-    border-radius: 4px;
-    padding: 10px;
-}

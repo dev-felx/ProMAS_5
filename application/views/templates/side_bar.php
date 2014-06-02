@@ -117,7 +117,7 @@
                                     array('Export Assessment Data' => 'assessment/assess/export'),
                         ),
         'Archive' => array(
-                                    array('Archive Home' => 'home'),    // Modified by Minja Junior
+                                    array('Archive Home' => 'archive/access/switcher'),    // Modified by Minja Junior
                                     array('Archive Publisher' => 'timeline/timeline/event'),    // Modified by Minja Junior
                                ),
         

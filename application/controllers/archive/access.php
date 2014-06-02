@@ -12,8 +12,6 @@ class Access extends CI_Controller{
     }
     
     public function switcher(){
-        //check if user is in management or archive
-        if($this->session->userdata('archive_level') == ''){
             //Check type of user and grant access
             if($this->session->userdata('type') == 'coordinator'){
                 $this->session->set_userdata('archive_level', 1);
@@ -24,11 +22,7 @@ class Access extends CI_Controller{
             }
             
             //Redirect to archive home
-            echo 'Welcome to promas archive';
-        }else{
-            $this->session->unset_userdata('archive_level');
-            redirect('home','location');
-        }   
+            redirect('archive/archive','location');  
     }
     
     

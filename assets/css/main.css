@@ -98,3 +98,38 @@ body{
     
 }
 
+
+
+
+/*Archive header css*/
+#arch_head{
+    padding: 10px 0px 0px 0px;
+    height: 55px !important;
+    border-bottom: #eeeeee solid 1px;
+}
+
+.btn-cyc {
+    border-radius: 20px;
+    font-size: 20px;
+    height: 35px;
+    text-align: center;
+    width: 35px;
+    color: #999999;
+}
+
+.push_left_bit{
+    margin-left: 5px;
+}
+
+#slide_box{
+    right: 0px;
+    border: solid 1px;
+    height: 200px;
+}
+
+#arch_name{
+    margin-top: 5px;
+}
+
+
+
