@@ -27,39 +27,40 @@
         <div class="hr"><hr/></div>
     </div>
     
-    <div>
-        
-        <div class="panel-group" id="accordion">
-            
-            <?php 
-            $i=0;
-            foreach ($groups as $group){ ?>
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a class="project_title" data-toggle="collapse" data-super_id="<?php echo $group['supervisor_id']; ?>" data-group_no="<?php echo $group['group_no']; ?>" data-parent="#accordion" href="#collapse<?php echo $i; ?>">
-                     <?php echo $group['title']; ?>
-                    </a>
-                  </h4>
-                </div>
-                <div id="collapse<?php echo $i; ?>" class="panel-collapse collapse ">
-                    <div class="panel-body">
-                        <?php echo $group['description']; ?>
-                    </div>
-                </div>
-              </div>
-            <?php
-            $i++;
-            } ?>
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Publish Projects into Archive</h3>
             </div>
+            <div class="panel-body">
+                <form role="form" action="<?php echo site_url('assessment/assess/gen_csv_sup'); ?>" method="POST">
+                    <div class="form-group">
+                        <label>Choose project</label>
+                        <select class="form-control" id="projects" name="projects">
+                            <?php foreach ($groups as $group){ 
+                             echo "<option data-super_id=".$group['supervisor_id']." value='".$group['project_id']."'>".$group['title']."</option>";   
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+    
     
 </div>
 
 <script>
+    $('#projects').change(function(){
+        
+       var group_no =  $(this).val();
+       var super_id = $(this).data('super_id');
+    alert(super_id);
+    });
  
 //$('.project_details').hide();
-$('body').on('click', '.project_title', function () {
+$('body').on('click', '.panel-title', function () {
     var group_no = $(this).data('group_no');
     var super_id = $(this).data('super_id');
     alert(group_id);
