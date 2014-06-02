@@ -56,19 +56,16 @@
         
        var group_no =  $(this).val();
        var super_id = $(this).data('super_id');
-    alert(super_id);
+       
+        alert(super_id);
+        var function_url = "<?php echo site_url(); ?>/project/publish_project/get_project_details/".concat(group_no)+"/".concat(super_id);
+    
+    $.get( function_url).done(function(data) {
+        
+    });
+    
     });
  
-//$('.project_details').hide();
-$('body').on('click', '.panel-title', function () {
-    var group_no = $(this).data('group_no');
-    var super_id = $(this).data('super_id');
-    alert(group_id);
-//    var function_url = "<?php echo site_url(); ?>/project/publish_project/get_project_details/".concat(group_no)+"/".concat(super_id);
-//    
-//    $.get( function_url).done(function(data) {
-//        
-//    });
 });
 
   
