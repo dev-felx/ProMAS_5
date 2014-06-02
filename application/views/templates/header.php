@@ -44,7 +44,8 @@
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
-                        <ul class="nav navbar-nav navbar-right">                            
+                        <ul class="nav navbar-nav navbar-right"> 
+                           <li><a href="<?php echo site_url('archive/access/switcher'); ?>">Switch to Archive</a></li>
                            <li class="dropdown" id="notification">
                                <a  href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="badge push_left_bit badge_nav_ie"><?php echo count(unread_not()); ?></span></a>
                                <ul class="dropdown-menu" id='head_not'>
@@ -136,4 +137,13 @@
             $(this).children('.desc_not').hide();
             return false;
             });
+            
+           $('ul.nav li.dropdown').hover(function() {
+              $(this).addClass('active');
+              $(this).find('.dropdown-menu').stop(true, true).fadeIn(400);
+            }, function() {
+              $(this).removeClass('active');
+              $(this).find('.dropdown-menu').stop(true, true).fadeOut(100);
+            });
+          
       </script>

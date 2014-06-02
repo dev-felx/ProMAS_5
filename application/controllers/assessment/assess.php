@@ -10,9 +10,8 @@ class Assess extends CI_Controller{
     function __construct() {
          
         parent::__construct();
-        
         //checking session and allowed roles
-        $roles = array('supervisor','panel_head');
+        $roles = array('supervisor','panel_head','coordinator');
         check_session_roles($roles);
         $this->load->model('assessment_model');
         $this->load->model('announcement_model');
@@ -188,7 +187,7 @@ class Assess extends CI_Controller{
         $this->form_validation->set_rules("qn"," Questions and Answers","required|is_natural|less_than[6]");
         $this->form_validation->set_message('required','%s marks are required');
         $this->form_validation->set_message('is_natural','%s marks have to a natural number');
-        if ($this->form_validation->run('reg') == FALSE){
+        if ($this->form_validation->run() == FALSE){
                 echo validation_errors();        
         }else {
             $data = array(
@@ -242,30 +241,140 @@ class Assess extends CI_Controller{
     }
     
     
-    public function export(){
+    public function export(){ 
+        //prepare 
+        if($this->session->userdata('type') == 'supervisor'){
+            $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
+        }elseif($this->session->userdata('type') == 'coordinator'){
+            $data['projects'] = $this->assessment_model->get_grps_coor($this->session->userdata('space_id'));
+        }
+        
         $data['sub_title'] = 'Export Assessment Documents';
         $data['views'] = array('/assessment/export_view');
         //load view
         page_load($data);
     }
     
-    
-    
-      public function report_export(){
-        $this->load->dbutil();
-        $this->db->select('*');
-        $this->db->from('assess_groups');
-        $this->db->where(array('owner' => $this->session->userdata('user_id')));
-        $query = $this->db->get();
+    public function gen_csv_sup(){
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename=project_assessment.csv');
+        $fp = fopen('php://output', 'w');
+        
+        //put titles
+        fputcsv($fp, array('registration_number','first name', 'last name', 'project group number', 'project name', 'weekly assessmemt','report assessment', 'presentation assessment', 'total marks'));
+        if($_POST['grp'] == '0'){
+            $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
+        }else{
+            $data['projects'] = $this->assessment_model->get_grps_list($_POST['receiver']);
+        }
 
-        $delimiter = ",";
-        $newline = "\r\n";
-        $csv_data =  $this->dbutil->csv_from_result($query, $delimiter, $newline);
+            foreach ($data['projects'] as $value) {
+                $students = $this->assessment_model->get_project_stu_ex($value['project_id']);
+                foreach ($students as $sub_value) {
+                    $x = implode(',',array_values($sub_value));
+                    $x = $x.','.$value['group_no'].','.$value['title'];
+                    $y = $this->get_stu_week_total($sub_value['registration_no']);
+                    $z = $this->get_stu_report_total($value['project_id']);
+                    $k = $this->get_stu_pres_total($value['project_id']);
+                    $m = $y+$z+$k;
+                    $x = $x.','.$y.','.$z.','.$k.','.$m;
+                    fputs($fp, $x);
+                    fputs($fp, "\r\n");
+                }
+            }
         
-        $name = 'mytext.csv';
-        $this->load->helper('download');
-        force_download($name, $csv_data);
-    
-        
+        fclose($fp);
     }
+    public function gen_csv_coor(){
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename=project_assessment.csv');
+        $fp = fopen('php://output', 'w');
+        
+        //put titles
+        fputcsv($fp, array('registration_number','first name', 'last name', 'project group number', 'project name', 'weekly assessmemt','report assessment', 'presentation assessment', 'total marks'));
+        if($_POST['grp2'] == '0'){
+            $data['projects'] = $this->announcement_model->get_grps_coor($this->session->userdata('user_id'));
+        }else{
+            $data['projects'] = $this->assessment_model->get_grps_list($_POST['receiver2']);
+        }
+
+            foreach ($data['projects'] as $value) {
+                $students = $this->assessment_model->get_project_stu_ex($value['project_id']);
+                foreach ($students as $sub_value) {
+                    $x = implode(',',array_values($sub_value));
+                    $x = $x.','.$value['group_no'].','.$value['title'];
+                    $y = $this->get_stu_week_total($sub_value['registration_no']);
+                    $z = $this->get_stu_report_total($value['project_id']);
+                    $k = $this->get_stu_pres_total($value['project_id']);
+                    $m = $y+$z+$k;
+                    $x = $x.','.$y.','.$z.','.$k.','.$m;
+                    fputs($fp, $x);
+                    fputs($fp, "\r\n");
+                }
+            }
+        
+        fclose($fp);
+    }
+    
+      public function get_stu_week_total($reg){
+          $student_forms = $this->assessment_model->get_stu_form($reg);
+                //average fields
+                $form = array(
+                    'initiative' => 0,
+                    'understand' => 0,
+                    'contribution' => 0,
+                    'qna' => 0,
+                );
+                
+                //sum all
+                foreach ($student_forms as $sub_sub_value) { 
+                    $form['initiative'] =  $form['initiative'] + $sub_sub_value['initiative'];
+                    $form['understand'] =  $form['understand'] + $sub_sub_value['understand'];
+                    $form['contribution'] = $form['contribution'] + $sub_sub_value['contribution'];
+                    $form['qna'] = $form['qna'] + $sub_sub_value['qna'];
+                }
+                
+                //average
+                $num  = count($student_forms);
+                $form['initiative'] =  $form['initiative'] / $num;
+                $form['understand'] =  $form['understand'] / $num;
+                $form['contribution'] = $form['contribution'] / $num;
+                $form['qna'] = $form['qna'] / $num;
+                 
+                $total = 0;
+                foreach ($form as $value) {
+                    $total = $total + $value;
+                }
+                
+                return $total;
+      }
+      
+      
+      public function get_stu_report_total($project_id) {
+          $this->db->select('abs,ack,t_content,intro,main,ref');
+          $this->db->from('assess_groups');
+          $this->db->where(array('project_id' => $project_id,'type' => 'Final Project report'));
+          $query = $this->db->get();
+          $result =  $query->result_array();
+          $total = 0;
+            foreach ($result[0] as $value) {
+                $total = $total + $value;
+            }
+            return $total;
+   
+      }
+      
+      public function get_stu_pres_total($project_id){
+          $this->db->select('im,pq,ptc,sc,sf');
+          $this->db->from('assess_pres');
+          $this->db->where(array('project_id' => $project_id));
+          $query = $this->db->get();
+          $result =  $query->result_array();
+          $total = 0;
+            foreach ($result[0] as $value) {
+                $total = $total + $value;
+            }
+            return $total;
+      }
+      
 }

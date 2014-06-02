@@ -121,24 +121,29 @@
                 },'json');
              },400);
         }
-        
-        $('#sav_form').click(function(){
-            $('#msg_frm').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
-             setTimeout(function(){
-                 var t = "<?php echo site_url(); ?>";
-                 var c = t+"/assessment/assess/save_form";
-                 $.post( c, $("#ind_form").serialize()).done(function(data) {
-                     if(data.status == 'cool'){
-                         $('#msg_frm').html('<div class="alert alert-success text-center">Saved</div>');
-                         forms = data.forms;
-                     }else{
-                         $('#msg_frm').html('<div class="alert alert-danger text-center">'+data+'</div>');
-                     }
-                 },'json');
-             },400);
-             return false;
-        });
-        
+        <?php if($this->session->userdata('type') == 'supervisor'){ ?>
+            $('#sav_form').click(function(){
+                $('#msg_frm').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
+                 setTimeout(function(){
+                     var t = "<?php echo site_url(); ?>";
+                     var c = t+"/assessment/assess/save_form";
+                     $.post( c, $("#ind_form").serialize()).done(function(data) {
+                         if(data.status == 'cool'){
+                             $('#msg_frm').html('<div class="alert alert-success text-center">Saved</div>');
+                             forms = data.forms;
+                         }else{
+                             $('#msg_frm').html('<div class="alert alert-danger text-center">'+data+'</div>');
+                         }
+                     },'json');
+                 },400);
+                 return false;
+            });
+        <?php }else{ ?>
+            $('#sav_form').click(function(){
+                $('#msg_frm').html('<div class="alert alert-danger text-center">You do not have access to edit these data</div>');
+                return false;
+            });
+        <?php } ?>
         //student functions
         $('body').on('click', '.stu_btn', function () { 
             $('.stu_btn').removeClass('stu_btn_active');

@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of timeline
  *
@@ -16,13 +10,13 @@ class Timeline extends CI_Controller {
     public function __construct() {
          
         parent::__construct();
+        
+        // checking session and allowed roles
+        $roles = array('superuser','administrator','coordinator','supervisor');
+        check_session_roles($roles);
+        
         $this->load->model('event_model');
         $this->load->model('project_model');
-    }
-    
-    public function event(){
-           $data['views']= array('timeline/event_view');
-           page_load($data);
     }
     
     public function add_event(){
@@ -216,4 +210,13 @@ class Timeline extends CI_Controller {
          );
         echo json_encode($this->event_model->load_events($values));
     }
+    
+    public function event(){
+        
+        $data['test'] = $this->event_model->list_events();
+        $data['views']= array('timeline/event_view');
+        page_load($data);
+          
+    }
+    
 }
