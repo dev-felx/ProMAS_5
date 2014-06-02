@@ -14,7 +14,6 @@
                 <th>Description</th>
                 <th>Status</th>
                 <th>Due Date</th>
-                <th>Actions</th>
             </thead>
             <tbody>
             <?php   foreach ($test as $row) {?>
@@ -23,11 +22,6 @@
                     <td><?php echo $row->desc; ?></td>
                     <td><?php echo $row->status; ?></td>
                     <td><?php echo $row->end; ?></td>
-                    <td>
-                        <!--a type="button" href="#" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span>View</a>
-                        <a type="button" href="#" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-pencil push_right_bit"></span>Edit</a-->
-                        <a type="button" href="#" class="action_del btn_edge badge_link btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash push_right_bit"></span>Delete</a>
-                    </td>
                 </tr>
                 <?php }?>
             </tbody>
