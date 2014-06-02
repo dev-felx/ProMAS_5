@@ -76,7 +76,6 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
-                                    array('Publish Projects' => 'project/publish_project'),
                                     array('Notifications' => 'project/notify'),
                                ),
         'Schedule' => array(
@@ -93,7 +92,7 @@
         'Archive' => array(
                                     array('Archive Home' => 'archive/access/switcher'),
                                     array('Access Manager' => 'archive/users'), 
-                                    array('Archive Publisher' => 'timeline/timeline/event'),
+                                    array('Archive Publisher' => 'project/publish_project'),
                      ),
         
         
@@ -119,7 +118,7 @@
                         ),
         'Archive' => array(
                                     array('Archive Home' => 'home'),    // Modified by Minja Junior
-                                    array('Archive Publisher' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Archive Publisher' => 'project/publish_project'),    // Modified by Minja Junior
                                ),
         
     );
