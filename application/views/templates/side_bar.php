@@ -93,6 +93,7 @@
                                     array('Archive Home' => 'archive/access/switcher'),
                                     array('Access Manager' => 'archive/users'), 
                                     array('Archive Publisher' => 'project/publish_project'),
+                                    array('Archive Publisher' => 'timeline/timeline/event'),
                      ),
         
         
