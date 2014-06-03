@@ -10,6 +10,7 @@ class Users extends CI_Controller{
          
         parent::__construct();
         $this->load->model('archive_model');
+        $this->load->model('access/manage_users');
     }
     
     public function index(){
@@ -27,7 +28,16 @@ class Users extends CI_Controller{
         //get data
         $req = $this->archive_model->get_req();
         foreach ($req as $key => $value) {
-            $user = $this->archive_model->get_user_id($value['user_id']);
+            if($value['acc_type'] == 0){
+                $user = $this->archive_model->get_user_id($value['user_id']);
+            }else{
+                if($value['user_type'] == 'stu'){
+                    $user = $this->manage_users->get_student(array('student_id' => $value['user_id']));  
+                }else{
+                    $user_ = $this->manage_users->get_non_student(array('non_student_users.user_id' => $value['user_id']));
+                    $user = $user_[0];
+                }
+            }
             $req[$key] = array_merge($req[$key], $user);
         }
         $data['req'] = $req;    
@@ -89,64 +99,107 @@ class Users extends CI_Controller{
     }
     
     public function request() {
-        //form validation
-        $this->form_validation->set_rules("fname","First Name","required");
-        $this->form_validation->set_rules("lname","Last Name","required");
-        $this->form_validation->set_rules("level","Access level","required");
-        $this->form_validation->set_rules("email","Email","required|valid_email");
-        if($_POST['type'] == 'student'){
-            $this->form_validation->set_rules("reg","Registration Number","required");
-        }
-        
-        if ($this->form_validation->run() == FALSE){
-              $response['status'] = 'false';
-              $response['data'] = validation_errors();
-              header('Content-type: application/json');
-              exit(json_encode($response));
-        }else {
-            $data = array(
-                'first_name' => $_POST['fname'],
-                'last_name' => $_POST['lname'],
-                'username' => $_POST['email'],
-                'type' => $_POST['type'],
-                'acc_status' => 0,
-                'level' => 1,
-                'password' => md5($_POST['lname']),
-                'info' => $_POST['info']
-            );
-            
+        if($this->session->userdata('user_id_arch') == ''){
+            //form validation
+            $this->form_validation->set_rules("fname","First Name","required");
+            $this->form_validation->set_rules("lname","Last Name","required");
+            $this->form_validation->set_rules("level","Access level","required");
+            $this->form_validation->set_rules("email","Email","required|valid_email");
             if($_POST['type'] == 'student'){
-               $data['reg_no'] = $_POST['reg'];
+                $this->form_validation->set_rules("reg","Registration Number","required");
             }
-            
-            $res = $this->archive_model->new_user($data);
-            $user_id = $this->archive_model->get_user($_POST['email']);
-            if($res){
-                $db_data = array(
-                  'user_id' =>  $user_id['user_id'],
+
+            if ($this->form_validation->run() == FALSE){
+                  $response['status'] = 'false';
+                  $response['data'] = validation_errors();
+                  header('Content-type: application/json');
+                  exit(json_encode($response));
+            }else {
+                $data = array(
+                    'first_name' => $_POST['fname'],
+                    'last_name' => $_POST['lname'],
+                    'username' => $_POST['email'],
+                    'type' => $_POST['type'],
+                    'acc_status' => 0,
+                    'level' => 1,
+                    'password' => md5($_POST['lname']),
+                    'info' => $_POST['info']
+                );
+
+                if($_POST['type'] == 'student'){
+                   $data['reg_no'] = $_POST['reg'];
+                }
+
+                $res = $this->archive_model->new_user($data);
+                $user_id = $this->archive_model->get_user($_POST['email']);
+                if($res){
+                    $db_data = array(
+                      'user_id' =>  $user_id['user_id'],
+                      'project_id' => $_POST['project_id'],
+                      'project_name' => $_POST['pname'],
+                      'level' => $_POST['level']  
+                    );
+                    if($_POST['type'] == 'student'){
+                        $db_data['user_type'] = 'stu';
+                    }else{
+                        $db_data['user_type'] = 'nonstu';
+                    }
+                    $res2 = $this->archive_model->req($db_data);
+                    if($res2){
+                        $response['status'] = 'true';
+                        header('Content-type: application/json');
+                        exit(json_encode($response));
+                    }
+                }else{
+                    $response['status'] = 'false';
+                    $response['data'] = 'User exists, recover password or use another email';
+                    header('Content-type: application/json');
+                    exit(json_encode($response));
+                }
+            }
+        }else{
+            $db_data = array(
+                  'user_id' =>  $this->session->userdata('user_id_arch'),
                   'project_id' => $_POST['project_id'],
                   'project_name' => $_POST['pname'],
                   'level' => $_POST['level']  
                 );
-                
+            if($this->session->userdata('type') == 'student'){
+                        $db_data['user_type'] = 'stu';
+                    }else{
+                        $db_data['user_type'] = 'nonstu';
+                    }
                 $res2 = $this->archive_model->req($db_data);
                 if($res2){
                     $response['status'] = 'true';
                     header('Content-type: application/json');
                     exit(json_encode($response));
                 }
-            }else{
-                $response['status'] = 'false';
-                $response['data'] = 'User exists, recover password or use another email';
-                header('Content-type: application/json');
-                exit(json_encode($response));
-            }
         }
         
     }
     
     
-    
+    public function request_man() {
+               $db_data = array(
+                  'user_id' =>  $this->session->userdata('user_id'),
+                  'project_id' => $_POST['project_id'],
+                  'project_name' => $_POST['pname'],
+                  'level' => $_POST['level'],
+                  'acc_type' => 1,
+                );
+               if($this->session->userdata('type') == 'student'){
+                    $db_data['user_type'] = 'stu';
+                }else{
+                    $db_data['user_type'] = 'nonstu';
+                }
+                $res2 = $this->archive_model->req($db_data);
+                if($res2){
+                    $response['status'] = 'true';
+                    header('Content-type: application/json');
+                    exit(json_encode($response));
+                }
+    }
     
     public function del($id){
         $res = $this->archive_model->del($id);

@@ -27,7 +27,11 @@
                     echo  '<td>'.$value['first_name'].'</td>';
                     echo  '<td>'.$value['last_name'].'</td>';
                     echo  '<td id="user">'.$value['username'].'</td>';
-                    echo  '<td>'.$value['type'].'</td>';
+                    if($this->session->userdata('user_id') != ''){
+                        echo '<td>'.$this->session->userdata('type').'</td>';
+                    }else{
+                        echo  '<td>'.$value['type'].'</td>';
+                    }    
                     echo  '<td>'.$value['project_name'].'</td>';
              ?>
                         <td>

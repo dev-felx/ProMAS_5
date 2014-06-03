@@ -1,7 +1,7 @@
     <div id="arch_head" class="col-sm-12">
         <div class="container-fluid">
             <div id="login_cont" class="col-sm-2 pull-right" >
-                <?php if($this->session->userdata('user_id_arch') == ''){ ?>
+                <?php if($this->session->userdata('user_id_arch') == '' && $this->session->userdata('user_id') == ''){ ?>
                     <span id="arch_name" class="pull-right push_left_bit">Login</span>
                 <?php }else{ ?>
                     <span id="arch_name" class="pull-right push_left_bit"><?php echo $this->session->userdata('fname').' '.$this->session->userdata('fname'); ?></span>
@@ -17,7 +17,7 @@
               <h3 class="panel-title text-center">sProMAS Archive Login</h3>
             </div>
             <div class="panel-body">
-                <?php if($this->session->userdata('user_id_arch') == ''){ ?>
+                <?php if($this->session->userdata('user_id_arch') == '' && $this->session->userdata('user_id') == ''){ ?>
                 <form id="login_form" role="form" action="<?php echo site_url('/archive/access/login'); ?>" method="POST">
                     <div id="msg_log"></div>
                     <div class="form-group">
@@ -43,7 +43,7 @@
             <div class="panel-footer">
                 
                 <a href="<?php echo site_url('/access/login'); ?>" class="pull-left">Use Management Account</a>
-                <?php if($this->session->userdata('user_id_arch') == ''){ ?>
+                <?php if($this->session->userdata('user_id_arch') == '' && $this->session->userdata('user_id') == ''){ ?>
                     <a href="#" class="pull-right">Recover Password</a>
                 <?php }else{ ?>
                     <a href="#" class="pull-right">Change Password</a>

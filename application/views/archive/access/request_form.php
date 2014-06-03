@@ -1,4 +1,11 @@
-<form id="request_form" role="form" action="<?php site_url('/archive/users/request'); ?>" method="POST">
+<?php 
+    if($this->session->userdata('user_id') != ''){
+        $link = '/archive/users/request_man';
+    }else{
+        $link = '/archive/users/request';
+    }
+?>
+<form id="request_form" role="form" action="<?php site_url($link); ?>" method="POST">
     <div id="msg_req"></div>
     <input type="text" hidden="" name="project_id"> 
     <input type="text" hidden="hidden" name="pname" value="promas"> 
@@ -13,6 +20,7 @@
             <option value="3">Full Access to Project</option>
          </select>
     </div>
+    <?php if($this->session->userdata('user_id_arch') == '' && $this->session->userdata('user_id') == ''){ ?>
       <div class="form-group"> 
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -44,6 +52,7 @@
             <label for="reg">Registration Number</label>
             <input type="text"  name="reg" class="form-control">
         </div>
+    <?php } ?>
       <div class="form-group">
           <label class="control-label">Further Information: reasons etc. (option)</label>
           <textarea class="form-control" name="info"></textarea>
@@ -64,8 +73,7 @@ $(document).ready(function(){
     $('#req_btn').click(function(){
         $('#msg_req').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching....');
          setTimeout(function(){
-             var t = "<?php echo site_url(); ?>";
-             var c = t+"/archive/users/request";
+             var c = "<?php echo site_url($link); ?>";
              $.post( c, $("#request_form").serialize()).done(function(data) {
                  if(data.status == 'true'){
                      $('#msg_req').html('<div class="alert alert-success text-center">Saved</div>');
