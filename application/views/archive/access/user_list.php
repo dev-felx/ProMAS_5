@@ -1,3 +1,7 @@
+<!-- Scripts -->
+<link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatable/jquery.bootstrap.datatable.css">
+<script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.dataTables.js"></script>
+<script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.bootstrap.datatable.js"></script>
 <div>
     <h4 class="col-sm-3 pull-left">Archive User Manager</h4> 
     <div class="btn-group pull-right push_left_bit">
@@ -8,7 +12,7 @@
           <li><a id="show_many" href="#">Multiple</a></li>
         </ul>
     </div>
-    <a href="<?php site_url('/assessment/assess/report') ?>" role="button" class="btn btn-success pull-right">Access Requests<span class="badge push_left_bit">0</span></a>
+    <a href="<?php echo site_url('/archive/users/show_req'); ?>" role="button" class="btn btn-success pull-right">Access Requests<span class="badge push_left_bit"><?php echo $req_count; ?></span></a>
     
 </div>
 <div class="clearfix"></div>
@@ -64,6 +68,47 @@
 <div id="add_many" class="adds">
     <?php $this->load->view('/archive/access/add_multiple'); ?>
 </div>
+<div class="clearfix"></div>
+<div id="user_list_table_wrap" class="col-sm-12">
+    <table id="user_list_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Type</th>
+            <th>Account Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+            foreach ($users as $value) {
+                echo  '<tr id='.$value['user_id'].'>';
+                echo  '<td>'.$value['first_name'].'</td>';
+                echo  '<td>'.$value['last_name'].'</td>';
+                echo  '<td id="user">'.$value['username'].'</td>';
+                echo  '<td>'.$value['type'].'</td>';
+                if($value['acc_status'] == '1'){ ?>
+                    <td class="text-success">Enabled</td>
+                    <td>
+                        <a href="<?php echo site_url('archive/users/dis/'.$value['user_id']); ?>" type="button" class="btn btn-warning btn-sm push_left_bit">Disable</a>
+                        <a onclick="return confirm('Are you sure you want to delete <?php echo $value['username']; ?>?')" href="<?php echo site_url('archive/users/del/'.$value['user_id']); ?>" type="button" class="btn btn-danger btn-sm push_left_bit">Delete</a>
+                    </td>
+                <?php }else{ ?>
+                    <td class="text-danger">Disabled</td>
+                    <td>
+                        <a href="<?php echo site_url('archive/users/en/'.$value['user_id']); ?>" type="button" class="btn btn-primary btn-sm push_left_bit">Enable</a>
+                        <a onclick="return confirm('Are you sure you want to delete <?php echo $value['username']; ?>?')" href="<?php echo site_url('archive/users/del/'.$value['user_id']); ?>" type="button" class="btn btn-danger btn-sm push_left_bit">Delete</a>
+                    </td>
+               <?php }
+                
+                echo  '</tr>';
+            }
+        ?>
+        </tbody>
+    </table>
+</div>
 <script>
     $('#add_single').hide();
     $('#add_many').hide();
@@ -102,8 +147,11 @@
                     },'json');
                  },400);
          });
-     });
-     
+         
+     //data tables
+            $('#user_list_table').dataTable();
+            });
+            
      //========================================
      $('#show_many').click(function(){
             $('.adds').hide();
@@ -114,5 +162,8 @@
             $('#add_many').hide();
             return false;
         });
+        
+     //=========================================
+     
         
 </script>
