@@ -6,13 +6,13 @@
 ?>
 <div class="row">
     <h4>Event list</h4>
-    <div class="table-responsive col-sm-9">
-        <table id="" class="table table-striped table-bordered">
+    <div class="col-sm-9">
+        <table id="" class="table table-striped">
             <thead>
                 <th></th>
                 <th>Event Title</th>
                 <th>Description</th>
-                <th>Status</th>
+                <th>Start Date</th>
                 <th>Due Date</th>
             </thead>
             <tbody>
@@ -20,7 +20,7 @@
                 <tr class="row">
                     <td><?php echo $row->title; ?></td>
                     <td><?php echo $row->desc; ?></td>
-                    <td><?php echo $row->status; ?></td>
+                    <td><?php echo $row->start; ?></td>
                     <td><?php echo $row->end; ?></td>
                 </tr>
                 <?php }?>

@@ -32,7 +32,7 @@
 <!-- Calender wrap header -->
 <div>
     <h4 class="col-sm-3 pull-left">Project Schedule</h4> 
-    <button class="btn btn-success pull-right push_left_bit glyph_big"><span class="glyphicon glyphicon-cog"></span></button>
+    <button type="button" class="btn btn-success pull-right push_left_bit glyph_big" data-toggle="tooltip" data-placement="bottom" title="help">Help <span class="glyphicon glyphicon-question-sign"></span></button>
     <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
     
@@ -62,19 +62,12 @@
     <div id="flash_info" class="sider">
             <div class="alert-info alert text-center pad_10">Upcoming events</div>
             <div class="col-sm-12 up_event">
-                        <div class="up_event_item">
-                            <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation</div>
-                        </div>
-                        <div class="up_event_item">
-                            <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation</div>
-                        </div>
-                        <div class="up_event_item">
-                            <div><strong>25th April</strong></div>
-                            <div>Presentation Preparation</div>
-                        </div>
-                        
+                <?php   foreach ($event as $row) {?>
+                <div class="up_event_item">
+                    <div><strong><?php echo $row->start; ?> - <?php echo $row->end; ?></strong></div>
+                    <div><?php echo $row->title; ?></div>
+                </div>
+                <?php }?>
             </div>
     </div>
     <div id="add_new" class="sider hidden">

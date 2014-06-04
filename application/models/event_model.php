@@ -39,10 +39,34 @@ class Event_model extends CI_Model{
         }
     }
     
-    public function list_events(){
-        $this->db->select('*');
-        $this->db->from('events');
-        $res = $this->db->get();
+    public function list_events($data){
+        if($data['type'] == 'coordinator'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."'";
+        } elseif($data['type'] == 'supervisor'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."' OR creator_type = 'coordinator'";
+        }elseif($data['type'] == 'student'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."' OR creator_type = 'coordinator'";
+        }
+        $this->db->where($where,NULL, FALSE);
+        $res = $this->db->get('events');
+        if($res->num_rows() > 0) {
+            foreach ($res->result() as $row) {
+                $dt[] = $row;
+            }
+            return $dt;        
+        }
+    }
+    
+    public function upcoming_events($data){
+        if($data['type'] == 'coordinator'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."' LIMIT 4";
+        } elseif($data['type'] == 'supervisor'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."' OR creator_type = 'coordinator' LIMIT 4";
+        }elseif($data['type'] == 'student'){
+            $where = "space_id=".$data['space_id']." AND creator_type='".$data['type']."' OR creator_type = 'coordinator' LIMIT 4";
+        }
+        $this->db->where($where,NULL, FALSE);
+        $res = $this->db->get('events');
         if($res->num_rows() > 0) {
             foreach ($res->result() as $row) {
                 $dt[] = $row;

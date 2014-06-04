@@ -12,7 +12,7 @@ class Timeline extends CI_Controller {
         parent::__construct();
         
         // checking session and allowed roles
-        $roles = array('superuser','administrator','coordinator','supervisor');
+        $roles = array('superuser','administrator','coordinator','supervisor','student');
         check_session_roles($roles);
         
         $this->load->model('event_model');
@@ -92,8 +92,7 @@ class Timeline extends CI_Controller {
                         if($res){
                             $response['status'] = 'success';
                         }
-                    }
-                    
+                    }  
                 }
             }
         }
@@ -167,9 +166,9 @@ class Timeline extends CI_Controller {
     }
     
     public function c_event(){
-        $values= array(
+        $values = array(
             'space_id'=>  $this->session->userdata['space_id'],
-            'creator_type'=>  'coordinator'
+            'type'=>  'coordinator'
          );
         echo json_encode($this->event_model->load_events($values));
     }
@@ -212,11 +211,15 @@ class Timeline extends CI_Controller {
     }
     
     public function event(){
+        $values = array (
+            'space_id'=>  $this->session->userdata['space_id'],
+            'type' => $this->session->userdata['type'],
+            //'sup_id'=> $this->project_model->get_supervisor($this->session->userdata['project_id']),
+            //'project_id'=>  $this->session->userdata['project_id'],
+        );
         
-        $data['test'] = $this->event_model->list_events();
+        $data['test'] = $this->event_model->list_events($values);
         $data['views']= array('timeline/event_view');
         page_load($data);
-          
     }
-    
 }

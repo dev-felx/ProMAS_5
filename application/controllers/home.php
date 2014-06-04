@@ -10,6 +10,8 @@ class Home extends CI_Controller{
     function __construct() {
          
         parent::__construct();
+        
+        $this->load->model('event_model');
     }
     
     public function index(){
@@ -38,6 +40,12 @@ class Home extends CI_Controller{
             //if space id exist 
             if(($this->session->userdata['space_id'] != NULL) ){
                 
+                $values = array(
+                    'space_id'=>  $this->session->userdata['space_id'],
+                    'type'=>  'coordinator'
+                );
+                $data['event'] = $this->event_model->upcoming_events($values);
+                
                 //prepare data to be sent to view
                 $data['views'] = array('landing/coor_land');
                 //load user's views
@@ -54,6 +62,13 @@ class Home extends CI_Controller{
         }
         else if($this->session->userdata['type']=='supervisor'){
             $this->load->model('announcement_model');
+            
+            $values = array(
+                    'space_id'=>  $this->session->userdata['space_id'],
+                    'type'=>  'supervisor'
+                );
+            $data['event'] = $this->event_model->upcoming_events($values);
+            
             //prepare data to be sent to view
             $data['views'] = array('landing/svisor_land');
             $data['receiver'] = array('All groups calenders','Choose groups calenders');
@@ -65,6 +80,13 @@ class Home extends CI_Controller{
             
         }
         else if($this->session->userdata['type']=='student'){
+            
+            $values = array(
+                    'space_id'=>  $this->session->userdata['space_id'],
+                    'type'=>  'student'
+                );
+            $data['event'] = $this->event_model->upcoming_events($values);
+            
             //prepare data to be sent to view
             $data['views'] = array('landing/student_land');
   
