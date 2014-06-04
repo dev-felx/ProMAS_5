@@ -105,7 +105,6 @@ body{
 #arch_head{
     padding: 10px 0px 0px 0px;
     height: 55px !important;
-    border-bottom: #eeeeee solid 1px;
 }
 
 .btn-cyc {
@@ -114,7 +113,7 @@ body{
     height: 35px;
     text-align: center;
     width: 35px;
-    color: #999999;
+    color: #0093D0;
 }
 
 .push_left_bit{
@@ -122,14 +121,29 @@ body{
 }
 
 #slide_box{
-    right: 0px;
-    border: solid 1px;
-    height: 200px;
+    z-index: 100;
+    position: fixed;
+    right: 10px;
+    top: 55px;
+    padding: 0px;
+    
+}
+#slide_box > .alert{
+    padding: 10px !important;
 }
 
 #arch_name{
-    margin-top: 5px;
+    margin-top: 7px;
 }
 
+#add_single{
+    border: #0093D0 solid 1px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+#login_cont{
+    cursor: pointer;
+}
 
 
