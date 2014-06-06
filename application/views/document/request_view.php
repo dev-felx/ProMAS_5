@@ -69,8 +69,26 @@
                         </div>
                        <div class="modal-body">
                            <div class="form-group">
-                               <label class="control-label" for="title">Document name</label><?php show_form_error('title'); ?>
-                              <input class="form-control" type="text" id="title" name="title">
+                                <label class="control-label" for="title">Document name</label><?php show_form_error('title'); ?>
+                                      
+                                <div class="radio"><label>
+                                   <input class="req_docs" type="radio" name="req_doc" id="" value="Project Proposal"  checked="">
+                                    Project Proposal
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input class="req_docs" type="radio" name="req_doc" id="" value="Final Year Report">
+                                    Final Year Report
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                      <input class="req_docs" type="radio" name="req_doc" id="others" value="0">
+                                    Others
+                                  </label>
+                                </div>
+                              <input class="form-control hide" placeholder="Name of the document to request" type="text" id="req_title" name="title">
                            </div>
 
                            <div class="form-group">
@@ -167,6 +185,7 @@
                 <form id="upload_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload_document" method="POST">
                     
                     <input name="status" type="hidden">
+                    <input name="group_no" type="hidden">
                     <input name="rev_id" type="hidden">
                     <input name="rev_status" type="hidden">
                     <input name="rev_no" type="hidden">
@@ -193,10 +212,20 @@
     </div>
     </div>
 <script>
+    $('.req_docs').click(function(e) {
+        if($('#others').is(':checked')) { 
+                $('#req_title').removeClass('hide');
+            }else{
+                $('#req_title').addClass('hide');
+            }
+    });
     $( "#groups" ).hide();
     $( "#groups_share" ).hide();
     var site_url = "<?php echo site_url(); ?>";
     $(document).ready(function(){
+        
+        
+        
         $('.group_no').click(function(e) {
         var group_no = $(this).data('number');
         var function_url = "<?php echo site_url(); ?>/project/file/get_documents/".concat(group_no);
@@ -212,7 +241,7 @@
                     var status = 'Submited';
                     var path = site_url+'/project/file/download/'+data[i][0].rev_file_path;
                     var x = '<a type="button" href="'+path+'" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-download push_right_bit"></span>Download</a>\n\
-                             <a  data-status="'+data[i][0].doc_status+'" data-rev_id="'+data[i][0].rev_id+'"data-rev_status="'+data[i][0].rev_status+'" data-rev_no="'+data[i][0].rev_no+'" data-doc_name="'+data[i][0].name+'" data-doc_id="'+data[i][0].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
+                             <a data-group_no="'+data[i][0].group_no+'"  data-status="'+data[i][0].doc_status+'" data-rev_id="'+data[i][0].rev_id+'"data-rev_status="'+data[i][0].rev_status+'" data-rev_no="'+data[i][0].rev_no+'" data-doc_name="'+data[i][0].name+'" data-doc_id="'+data[i][0].doc_id+'" type="button" class="upload_m action_view btn_edge btn btn-primary btn-xs"><span  href="#upload_modal"class="glyphicon glyphicon-upload push_right_bit"></span>Upload</a>';
                 }else if(data[i][0].doc_status == '0'){
                     var status ='Not submitted';
                     var x = 'Not Action';
@@ -228,6 +257,7 @@
         
         $('body').on('click', '.upload_m', function () {
         $('[name="status"]','#upload_form').attr('value',$(this).data('status'));
+        $('[name="group_no"]','#upload_form').attr('value',$(this).data('group_no'));
         $('[name="rev_id"]','#upload_form').attr('value',$(this).data('rev_id'));
         $('[name="rev_status"]','#upload_form').attr('value',$(this).data('rev_status'));
         $('[name="rev_no"]','#upload_form').attr('value',$(this).data('rev_no'));

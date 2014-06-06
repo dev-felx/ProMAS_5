@@ -92,7 +92,8 @@
         'Archive' => array(
                                     array('Archive Home' => 'archive/access/switcher'),
                                     array('Access Manager' => 'archive/users'), 
-                                    array('Archive Publisher' => 'timeline/timeline/event'),
+                                    array('Archive Publisher' => 'project/publish_project'),
+                                    
                      ),
         
         
@@ -117,8 +118,8 @@
                                     array('Export Assessment Data' => 'assessment/assess/export'),
                         ),
         'Archive' => array(
-                                    array('Archive Home' => 'archive/access/switcher'),    // Modified by Minja Junior
-                                    array('Archive Publisher' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Archive Home' => 'home'),    // Modified by Minja Junior
+                                    array('Archive Publisher' => 'project/publish_project'),    // Modified by Minja Junior
                                ),
         
     );

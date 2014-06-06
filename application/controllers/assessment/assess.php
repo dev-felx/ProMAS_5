@@ -10,7 +10,6 @@ class Assess extends CI_Controller{
     function __construct() {
          
         parent::__construct();
-        force_ssl();
         //checking session and allowed roles
         $roles = array('supervisor','panel_head','coordinator');
         check_session_roles($roles);

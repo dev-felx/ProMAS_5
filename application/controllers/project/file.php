@@ -24,15 +24,13 @@ class File extends CI_Controller{
             $values = array(
                 'creator_id'=>  $this->session->userdata['user_id'],
                 'creator_role'=>  $this->session->userdata['type'],
-                
             );
             
-            $data['table_head']= array('#','Name','Group','Due date','Status');
             $data['filter_fields']= array('#','Name','Group','Due date','Status');
-            $data['documents']=  $this->document_model->get_document($values);
             
             $this->load->model('project_model');
-            $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0));
+            $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0,
+                'space_id'=>  $this->session->userdata['space_id']));
             
             $this->load->model('announcement_model');
             $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
@@ -79,8 +77,9 @@ class File extends CI_Controller{
 
 
     public function request(){
-        
-        $this->form_validation->set_rules("title","Document title","required");
+        if($_POST['req_doc']=='0'){
+            $this->form_validation->set_rules("title","Document title","required");
+        }
         $this->form_validation->set_rules("group","Receiver","required");
         $this->form_validation->set_rules("duedate","Receiver","required");
         $this->form_validation->set_message('required','*');
@@ -99,13 +98,19 @@ class File extends CI_Controller{
         }else{
            
             $data = array(
-                'name' => $_POST['title'],
                 'space_id' => $this->session->userdata['space_id'],
                 'creator_id' => $this->session->userdata['user_id'],
                 'creator_role' => $this->session->userdata['type'],
                 'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
                 
             );
+            if($_POST['req_doc']=='0'){
+                $data['name']=$_POST['title'];
+                $data['req_status']=0;//optional document for archive
+            }else{
+                $data['name']=$_POST['req_doc'];
+                $data['req_status']=1;//required document for archive
+            }
             
             if($_POST['group'] == 'All groups'){
                 if($this->session->userdata['type']=='supervisor'){
@@ -169,22 +174,33 @@ class File extends CI_Controller{
 
     public function upload_document(){
         
+        $this->load->model('project_space_model');
+        $values = array(
+          'space_id'=>$this->session->userdata['space_id']  
+        );
+        $space_data = $this->project_space_model->get_all_project_space($values);
+        $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']);                 
+        
         $this->load->library('upload');
         
         if($this->session->userdata['type']=='student'){
             
             //controlling version no of a document by counting existing versions
-            //$exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
             if(($_POST['rev_status']==0)){
                $rev_no=$_POST['rev_no']; 
             }else if(($_POST['rev_status']==1)){
                $rev_no=$_POST['rev_no']+1;
             }
-            //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
-            $config['upload_path']= './files/documents/group_no_1/';
+            $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$this->session->userdata['group_no'].'/';
             $config['allowed_types']= 'pdf|doc|docx';
-            $config['max_size']='2048';
-            $config['file_name']=$_POST['doc_name'].'_v'.$rev_no.'_modified_by_student';
+            $config['overwrite']= TRUE;
+            $config['remove_spaces']= FALSE;
+            $config['max_size']='2048'; // in Kb
+            $config['file_name']=$_POST['doc_name'].' v'.$rev_no.' by student';
+            //if upload path does not exist create directories
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
             
             $this->upload->initialize($config);
 
@@ -196,8 +212,6 @@ class File extends CI_Controller{
                 //obtaining a file extension
                 $path_parts = pathinfo($_FILES["userfile"]["name"]);
                 $extension = $path_parts['extension'];
-                //replaccing white space with _
-                $file_name =  str_replace(' ', '_', $config['file_name']);
                 
                 $data_doc= array(
                     'doc_status' =>1,//status of the document submitted
@@ -207,8 +221,8 @@ class File extends CI_Controller{
                         'doc_id'=>$_POST['doc_id'],
                         'rev_date_upload'=>date("Y-m-d",time()),
                         'rev_status'=>0,//status of the revision if approved or not
-                        'rev_file_name'=>$file_name,
-                        'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
                         'rev_no'=>$rev_no
                     );
                     //controlling number existing version of the document to be only 2
@@ -226,18 +240,22 @@ class File extends CI_Controller{
             
                     }else{// else if user not student
                         //controlling version no of a document by counting existing versions
-                        //$exist_revs = $this->document_model->count_prev_revisions($_POST['doc_id'],$_POST['rev_no']);
                         if(($_POST['rev_status']==0)){
                            $rev_no=$_POST['rev_no']+1; 
                         }else if(($_POST['rev_status']==1)){
                            $rev_no=$_POST['rev_no'];
                         }
-                        //$config['upload_path']= './files/documents/group_no_'.$this->session->userdata['proeject_id'].'/';
-                        $config['upload_path']= './files/documents/group_no_1/';
+                        $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$_POST['group_no'].'/';
                         $config['allowed_types']= 'pdf|doc|docx';
+                        $config['overwrite']= TRUE;
+                        $config['remove_spaces']= FALSE;
                         $config['max_size']='2048';
-                        $config['file_name']=$_POST['doc_name'].'_v'.$rev_no.'_modified_by_'.$this->session->userdata['type'];
+                        $config['file_name']=$_POST['doc_name'].' v'.$rev_no.' by '.$this->session->userdata['type'];
 
+                        //if upload path does not exist create directories
+                        if (!is_dir($config['upload_path'])) {
+                            mkdir($config['upload_path'], 0777, TRUE);
+                        }
                         $this->upload->initialize($config);
 
                         if(!$this->upload->do_upload()){
@@ -248,8 +266,7 @@ class File extends CI_Controller{
                             //obtaining a file extension
                             $path_parts = pathinfo($_FILES["userfile"]["name"]);
                             $extension = $path_parts['extension'];
-                            //replaccing white space with _
-                            $file_name =  str_replace(' ', '_', $config['file_name']);
+                            
                             $data_doc= array(
                                 'doc_status' =>1,//status of the document submitted
                             );
@@ -257,8 +274,8 @@ class File extends CI_Controller{
                                 'doc_id'=>$_POST['doc_id'],
                                 'rev_date_upload'=>date("Y-m-d",time()),
                                 'rev_status'=>1,//status of the document that has been revised and uploaded
-                                'rev_file_name'=>$file_name,
-                                'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                                'rev_file_name'=>$config['file_name'],
+                                'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
                                 'rev_no'=>$rev_no
                             );
                             
@@ -301,13 +318,26 @@ class File extends CI_Controller{
             $response['errors'] = array_filter($errors); // Some might be empty
             $response['status'] = 'not_valid';
         }else{
-        
+            
+            $this->load->model('project_space_model');
+            $values = array(
+              'space_id'=>$this->session->userdata['space_id']  
+            );
+            $space_data = $this->project_space_model->get_all_project_space($values);
+            $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']); 
         
             $this->load->library('upload');
-            $config['upload_path']= './files/uploads/documents/';
+            $config['upload_path']= './sProMAS_documents/'.$acc_year.'/uploads/documents/shared/';
             $config['allowed_types']= 'pdf|doc|docx';
+            $config['overwrite']= TRUE;
+            $config['remove_spaces']= FALSE;
             $config['max_size']='2048';
             $config['file_name']=$_POST['file_name'];
+            
+            //if upload path does not exist create directories
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
             
             $this->upload->initialize($config);
 
@@ -320,8 +350,6 @@ class File extends CI_Controller{
                 //obtaining a file extension
                 $path_parts = pathinfo($_FILES["userfile"]["name"]);
                 $extension = $path_parts['extension'];
-                //replaccing white space with _
-                $file_name =  str_replace(' ', '_', $_POST['file_name']);
                 
                 
                 $data_doc = array(
@@ -385,7 +413,6 @@ class File extends CI_Controller{
                                 $project_id = $this->project_model->get_project_id($value);
                                 $scope = 5;
                                 $sc_p1=$project_id[0]['project_id'];
-                                print_r($sc_p1);
                                 $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
                                 $email= TRUE;
                                 $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
