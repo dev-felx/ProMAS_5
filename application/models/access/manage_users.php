@@ -27,7 +27,7 @@
         function match_student($registration_no, $password){
             $query = $this->db->get_where('students', array('registration_no' => $registration_no, 'password' => $password));
                 if ($query->num_rows() > 0){
-                    return $query->result_array();;
+                    return $query->result_array();
                 }
         }
         
