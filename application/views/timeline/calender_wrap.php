@@ -62,12 +62,16 @@
     <div id="flash_info" class="sider">
             <div class="alert-info alert text-center pad_10">Upcoming events</div>
             <div class="col-sm-12 up_event">
-                <?php   foreach ($event as $row) {?>
+                <?php   
+                if($event != null){
+                foreach ($event as $row) {?>
                 <div class="up_event_item">
                     <div><strong><?php echo $row->start; ?> - <?php echo $row->end; ?></strong></div>
                     <div><?php echo $row->title; ?></div>
                 </div>
-                <?php }?>
+                <?php }}else{ ?>
+                <p class="text-warning text-center">No Upcoming Events</p>   
+                 <?php } ?>
             </div>
     </div>
     <div id="add_new" class="sider hidden">
