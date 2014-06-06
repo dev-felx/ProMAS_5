@@ -35,7 +35,7 @@ class Publish_project extends CI_Controller{
         page_load($data);
     }
     
-    public function get_project_details($group_no,$supervisor_id){
+    public function get_project_details($group_no){
         
         $values_doc= array(
                 'group_no'=>$group_no,
@@ -44,6 +44,13 @@ class Publish_project extends CI_Controller{
             );
         $this->load->model('document_model');
         $details['documents']=$this->document_model->get_document($values_doc);
+        if($details['documents']!=NULL){
+            $i=0;
+            foreach ($details['documents'] as $key => $value) {
+               $details['documents'][$i][0]['rev_file_path'] = base64_encode($details['documents'][$i][0]['rev_file_path']);
+            $i++;
+            }
+        }
         
         $this->load->model('project_model');
         $project_id = $this->project_model->get_project_id($group_no);
@@ -54,23 +61,196 @@ class Publish_project extends CI_Controller{
             'space_id'=>  $this->session->userdata['space_id']
         );
         $details['students']=$this->student_model->get_student($values_stud);
-        
-        $this->load->model('non_student_model');
-        $values_non_s=array(
-            'non_student_users.user_id'=>$supervisor_id,
-            'roles.role'=>'supervisor',
-            'space_id'=>  $this->session->userdata['space_id']
-        );
-        $details['supervisor']=$this->non_student_model->get_non_student($values_non_s);
-        $values_non_s=array(
-            'roles.role'=>'coordinator',
-            'space_id'=>  $this->session->userdata['space_id']
-        );
-        $details['coordinator']=$this->non_student_model->get_non_student($values_non_s);
-        
+       
         header('Content-type: application/json');
         exit(json_encode($details));
         
+    }
+    
+    public function request_doc($doc_id,$rev_id,$group_no,$doc_name){
+        $data_doc = array(
+                'doc_status' =>1,
+            );
+        $data_rev = array(
+                'rev_status' =>1,
+            );
+        $this->load->model('document_model');
+        $result = $this->document_model->update_document($rev_id,$doc_id,$data_doc,$data_rev);
+        if($result!=NULL){    
+            $this->load->model('project_model');
+            $project_id = $this->project_model->get_project_id($group_no);
+            $scope = 5;
+            $sc_p1=$project_id[0]['project_id'];
+            $desc = 'Document: ' .$doc_name.' needs to be modified contact your '.$this->session->userdata['type'].' for details';
+            $email= TRUE;
+            $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+    
+            if($notify==TRUE){
+                $response['status'] = 'success';
+            }else{
+                $response['status'] = 'not_vslid';
+            }
+
+        }else{
+            $response['status'] = 'not_vslid';
+        }
+        header('Content-type: application/json');
+        exit(json_encode($response));
+        }
+    
+    public function publish_documents($doc_id,$project_id){
+        
+        $this->load->model('document_model');
+        $document = $this->document_model->get_doc_archive($doc_id,  $this->session->userdata['space_id']);
+        
+        $this->load->model('project_space_model');
+        $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
+        $acc_yr = str_replace('/','-' ,$acc_year[0]['academic_year']);
+        $dest_path = './sProMAS_documents/'.$acc_yr.'/archive/group_'.$document[0]['group_no'].'/';
+        //getting file extension
+        $info = new SplFileInfo($document[0]['rev_file_path']);
+        $ext = $info->getExtension();
+        //renaming the file
+        $dest_file = $dest_path.$document[0]['name'].'.'.$ext;
+        
+        //if upload path does not exist create directories
+        if (!is_dir($dest_path)) {
+            mkdir($dest_path, 0777, TRUE);
+        }
+        
+        $copied = copy($document[0]['rev_file_path'], $dest_file);
+        if($copied){
+            $values = array(
+                'document_name'=>$document[0]['name'],  
+                'document_path'=>$dest_file,  
+                'project_profile_id'=>$project_id,
+                
+            );
+         
+            $this->load->model('archive_document_model');
+            $result = $this->archive_document_model->archive_document($values);    
+            if($result!=NULL){
+                $response['status'] = 'success';
+            }else{
+                $response['status'] = 'not_valid';
+            }
+            }else{
+            //not copied
+            $response['status'] = 'not_valid';
+        }
+        
+        header('Content-type: application/json');
+        exit(json_encode($response));
+    }
+    
+    public function publish($group_no){
+
+        $this->load->model('project_model');
+        $project = $this->project_model->get_project_id($group_no);
+        
+        $this->load->model('project_space_model');
+        $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>  $this->session->userdata['space_id']));
+        
+        $project_profile_data= array(
+          'name'=>$project[0]['title'],  
+          'abstract'=>$project[0]['description'],  
+          'academic_year'=>$acc_year[0]['academic_year'],
+          'publish_status'=>0,
+          'department_id'=>$project[0]['department_id'],  
+        );
+        
+        $this->load->model('project_profile_model');
+        $proj_prof_id = $this->project_profile_model->add_project_profile($project_profile_data);
+        if(isset($proj_prof_id) && $proj_prof_id!=NULL){
+            
+            $participants= array();
+            $this->load->model('archive_participant_model');
+            $this->load->model('student_model');
+            $values_stud= array(
+                'project_id'=>$project[0]['project_id'],
+                'space_id'=>  $this->session->userdata['space_id']
+            );
+            $students=$this->student_model->get_student($values_stud);
+            if($students!=NULL){
+                foreach ($students as $value) {
+                    $participant = array(
+                        'first_name'=>$value['first_name'],
+                        'last_name'=>$value['last_name'],
+                        'phone_no'=>$value['phone_no'],
+                        'email'=>$value['email'],
+                        'type'=>'student',
+                        'project_profile_id'=>$proj_prof_id,
+                        );
+                        array_push($participants, $participant);
+            
+            }
+            $result_student = $this->archive_participant_model->add_participants($participants);
+            
+            }else{
+                echo 'students empty';
+            }
+            
+            $this->load->model('non_student_model');
+            $values_non_s=array(
+                'non_student_users.user_id'=>$project[0]['supervisor_id'],
+                'roles.role'=>'supervisor',
+                'space_id'=>  $this->session->userdata['space_id']
+            );
+            $spvs= array();
+            $supervisor=$this->non_student_model->get_non_student($values_non_s);
+            if($supervisor!=NULL){
+                $participant = array(
+                        'first_name'=>$supervisor[0]['first_name'],
+                        'last_name'=>$supervisor[0]['last_name'],
+                        'phone_no'=>$supervisor[0]['phone_no'],
+                        'email'=>$supervisor[0]['email'],
+                        'type'=>'supervisor',
+                        'address'=>$supervisor[0]['office_location'],
+                        'project_profile_id'=>$proj_prof_id,
+                        );
+                        array_push($spvs, $participant);
+                    $result_spvs = $this->archive_participant_model->add_participants($spvs);
+            }else{
+                echo 'Supervisor empty';
+            }
+            
+            $values_non_c=array(
+                'roles.role'=>'coordinator',
+                'space_id'=>  $this->session->userdata['space_id']
+            );
+            $coord = array();
+            $coordinator=$this->non_student_model->get_non_student($values_non_c);
+            if($coordinator!=NULL){
+                $participant = array(
+                        'first_name'=>$coordinator[0]['first_name'],
+                        'last_name'=>$coordinator[0]['last_name'],
+                        'phone_no'=>$coordinator[0]['phone_no'],
+                        'email'=>$coordinator[0]['email'],
+                        'type'=>'coordinator',
+                        'address'=>$coordinator[0]['office_location'],
+                        'project_profile_id'=>$proj_prof_id,
+                        );
+                    array_push($coord, $participant);
+                    $result_coord = $this->archive_participant_model->add_participants($coord);
+            }else{
+                echo 'Coordinator empty';
+            }
+            
+        }else{
+            echo 'Project profile id not present';
+        }
+        
+        if($result_coord != NULL && $result_spvs != NULL && $result_student != NULL){
+                $response['project_profile_id'] = $proj_prof_id;
+                $response['status'] = 'success';
+            
+        }else{
+            $response['status'] = 'not_valid';
+            //echo ' Some partcipant are missng';
+        }
+        
+        header('Content-type: application/json');
+        exit(json_encode($response));
     }
     
     

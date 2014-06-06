@@ -26,9 +26,7 @@ class File extends CI_Controller{
                 'creator_role'=>  $this->session->userdata['type'],
             );
             
-            $data['table_head']= array('#','Name','Group','Due date','Status');
             $data['filter_fields']= array('#','Name','Group','Due date','Status');
-            $data['documents']=  $this->document_model->get_document($values);
             
             $this->load->model('project_model');
             $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0,
@@ -79,8 +77,9 @@ class File extends CI_Controller{
 
 
     public function request(){
-        
-        $this->form_validation->set_rules("title","Document title","required");
+        if($_POST['req_doc']=='0'){
+            $this->form_validation->set_rules("title","Document title","required");
+        }
         $this->form_validation->set_rules("group","Receiver","required");
         $this->form_validation->set_rules("duedate","Receiver","required");
         $this->form_validation->set_message('required','*');
@@ -99,13 +98,19 @@ class File extends CI_Controller{
         }else{
            
             $data = array(
-                'name' => $_POST['title'],
                 'space_id' => $this->session->userdata['space_id'],
                 'creator_id' => $this->session->userdata['user_id'],
                 'creator_role' => $this->session->userdata['type'],
                 'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
                 
             );
+            if($_POST['req_doc']=='0'){
+                $data['name']=$_POST['title'];
+                $data['req_status']=0;//optional document for archive
+            }else{
+                $data['name']=$_POST['req_doc'];
+                $data['req_status']=1;//required document for archive
+            }
             
             if($_POST['group'] == 'All groups'){
                 if($this->session->userdata['type']=='supervisor'){

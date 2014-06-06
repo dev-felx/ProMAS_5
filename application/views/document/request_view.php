@@ -69,8 +69,26 @@
                         </div>
                        <div class="modal-body">
                            <div class="form-group">
-                               <label class="control-label" for="title">Document name</label><?php show_form_error('title'); ?>
-                              <input class="form-control" type="text" id="title" name="title">
+                                <label class="control-label" for="title">Document name</label><?php show_form_error('title'); ?>
+                                      
+                                <div class="radio"><label>
+                                   <input class="req_docs" type="radio" name="req_doc" id="" value="Project Proposal"  checked="">
+                                    Project Proposal
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input class="req_docs" type="radio" name="req_doc" id="" value="Final Year Report">
+                                    Final Year Report
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                      <input class="req_docs" type="radio" name="req_doc" id="others" value="0">
+                                    Others
+                                  </label>
+                                </div>
+                              <input class="form-control hide" placeholder="Name of the document to request" type="text" id="req_title" name="title">
                            </div>
 
                            <div class="form-group">
@@ -194,10 +212,20 @@
     </div>
     </div>
 <script>
+    $('.req_docs').click(function(e) {
+        if($('#others').is(':checked')) { 
+                $('#req_title').removeClass('hide');
+            }else{
+                $('#req_title').addClass('hide');
+            }
+    });
     $( "#groups" ).hide();
     $( "#groups_share" ).hide();
     var site_url = "<?php echo site_url(); ?>";
     $(document).ready(function(){
+        
+        
+        
         $('.group_no').click(function(e) {
         var group_no = $(this).data('number');
         var function_url = "<?php echo site_url(); ?>/project/file/get_documents/".concat(group_no);

@@ -49,6 +49,15 @@ class Document_model extends CI_Model{
          
     }
     
+    public function get_doc_archive($doc_id,$space_id){
+        
+        $query_1 = "SELECT documents.*, revisions.* FROM documents  
+                            INNER JOIN revisions ON revisions.doc_id=documents.doc_id  
+                            WHERE revisions.doc_id=$doc_id AND documents.space_id=$space_id ORDER BY revisions.rev_no DESC LIMIT 1"; 
+                $query =  $this->db->query($query_1);
+        return $query->result_array();
+    }
+    
     
     public function update_document($rev_id,$doc_id,$data_doc,$data_rev){
         
