@@ -39,4 +39,19 @@ class Archive extends CI_Controller {
         $data['res'] = $this->archive_model->profile($id);
         $this->load->view('archive/search/profile_view', $data);
     }
+    
+    public function get_participants($id){
+        $data['pat'] = $this->archive_model->profile($id);
+        $this->load->view('archive/search/profile_view', $data);
+    }
+
+        public function explore(){
+        $data['res'] = $this->archive_model->explore();
+        $this->load->view('archive/search/explore', $data);
+    }
+    
+    public function explore_filter($term){
+        $data['res'] = $this->archive_model->explore_filter($term);
+        $this->load->view('archive/search/explore', $data);
+    }
 }

@@ -55,6 +55,54 @@ class Archive_model extends CI_Model {
         }
     }
     
+    public function participants($id){
+        $this->db->select('*');
+        $this->db->from('participants'); 
+        $this->db->where('project_profile_id', $id);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            return FALSE;
+        }
+    }
+    
+    public function explore(){
+        $this->db->select('*');
+        $this->db->from('project_profile');
+        $this->db->order_by('project_profile_id', 'desc');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            return FALSE;
+        }
+    }
+    
+    public function explore_filter($ft){
+        $this->db->select('*');
+        $this->db->from('project_profile');
+        $this->db->order_by('name', $ft);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            return FALSE;
+        }
+    }
+    
     /*========================================
      * Access functions
      */
