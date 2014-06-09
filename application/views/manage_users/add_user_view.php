@@ -7,24 +7,9 @@
 ?>
 
 <div class="container-fluid">
-    
-    <div class='row' style="margin-bottom: -5px; ">
-        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst($user);   ?></h4></div>
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-success pull-right push_left_bit dropdown-toggle" data-toggle="dropdown" >Add <?php echo ucfirst($user);   ?></button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Individual</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Group</a></li>
-                </ul>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <hr style="border: none; height: 1px; background:#0093D0;"/>
-    </div>
-   
+    <?php 
+    $this->load->view('manage_users/manage_user_head_view');
+    ?>
     <div  class="row">
         
         <div  id='add_user_form' class="container-fluid col-sm-6 col-sm-offset-3">
@@ -34,7 +19,7 @@
             <?php if(isset($message)) {
                 echo $message;
                 } else{ ?>
-            <div class="alert alert-info fade in text-center"><b>Add <?php echo ucfirst($user);   ?></b> </div>
+            <div class="alert alert-info fade in text-center"><b>Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></b> </div>
         <?php } ?>
             
             <div class="hr" style="margin-top: -15px; margin-bottom: 10px"><hr/></div>
@@ -88,6 +73,7 @@
             <div class="form-group">
                 <div class="">
                     <button id="add_send" data-loading-text="loading stuff..." name="submit" type="submit" class="btn btn-primary">Add and Send Email</button>
+                    <a class="btn btn-sm btn-warning" href="<?php echo site_url(); ?>/manage_users/manage/users/<?php echo $user; ?>" onclick="" role="button" >Cancel</a>
                 </div>
 
             </div>

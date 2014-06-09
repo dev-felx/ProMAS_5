@@ -15,7 +15,6 @@ class Add_user extends CI_Controller {
         //checking session 
         $roles = array('superuser','administrator','coordinator');
         check_session_roles($roles);
-
         $this->load->model('access/manage_users');
         $this->load->model('project_model');
     
@@ -25,8 +24,6 @@ class Add_user extends CI_Controller {
     
     
     public function individual($user,$message=NULL){
-        
-        
         $values = array(
                 'student_projects.project_id >' =>0, 
             );
@@ -34,14 +31,12 @@ class Add_user extends CI_Controller {
         $data['message']=$message;
         $data['user'] = $user;
         $data['views'] = array('manage_users/add_user_view');
-        
         page_load($data);
         
     }
     
     
     public function add($user){
-        
             $this->form_validation->set_rules('fname', 'First Name', 'required|trim');
             $this->form_validation->set_rules('lname', 'Last Name', 'required|trim');
             $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
@@ -79,8 +74,6 @@ class Add_user extends CI_Controller {
                 
                 //if user  does not exist is added
                 if(!$result_exist){
-                    
-                
                     $values = array(
                         'first_name' => $_POST['fname'],
                         'last_name' => $_POST['lname'],
@@ -168,7 +161,6 @@ class Add_user extends CI_Controller {
                             $result_exist = $this->manage_users->check_value_exists($table, $data_exist);
                             //if user  does not exist is added
                             if(!$result_exist){
-                                
                                 $values = array(
                                     'first_name' => $_POST['fname'],
                                     'last_name' => $_POST['lname'],
@@ -177,26 +169,20 @@ class Add_user extends CI_Controller {
                                     'password' => md5(lcfirst($_POST['lname'])),
                                     'space_id'=>$this->session->userdata['space_id'],
                                     );
-                                
                                 //role to be stored into db
                                 $role = strtolower($user);
-
                                 $userdata = $this->manage_users->add_non_student($values,$role);
-
                                 if($userdata != NULL ){
-                    
-                                   $result_miscell = $this->miscellaneous_model->add_non_student_id($userdata[0]['user_id']);
+                                    $result_miscell = $this->miscellaneous_model->add_non_student_id($userdata[0]['user_id']);
 
                                    if( ($user=='supervisor')  && isset($_POST['group_project']) && $_POST['group_project'] != NULL ){
-                                       
                                        $this->load->model('project_model');
                                        $result_project = $this->project_model->update_project($_POST['group_project'],array('supervisor_id'=>$userdata[0]['user_id']));
-                                   }
-                                   
+                                    }
+                                }
                                    $fname= $userdata[0]['first_name'];
                                    $lname= lcfirst($userdata[0]['last_name']);
                                    $email = $userdata[0]['email'];
-
                                    $from = "admin@promas.com";
                                   
                                    $to = $email;
@@ -212,26 +198,23 @@ class Add_user extends CI_Controller {
                                                  <p>Username : $email </p>   
                                                  <p>Password : $lname  </p>
                                                  <p>Click the link below</p>    
-                                                 <a href='http://localhost/ProMAS_4/index.php/access/login'>Login into promas</a>
+                                                 <a href='http://localhost/ProMAS_5/index.php/access/login'>Login into promas</a>
                                                 <p>Sincerely,</p>
                                                 <p>ProMAS admin.</p>
                                         </body>
                                         </html>";
 
                                     //sending email
-                                   $send_email =  send($from,$to,$subject,$message);
-
-                                    if($send_email == TRUE){
-
-                                        $message = '<div class="alert alert-success  text-center">User added and email was sent</div>';
+                                    $send_email =  send($from,$to,$subject,$message);
+                                    if(($send_email == TRUE)&& $userdata != NULL){
+                                        $message = '<div class="alert alert-success  text-center">User added and email sent</div>';
                                         $this->individual($user,$message);
                                         
-                                    }// end if $send_email == TRUE
-
-                                    }// end if $userdata !=NULL
-                        
-
-                                    else{// if user user was not added in the database
+                                    }else if(($send_email == FALSE)&& $userdata != NULL){
+                                        $message = '<div class="alert alert-success  text-center">User added but email not sent</div>';
+                                        $this->individual($user,$message);
+                                        
+                                    }else{// if user user was not added in the database
 
                                         $message = '<div class="alert alert-warning text-center">User not added, try again</div>';
                                         $this->individual($user,$message);
@@ -246,14 +229,8 @@ class Add_user extends CI_Controller {
 
                                         $message = '<div class="alert alert-warning text-center">User with the same email already exists</div>';
                                         $this->individual($user,$message);
-
-                                    
                                     }//end else
-            
-                                    
                                     }// end else if user added is not student
-  
-                                   
                                     }//end if form validation is true     
     
                                     

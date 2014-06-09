@@ -112,7 +112,7 @@
                $('#check_box').append('<div class=" row-fluid checkbox"><label class="col-sm-6"><input name="chck" class="chk" type="checkbox" value="'+data.documents[i][0]['req_status']+'">'+data.documents[i][0]['name']+'</label>'+button+'</div>');
             }//end for loop
         }else{
-            $('#check_box').append('<div class="text-warning">No documents has been submitted yet</div>');    
+            $('#check_box').append('<div class="alert alert-warning text-center">No document has been submitted</div>');    
         }
         $('#publish_btn').attr('data-group_no',group_no);
         $('#project_details').removeClass('hide');

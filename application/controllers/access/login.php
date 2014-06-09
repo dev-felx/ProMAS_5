@@ -16,24 +16,16 @@ class Login extends CI_Controller{
     }
 
     public function index(){
-        
         $this->session->keep_flashdata('url');   
-
         if(isset($_COOKIE['remember_promas'])){
-           
-            //a function to validate a cookie
+           //a function to validate a cookie
             $this->cookie_login($_COOKIE['remember_promas']);
-            
         }//end isset($_COOKIE['remember_promas']
-        
-
         else if($this->session->userdata('user_id') != NULL){
                  redirect('/home/', 'location');
-        }
-        else {
+        }else {
      
             $this->load->view('access/login_page');
- 
         }
         
         
@@ -43,21 +35,16 @@ class Login extends CI_Controller{
         
         $this->session->keep_flashdata('url');
        //check if it is student logging in or other user
-       
         $this->form_validation->set_rules("username","","trim|required|");
         $this->form_validation->set_rules("password","","trim|required");
         $this->form_validation->set_message('required','');
         
-        
         if($this->form_validation->run() !== FALSE){
-            
-            
-              //check if it is student logging in or other user
+            //check if it is student logging in or other user
                 if($this->form_validation->valid_email($_POST['username']) == 1){
                     
                     $this->non_student_login($_POST['username'],md5($_POST['password']));
                     
-                
                 }elseif ($this->form_validation->alpha_dash($_POST['username']) == 1){
                     
                     $this->student_login($_POST['username'],md5($_POST['password']));
@@ -69,7 +56,6 @@ class Login extends CI_Controller{
                 }
                 
         }// end if $this->form_validation->run() !== FALSE
-        
         else{
             $data['message']='<div class="alert alert-danger text-center" >Username and Password is required</div>';
             $this->load->view('access/login_page',$data);
@@ -88,8 +74,7 @@ class Login extends CI_Controller{
         
             $roles[$i] = $data['user_data'][$i]['role'];
     
-        }
-            //positive results ? set session : redirect to login with error message
+        }//positive results ? set session : redirect to login with error message
             if($data['user_data'] != null){
                 $user_data = array(
                    'user_id' => $data['user_data'][0]['user_id'],
@@ -102,7 +87,6 @@ class Login extends CI_Controller{
                    'roles' => $roles,
                     'space_id' => $data['user_data'][0]['space_id']
                     );
-
                 if($user_data['type'] == 'superuser'){
                     $this->session->set_userdata($user_data);
                     
@@ -120,12 +104,10 @@ class Login extends CI_Controller{
                    //if non student user has completed registration
                    else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor')) && $user_data['status']== 1){
                         $this->session->set_userdata($user_data);
-                        
                         //creating cookie or renewing cookie
                         if(($_POST['keep_logged'] == 1) || isset($_COOKIE['remember_promas']) ){
                             //calling keep_me_logged function
                             $this->keep_me_logged($this->session->userdata['user_id'],$this->session->userdata['type']);    
-                        
                     }//end if keeped_logged
 
                         redirect('/home', 'location');
@@ -134,7 +116,6 @@ class Login extends CI_Controller{
                 //if non-student user has not completed registration
                 else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor')) && $user_data['status']== 0){
                         $this->session->set_userdata($user_data);
-                        
                         //creating cookie or renewing cookie
                         if(($_POST['keep_logged'] == 1) || isset($_COOKIE['remember_promas'])){
                         //calling keep_me_logged function

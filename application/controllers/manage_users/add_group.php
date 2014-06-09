@@ -17,34 +17,23 @@ class Add_group extends CI_Controller{
         //
         $this->load->model('access/manage_users');
         $this->load->helper(array('file','directory'));
+        $this->load->model('project_space_model');
+        $this->acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
         
     }
 
-
     public function group($user){
-        
+        $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
         $data['user'] = $user;
         $data['views']= array('manage_users/add_group_view');
-        
         page_load($data);
-        
     }
     
     public function download($user){
-        
         $this->load->helper('download');
-        
-        if($user=='student' ){
-        
-            $filename = './files/templates/student.csv';
-            $name = 'students.csv';
-        }
-        
-        elseif ($user=='supervisor') {
-            $filename = './files/templates/supervisor.csv';
-            $name = 'supervisors.csv';
-    }
-        
+        $acc_yr = str_replace('/','-' ,  $this->acc_year[0]['academic_year']);
+        $filename= './sProMAS_documents/'.$acc_yr.'/registration_templates/'.$user.'.csv';
+        $name = $user.'.csv';
         //reading the file content
         $data = file_get_contents($filename);
         //download a file from a server
@@ -52,85 +41,43 @@ class Add_group extends CI_Controller{
         
     }//end function download
     
-    public function upload_file($user){
-        
-        $data['user'] = $user;
-        $data['views']= array('manage_users/upload_file_view');
-        
-        page_load($data);
-        
-        
-    }
-    
     public function upload($user){
-        
         $this->load->library('upload');
-    
         $this->form_validation->set_rules("fName","Name","required");
         $this->form_validation->set_message('required','%s is required');
-        
         if($this->form_validation->run() === FALSE){
+            $response['status'] = 'name_required';
+        }else {
             
-            $data['user'] = $user;
-            $data['views']= array('manage_users/upload_file_view');
-        
-            page_load($data);
-        }
-        
- 
-        else {
+            $acc_yr = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
             
-            if($user == 'supervisor' ){
-                $config['upload_path']= './files/uploads/supervisor';
-            }
-            elseif($user == 'student'){
-                
-                $config['upload_path']= './files/uploads/student';
-            }
-            
+            $config['upload_path']= './sProMAS_documents/'.$acc_yr.'/registration_files/'.$user.'/';
             $config['allowed_types']= 'csv';
             $config['max_size']='2048';
             $config['file_name']= $_POST['fName'];
             
+            //if upload path does not exist create directories
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
             $this->upload->initialize($config);
-
-            $data['user'] = $user;
-            
             if(!$this->upload->do_upload()){
-                //if unseccessfully load view and display errors
-                $data['message'] = $this->upload->display_errors();
-                $data['views']= array('manage_users/upload_file_view');
-        
-                page_load($data);
-                
-            }
-
-            else {
-                $data['message'] = 'File successful uploaded';
-                
-                $data['views']= array('manage_users/add_group_view');
-                page_load($data);
-                
-
-                //$this->pagination($user,$data);
-            }
-            
-        
-        
-            
+                $response['file_errors'] = $this->upload->display_errors();
+                $response['status'] = 'file_error';
+            }else {
+                $response['status'] = 'success';
+                }
             }//end outer else
-   
+            header('Content-type: application/json');
+            exit(json_encode($response));
             }//end function do upload
             
             
             public function register_file($user){
-                
                 $this->load->model('miscellaneous_model');
-                
                 $this->load->library('csv_reader');
                 //fetching content from the csv file
                 $content = $this->csv_reader->read_csv_file($_POST['file_path'],$user);
-                
                 $data['user'] = $user;
                 
                 if($user == 'student'){
@@ -345,26 +292,38 @@ class Add_group extends CI_Controller{
             
     
             public function delete_file($user){
-                
+                $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
                 $data['user']=$user;
-                
                 if(unlink($_POST['file_path'])){
-                    
                     $data['message'] = 'File deleted successfully';
                     $data['views']= array('manage_users/add_group_view');
-                    
                     page_load($data);
-                }
-                
-                else{
-                    
+                }else{
                     $data['message'] = 'File not deleted, Try again';
                     $data['views']= array('manage_users/add_group_view');
-                    
                     page_load($data);
                 }
+            }//end function delete file
+            public function delete_all_files($user){
+                $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
+                $acc_yr = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
                 
-                
+                $files = glob('./sProMAS_documents/'.  $acc_yr.'/registration_files/'.$user.'/*'); // get all file names
+                foreach($files as $file){ // iterate files
+                    if(is_file($file)){
+                        unlink($file); // delete file
+                    }
+                }
+                $data['user']=$user;
+                if(unlink($_POST['file_path'])){
+                    $data['message'] = 'File deleted successfully';
+                    $data['views']= array('manage_users/add_group_view');
+                    page_load($data);
+                }else{
+                    $data['message'] = 'File not deleted, Try again';
+                    $data['views']= array('manage_users/add_group_view');
+                    page_load($data);
+                }
             }//end function delete file
 
 }

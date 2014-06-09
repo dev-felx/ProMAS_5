@@ -15,24 +15,9 @@ if($user=='student'){
 ?>
 
 <div class="container-fluid">
-    
-    <div class='row' style="margin-bottom: -5px; ">
-        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst($user);   ?></h4></div>
-            <div class="btn-group pull-right">
-                <button type="button" class="btn btn-success pull-right push_left_bit dropdown-toggle" data-toggle="dropdown" >Add <?php echo ucfirst($user);   ?></button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Individual</a></li>
-                    <li class="divider"></li>
-                    <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Group</a></li>
-                    </ul>
-
-            </div>
-     </div>
-    
-    <div class="row">
-        <hr style="border: none; height: 1px; background:#0093D0;"/>
-    </div>
-    
+    <?php 
+    $this->load->view('manage_users/manage_user_head_view');
+    ?>
     <div class="row">
     <div class="col-sm-10">
     <div class="container-fluid" id="reg_form">
@@ -59,12 +44,12 @@ if($user=='student'){
                       
                        if($user != 'student'){
                            
-                           if(($key=='user_id')||($key=='role_id')||($key=='department_id')||($key=='shortform')||($key=='college_id'))
+                           if(($key=='user_id')||($key=='space_id')||($key=='role_id')||($key=='department_id')||($key=='shortform')||($key=='college_id'))
                            continue;
                       }
                        if($user == 'student'){
                            
-                           if(($key=='student_id')||($key=='project_id')||($key=='group_id')||($key=='course_id')||($key=='department_id'))
+                           if(($key=='student_id')||($key=='space_id')||($key=='project_id')||($key=='group_id')||($key=='course_id')||($key=='department_id'))
                           continue;
                       }
                       
@@ -163,7 +148,7 @@ if($user=='student'){
         </div>
         <div class="hr"><hr/></div>
         <a class="btn btn-primary"  role="button" href='<?php echo site_url(); ?>/manage_users/manage/edit/<?php echo $user_data[0][$id]; ?>/<?php echo $user; ?>'>Edit Profile</a>
-
+        <a class="btn btn-sm btn-warning" href="<?php echo site_url(); ?>/manage_users/manage/users/<?php echo $user; ?>" onclick="" role="button" >Cancel</a>
     </div>
         
     </div>

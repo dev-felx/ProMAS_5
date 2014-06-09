@@ -222,9 +222,8 @@
     $( "#groups" ).hide();
     $( "#groups_share" ).hide();
     var site_url = "<?php echo site_url(); ?>";
+    
     $(document).ready(function(){
-        
-        
         
         $('.group_no').click(function(e) {
         var group_no = $(this).data('number');

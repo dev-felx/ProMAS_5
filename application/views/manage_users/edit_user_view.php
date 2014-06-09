@@ -13,20 +13,9 @@ if($user =='student'){
 ?>
 
 <div class="container-fluid">
-    
-    <div class='row' style="margin-bottom: -5px; ">
-        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst($user);   ?></h4></div>
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-success pull-right push_left_bit dropdown-toggle" data-toggle="dropdown" >Add <?php echo ucfirst($user);   ?></button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Individual</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Group</a></li>
-                </ul>
-
-        </div>
-    </div>
-    
+    <?php 
+        $this->load->view('manage_users/manage_user_head_view');
+    ?>
     <div class="row">
         <hr style="border: none; height: 1px; background:#0093D0;"/>
     </div>
@@ -149,16 +138,21 @@ if($user =='student'){
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label" for="inputUsername">Roles</label>
+                                    <label class="control-label">Roles</label>
                                     
                                     <?php if($user == 'student'){ ?>    
                                         <div class="checkbox">
                                         <label><input disabled type="checkbox" <?php echo 'checked'; ?>>Student</label>
                                         </div>
-                                    <?php  } else { ?>
+                                    <?php  } else {
+                                        
+                                        
+                                        if($this->session->userdata['type']=='administrator'){
+                                        ?>
+                                    
                                     <div class="checkbox">
                                         <input type="hidden" name="admin_role" value="0" />
-                                        <label><input name="admin_role" type="checkbox"<?php 
+                                        <label><input class="chk" name="admin_role" type="checkbox"<?php 
                                         
                                         for($i = 0; $i < count($user_data);$i++){
                                             if($user_data[$i]['role']=='administrator')
@@ -166,21 +160,30 @@ if($user =='student'){
                                     </div>
                                     <div class="checkbox">
                                         <input type="hidden" name="coord_role" value="0" />
-                                        <label><input type="checkbox"<?php 
+                                        <label><input class="chk" type="checkbox"<?php 
   
                                         for($i = 0; $i < count($user_data);$i++){
                                             if($user_data[$i]['role']=='coordinator')
                                         echo 'checked'; } ?> value="1" name="coord_role"  >Coordinator</label>
                                     </div>
+                                        <?php } else if($this->session->userdata['type']=='coordinator'){ ?>
                                     <div class="checkbox">
                                         <input type="hidden" name="super_role" value="0" />
-                                        <label><input type="checkbox"<?php 
+                                        <label><input class="chk" type="checkbox"<?php 
                                         
                                         for($i = 0; $i < count($user_data);$i++){
                                             if($user_data[$i]['role']=='supervisor')
                                         echo 'checked'; }  ?> value="1" name="super_role" >Supervisor</label>
                                     </div>
-                                    <?php } ?> 
+                                    <div class="checkbox">
+                                        <input type="hidden" name="panel_head_role" value="0" />
+                                        <label><input class="chk" type="checkbox"<?php 
+                                        
+                                        for($i = 0; $i < count($user_data);$i++){
+                                            if($user_data[$i]['role']=='panel_head')
+                                        echo 'checked'; }  ?> value="1" name="panel_head_role" >Panel Head</label>
+                                    </div>
+                                        <?php } } ?> 
                                 </div>
                             </div>
                        
@@ -190,9 +193,9 @@ if($user =='student'){
                         <div class='row'>
                         <div class=" form-group col-sm-8">
                             <div class='pull-left '>
-                                <button class="btn btn-success btn-sm " type='submit' role='button' >Save</button>
+                                <button id="update_btn" class="btn btn-success btn-sm " type='submit' role='button' >Update</button>
                                 <a class="btn btn-danger btn-sm "  role="button" onclick="return confirm('Are you sure you want to delete <?php echo ucfirst($user_data[0]['first_name']) .' '.ucfirst($user_data[0]['last_name']); ?>?')" href="<?php echo site_url(); ?>/manage_users/manage/delete/<?php echo $user_data[0][$id]; ?>/<?php echo $user; ?>">Delete</a>
-                                <a class="btn btn-sm btn-primary" onclick="" role="button" >Cancel</a>
+                                <a class="btn btn-sm btn-warning" href="<?php echo site_url(); ?>/manage_users/manage/users/<?php echo $user; ?>" onclick="" role="button" >Cancel</a>
                              </div>
                          </div>
                          </div>
@@ -204,4 +207,3 @@ if($user =='student'){
   </div>
     </div>
     </div>
-</div>

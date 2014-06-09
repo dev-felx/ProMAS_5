@@ -14,27 +14,34 @@ if(isset($this->session->userdata['user_id'])){
 ?>
 
 <div class="container-fluid">
-   
+   <div class='row' style="margin-bottom: -5px; ">
+        <div class='text-info pull-left'><h4>My Profile</h4></div>
+        <div class=" pull-right">
+        <?php echo "<a type='button' class='btn btn-success push_right_bit'  href='". site_url(). "/manage_users/profile/edit_profile/".$this->session->userdata['user_id']."/".$this->session->userdata['type']."'>Edit Profile</a>"; 
+        echo "<a type='button' class='btn btn-success push_right_bit'  href='". site_url(). "/manage_users/profile'>View Profile</a>";
+        ?>    
+        </div>
+    </div>
+    <div class="row">
+        <div class="hr"><hr/></div>
+    </div>
     <div class='row'>
     <div class="col-sm-6 col-sm-offset-3">
     
-        <div class='' style="margin-bottom: -15px; ">
-            <h4 class='text-center'>Change Password</h4>
-            <hr style="border: none; height: 1px; background:#0093D0;"/>
-        </div>
-    <form id="reg_form" class="" action="<?php echo site_url(); ?>/access/password/validate_pass_profile" method="POST" role="form">
-
-
+        <form id="reg_form" class="" action="<?php echo site_url(); ?>/access/password/validate_pass_profile" method="POST" role="form">
+        <h4 class='text-info text-center'>Change Password</h4>
+        
+        <div class="row"><div class="hr"><hr/></div></div>   
         <input name="user_id" type="hidden" value="<?php if(isset($user_id)) echo $user_id; ?>">
         <input name="user_type" type="hidden" value="<?php if(isset($user_type)) echo $user_type; ?>">
 
-         <span><?php if (isset($message)){ echo "<h4 class=' text-center text-success'><b>".$message."</b></h4>"; }?>
+         <span><?php if (isset($message)){ echo "<p class='text-center text-success'><b>".$message."</b></p>"; }?>
          </span>   
 
         <?php if(isset($user_id) && isset($user_type)) { ?>
        
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-sm-12">
                     <div class="form-group">
                         <label for="currPassword" class=" control-label">Current Password:&nbsp;<?php echo show_form_error('curr_password'); ?></label>
                         <input name="curr_password" type="password" class="form-control" id="currPassword" placeholder="Current Password">
@@ -42,7 +49,7 @@ if(isset($this->session->userdata['user_id'])){
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-sm-12">
                     <div class="form-group">
                         <label for="inputPassword" class=" control-label">New Password:&nbsp;<?php echo show_form_error('password'); ?></label>
                         <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password" value="<?php echo set_value('password');?>">
@@ -51,7 +58,7 @@ if(isset($this->session->userdata['user_id'])){
             </div>
 
         <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label for="inputPasswordCon" class="control-label">Confirm Password:&nbsp;<?php echo show_form_error('password_con'); ?></label>
                         <input name="password_con" type="password" class="form-control" id="inputPasswordCon" placeholder="Confirm Password" value="<?php echo set_value('password_con');?>">
@@ -61,9 +68,10 @@ if(isset($this->session->userdata['user_id'])){
         </div>
 
         <div class="row">
-            <div class="col-sm-offset-0 col-sm-3">
+            <div class="col-sm-12">
                 <div class="form-group" >
-                    <button name="submit" type="submit" class="btn btn-primary btn-block">Change</button>
+                    <button name="submit" type="submit" class="btn btn-primary ">Change</button>
+                    <a class="btn btn-warning"  role="button" href="<?php echo site_url(); ?>/home">Cancel</a>
                 </div>
             </div>
         </div>

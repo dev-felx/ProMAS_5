@@ -69,7 +69,7 @@
         'Manage users' => array(
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
-                                    array('Panel Head' => 'manage_users/manage/users/student'),
+                                    array('Panel Head' => 'manage_users/manage/users/panel_head'),
                                     array('Archive Users' => 'archive/users'),
                                     
                                ),

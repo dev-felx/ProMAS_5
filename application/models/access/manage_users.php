@@ -178,6 +178,38 @@
            return  $this->db->delete('students', array('student_id' => $id)); 
         
         }
+        public function delete_all_student($data){
+            return  $this->db->delete('students',$data); 
+        }
+        public function delete_all_non_student($user){
+           //$query =  'DELETE * FROM non_student_users INNER JOIN roles AS n ON s.npc_templateid = n.idTemplate 
+            //         WHERE n.type = "monster"';
+            
+            $this->db->select('*');
+            $this->db->from('non_student_users');
+            //$this->db->where('roles.role',$user);
+            $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
+            $query = $this->db->get();
+            $result= $query->result_array();
+
+            foreach ($result as $value) {
+                if($value['role']==$user){
+                    $this->db->select('*');
+                    $this->db->from('roles');
+                    $this->db->where('roles.user_id',$value['user_id']);
+                    $query = $this->db->get();
+                    $result_roles= $query->result_array();
+                    if(count($result_roles)>1){
+                       return  $this->db->delete('roles',array('role_id'=>$value['role_id'])); 
+                    }elseif (count($result_roles)==1) {
+                       return  $this->db->delete('non_student_users',array('user_id'=>$value['user_id'])); 
+                    }
+                    
+                }
+            }
+        }
+        
+        
    
     
 }

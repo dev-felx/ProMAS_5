@@ -7,29 +7,10 @@
 ?>
 
 <div id='add_group' class='container-fluid'>
- 
-    <div class='row' style="margin-bottom: -5px; ">
-        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst($user);   ?></h4></div>
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-success pull-right push_left_bitt dropdown-toggle" data-toggle="dropdown" >Add <?php echo ucfirst($user);   ?></button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Individual</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Group</a></li>
-                </ul>
-
-        </div>
-    </div>
-
-            
-    <div class="row">
-        <div class="">
-            <hr style="border: none; height: 2px; background:#0093D0;"/>
-        </div>
-    </div>
-    
-    <?php 
-            if(isset($results) && !isset($exists)){
+ <?php 
+    $this->load->view('manage_users/manage_user_head_view');
+           
+    if(isset($results) && !isset($exists)){
     ?>
                 
     <div class="row">

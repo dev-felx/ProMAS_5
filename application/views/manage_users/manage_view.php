@@ -5,23 +5,25 @@
  * 
  */
 ?>
-
-
+<link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatable/jquery.bootstrap.datatable.css">
 <script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.dataTables.js"></script>
-<script src="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
-   
+<script src="<?php echo base_url(); ?>assets/jquery/datatable/jquery.bootstrap.datatable.js"></script>
+
 <div id="manage_users" class="col-sm-12">            
     <div class='row' style="margin-bottom: -5px; ">
-        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst($user);   ?></h4></div>
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-success pull-right push_left_bit dropdown-toggle" data-toggle="dropdown" >Add <?php echo ucfirst($user);   ?></button>
+        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst(str_replace('_',' ', $user));   ?></h4></div>
+        <div class=" pull-right">
+            <?php if(($user == 'student') || ($user =='supervisor') ){ ?>
+            <button type="button" class="btn btn-success dropdown-toggle push_right_bit" data-toggle="dropdown" >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Individual</a></li>
+                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Single</a></li>
                 <li class="divider"></li>
-                <?php if(($user == 'student') || ($user =='supervisor') ){ ?>
-                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Group</a></li>
-                <?php }?>
+                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Multiple</a></li>
             </ul>
+            <?php }else{  ?>
+            <a type="button" class="btn btn-success push_right_bit" href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>"  >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></a>
+            <?php } ?>
+            <a onclick="return confirm('Are you sure you want to delete all <?php echo $user; ?>s?')" href="<?php echo site_url(); ?>/manage_users/manage/delete_all/<?php echo $user; ?>" type="button" class="btn btn-danger push_right_bit " >Delete All <?php echo str_replace('_',' ', $user).'s'; ?></a>
 
         </div>
     </div>
@@ -30,12 +32,12 @@
         <hr style="border: none; height: 1px; background:#0093D0;"/>
     </div>
     
-    <div class="row-fluid col-sm-12">
-        <?php if(isset($message)){ ?>
-        
-        <h4 class="text-center text-success"><strong><?php echo $message; ?></strong></h4>
+        <?php if(isset($message)&& $message!=NULL){ ?>
+        <div class="row-fluid col-sm-12">
+            <h4 class="text-center alert alert-info "><strong><?php echo $message; ?></strong></h4>
+        </div>
         <?php } ?>
-    </div>
+    
 <!--    <h4 class="pull-">Current <?php //echo ucfirst($user); ?>s</h4>-->
     <div class="row">
         <div id='user_list' class="table-responsive col-sm-12">
@@ -74,7 +76,7 @@
                    ?>
                       <a type="button" href="<?php echo site_url(); ?>/manage_users/manage/view/<?php echo $user_id; ?>/<?php echo $user; ?>" class="action_view btn_edge btn btn-primary btn-xs"><span class="glyphicon glyphicon-zoom-in push_right_bit"></span>View</a>
                         <a type="button" href="<?php echo site_url(); ?>/manage_users/manage/edit/<?php echo $user_id; ?>/<?php echo $user; ?>" class="action_edit btn_edge badge_link btn btn-success btn-xs"><span class="glyphicon glyphicon-pencil push_right_bit"></span>Edit</a>
-                        <a type="button" onclick="return confirm('Are you sure you want to delete <?php echo ucfirst($row['first_name']) .' '.ucfirst($row['last_name']); ?>?')" href="<?php echo site_url(); ?>/manage_users/manage/delete/<?php echo $this->uri->segment(5,0); ?>/<?php echo $user_id; ?>/<?php echo $user; ?>" class="action_del btn_edge badge_link btn btn-danger btn-xs">
+                        <a type="button" onclick="return confirm('Are you sure you want to delete <?php echo ucfirst($row['first_name']) .' '.ucfirst($row['last_name']); ?>?')" href="<?php echo site_url(); ?>/manage_users/manage/delete/<?php echo $user_id; ?>/<?php echo $user; ?>" class="action_del btn_edge badge_link btn btn-danger btn-xs">
                             <span class="glyphicon glyphicon-trash push_right_bit"></span>Delete</a>
                   <?php echo '</td>';
                    echo '</tr>';  
@@ -94,21 +96,6 @@
     $(document).ready(function(){
         
         $('#table_id').dataTable({
-            "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
-            "bJQueryUI": true,
-            //"sDom": '<"H"lfrT>t<"F"ip>T', // this adds TableTool in the center of the header and after the footer
-//                "oLanguage": { "sSearch": "Search the Features:" },
-//                "iDisplayLength": 25,
-                //"bJQueryUI": true,
-//                "sPaginationType": "full_numbers",
-//                "aaSorting": [[0, "asc"]],
-//                "bProcessing": true,
-//                "aoColumns": [
-//                /* 1st column hidden*/{"bVisible": false },
-//                /* show 2nd column */null,
-//                /* show 3rd column*/null,
-//                /* show 4th column*/null
-//                ]
             });
     });
     

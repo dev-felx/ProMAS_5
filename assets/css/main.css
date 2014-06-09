@@ -42,8 +42,8 @@ body{
 
 #reg_form{
     background: white;
-    /*border-radius: 10px;*/
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5) inset;
+    border-radius: 2px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset;
     margin-top: 20px;
     padding: 19px
 }
@@ -51,7 +51,7 @@ body{
 #upload_file{
     padding-top: 15px;
     background: white;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5) inset;
 }
 
