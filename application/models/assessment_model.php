@@ -8,7 +8,7 @@ class Assessment_model extends CI_Model{
     public function get_weekly($id){
         $this->db->select('*');
         $this->db->from('asses_week');
-        $this->db->where(array('owner' => $id, 'ignore' => 0));
+        $this->db->where(array('owner' => $id));
         $query = $this->db->get();
         $result =  $query->result_array();
         return $result;
@@ -61,6 +61,11 @@ class Assessment_model extends CI_Model{
         return $this->db->update('asses_week', $data);
     }
     
+    public function ignore_form($data) {
+        $this->db->where('form_id', $data);
+        return $this->db->update('asses_week', array('ignore' => 1));
+    }
+    
     public function save_form_grp($data,$id) {
         $this->db->where('form_id', $id);
         return $this->db->update('assess_groups', $data);
@@ -74,7 +79,7 @@ class Assessment_model extends CI_Model{
     public function get_stu_form($reg){
         $this->db->select('*');
         $this->db->from('asses_week');
-        $this->db->where(array('student' => $reg));
+        $this->db->where(array('student' => $reg,'ignore' => 0));
         $query = $this->db->get();
         $result =  $query->result_array();
         return $result;
@@ -111,5 +116,14 @@ class Assessment_model extends CI_Model{
         $query = $this->db->get();
         $result =  $query->result_array();
         return $result;
+    }
+    
+    public function get_interval(){
+        $this->db->select('*');
+        $this->db->from('project_space');
+        $this->db->where('space_id',$this->session->userdata('space_id'));
+        $query = $this->db->get();
+        $result =  $query->row_array();
+        return $result['assess_interval'];
     }
 }

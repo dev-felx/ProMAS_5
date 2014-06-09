@@ -35,6 +35,7 @@
                 <h3 class="panel-title text-center">Student Assessment Form</h3>
             </div>
             <div id="form_cont" class="panel-body">
+                <div id="cont_msg"></div>
                 <?php $this->load->view('assessment/ind_form'); ?>
             </div>
         </div>
@@ -64,28 +65,36 @@
                 $('#msg_frm').html('');               
                 for (var i=0; i < forms.length; i++){
                          if (forms[i]['student'] == curr_stu && forms[i]['week_no'] == week){
-                             $('#name').html(forms[i].student_name);
-                             $('#reg_no').html(forms[i].student);
-                             $('#wik').html(forms[i].week_no);
-                             $('#pro_name').html(forms[i].project_name);
-                             
-                             $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
-                             $('[name="init"]', '#ind_form').val(forms[i].initiative);
-                             
-                             $('[name="gen"]', '#ind_form').attr('value',forms[i].understand);
-                             $('[name="gen"]', '#ind_form').val(forms[i].understand);
-                             
-                             $('#spec').attr('value',forms[i].contribution);
-                             $('#spec').val(forms[i].contribution);
-                             
-                             $('#qn').attr('value',forms[i].qna);
-                             $('#qn').val(forms[i].qna);
-                             
-                             $('#com').html(forms[i].comments);
-                             $('#com').val(forms[i].comments);
-                             
-                             
-                             $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
+                             if(forms[i].ignore == 1){
+                                $('#cont_msg').html('<div class="alert alert-warning text-center">Assement Form Ignored</div>') ;
+                                $('#ind_form').hide();
+                                $('#cont_msg').show();
+                             }else{
+                                $('#name').html(forms[i].student_name);
+                                $('#reg_no').html(forms[i].student);
+                                $('#wik').html(forms[i].week_no);
+                                $('#pro_name').html(forms[i].project_name);
+
+                                $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
+                                $('[name="init"]', '#ind_form').val(forms[i].initiative);
+
+                                $('[name="gen"]', '#ind_form').attr('value',forms[i].understand);
+                                $('[name="gen"]', '#ind_form').val(forms[i].understand);
+
+                                $('#spec').attr('value',forms[i].contribution);
+                                $('#spec').val(forms[i].contribution);
+
+                                $('#qn').attr('value',forms[i].qna);
+                                $('#qn').val(forms[i].qna);
+
+                                $('#com').html(forms[i].comments);
+                                $('#com').val(forms[i].comments);
+
+
+                                $('[name="form_id"]', '#ind_form').attr('value',forms[i].form_id);
+                                $('#cont_msg').hide();
+                                $('#ind_form').show();
+                            }
                          }
                      }
              }
@@ -131,8 +140,32 @@
                  },400);
                  return false;
             });
+            
+            $('#ig_form').click(function(){
+                if(confirm('Ignore form?')){
+                    $('#msg_frm').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Working....');
+                     setTimeout(function(){
+                         var t = "<?php echo site_url(); ?>";
+                         var c = t+"/assessment/assess/ignore_from";
+                         $.post( c, $("#ind_form").serialize()).done(function(data) {
+                             if(data.status == 'cool'){
+                                 forms = data.forms;
+                                 $( "#week" ).trigger('change');
+                             }else{
+                                 $('#msg_frm').html('<div class="alert alert-danger text-center">'+data+'</div>');
+                             }
+                         },'json');
+                     },400);
+                 }
+                 return false;
+            });
         <?php }else{ ?>
             $('#sav_form').click(function(){
+                $('#msg_frm').html('<div class="alert alert-danger text-center">You need Supervisor priviledges to edit this form</div>');
+                return false;
+            });
+            
+            $('#ig_form').click(function(){
                 $('#msg_frm').html('<div class="alert alert-danger text-center">You need Supervisor priviledges to edit this form</div>');
                 return false;
             });
