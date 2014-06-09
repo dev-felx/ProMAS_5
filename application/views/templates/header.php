@@ -45,7 +45,7 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
                         <ul class="nav navbar-nav navbar-right"> 
-                           <li><a href="<?php echo site_url('archive/access/switcher'); ?>">Switch to Archive</a></li>
+                           <li><a href="<?php echo site_url('archive/access/switcher'); ?>">Archive Home</a></li>
                            <li class="dropdown" id="notification">
                                <a  href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="badge push_left_bit badge_nav_ie"><?php echo count(unread_not()); ?></span></a>
                                <ul class="dropdown-menu" id='head_not'>
@@ -104,8 +104,7 @@
                                 <a  href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon push_right_bit glyphicon-user hidden-xs"></span><?php echo $this->session->userdata['fname']; ?><b class="caret hidden-xs"></b><span class="glyphicon glyphicon-chevron-down pull-right visible-xs"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo site_url(); ?>/manage_users/profile"><span class="glyphicon push_right_bit glyphicon-user"></span>My profile<span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
-                                    <li><a href="<?php echo site_url(); ?>/access/password/change_pass_profile"><span class="glyphicon push_right_bit glyphicon-pencil"></span>Change password<span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
-                                    <li><a href="#"><span class="glyphicon push_right_bit glyphicon-cog"></span>Preferences<span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
+                                    <li><a href="<?php echo site_url(); ?>/access/password/change_pass_profile"><span class="glyphicon push_right_bit glyphicon-pencil"></span>Change password<span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>                                   
                                     <li class="divider"></li>
                                     <li class="hidden-xs"><a href="<?php echo site_url(); ?>/access/logout"><span class="glyphicon push_right_bit glyphicon-off"></span>Logout<span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>                                    
                                 </ul>                        

@@ -59,23 +59,9 @@
                 </div>
         </div>
         <hr/>
-        <!-- div class="checkbox" id="eres_qn">
-            <label>
-                <input type="checkbox"> Does this event/activity give output?
-            </label>
-        </div>
-        <div class="form-group">
-            <select id="eres" name="res" class="form-control">
-                <option>Choose type of output</option>
-                <option>Report Document</option>
-                <option>Presentation Document</option>
-                <option>Picture</option>
-                <option>url</option>
-            </select>
-        </div -->
         <div class="form-group">
             <button id="save_btn" class=" col-sm-4 btn btn-success pull-right" type="button">Save</button>
-            <button class="show_def col-sm-4 btn btn-warning pull-right push_right_bit" type="button">Cancel</button>
+            <button class="show_def col-sm-4 btn btn-danger pull-right push_right_bit" type="button">Cancel</button>
         </div>
        </div>
         <div class="clearfix"></div>

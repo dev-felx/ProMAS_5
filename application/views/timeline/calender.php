@@ -3,6 +3,11 @@
 <link href="<?php echo base_url(); ?>assets/css/timeline/css/fullcalendar.print.css" rel="stylesheet" media="print" />
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/jquery-ui.custom.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/css/timeline/js/fullcalendar.min.js"></script>
+<style>
+    .now{
+        border:#000 solid 3px !important;
+    }
+</style>
 <script>
     
     $(document).ready(function() { 
@@ -10,7 +15,7 @@
             eventRender: function (event, element) {
                 element.popover({
                     title: event.title,
-                    placement:'top auto',
+                    placement:'auto top',
                     html:true,
                     trigger : 'click',
                     animation : 'true',

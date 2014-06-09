@@ -8,7 +8,7 @@ class Assessment_model extends CI_Model{
     public function get_weekly($id){
         $this->db->select('*');
         $this->db->from('asses_week');
-        $this->db->where(array('owner' => $id));
+        $this->db->where(array('owner' => $id, 'ignore' => 0));
         $query = $this->db->get();
         $result =  $query->result_array();
         return $result;
@@ -49,6 +49,7 @@ class Assessment_model extends CI_Model{
         $this->db->select('week_no');
         $this->db->distinct();
         $this->db->from('asses_week');
+        
         $query = $this->db->get();
         $result =  $query->result_array();
         return $result;

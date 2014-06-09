@@ -32,7 +32,7 @@
 
     //for superuser
     $accordion['superuser'] = array(
-        'Manage users' => array(
+        'Users' => array(
                                     array('Administrator' => 'manage_users/manage/users/administrator'),
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
@@ -42,7 +42,25 @@
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
-                               )
+                                    array('Notifications' => 'project/notify'),
+                               ),
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
+                               ),
+        'Assesment' => array(
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Export Assessment Data' => 'assessment/assess/export'),
+                        ),
+        'Archive' => array(
+                                    array('Archive Home' => 'archive/access/switcher'),
+                                    array('Access Manager' => 'archive/users'), 
+                                    array('Archive Publisher' => 'project/publish_project'),
+                                    
+                     ),
         
     );
 
@@ -50,17 +68,36 @@
 
     //for administrator 
     $accordion['administrator'] = array(
-        'Manage users' => array(
+        'Users' => array(
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel Head' => 'manage_users/manage/users/student'),
+                                    array('Archive Users' => 'archive/users'),
                                     
                                ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
-                               )
+                               ),
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
+                               ),
+        'Assesment' => array(
+                                    array('Weekly Progress' => 'assessment/assess/weekly'),
+                                    array('Project Reports' => 'assessment/assess/report'),
+                                    array('Average Assessment' => 'assessment/assess/average'),
+                                    array('Presentation' => 'assessment/assess_panel/pres'),
+                                    array('Export Assessment Data' => 'assessment/assess/export'),
+                        ),
+        'Archive' => array(
+                                    array('Archive Home' => 'archive/access/switcher'),
+                                    array('Access Manager' => 'archive/users'), 
+                                    array('Archive Publisher' => 'project/publish_project'),
+                                    
+                     )
         
     );
     
@@ -101,16 +138,16 @@
     
      //for supervisor
     $accordion['supervisor'] = array(
-        
-        'Schedule' => array(
-                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
-                                    array('Calendar' => 'home'),
-                               ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
                                ),
+        
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
+                               ),     
         'Assesment' => array(
                                     array('Weekly Progress' => 'assessment/assess/weekly'),
                                     array('Project Reports' => 'assessment/assess/report'),
@@ -125,16 +162,16 @@
     );
     
     $accordion['student'] = array(
-        
-        'Schedule' => array(
-                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
-                                    array('Calendar' => 'home'),
-                               ),
         'Project' => array(
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
+                               ),  
+        'Schedule' => array(
+                                    array('Event list' => 'timeline/timeline/event'),    // Modified by Minja Junior
+                                    array('Calendar' => 'home'),
                                )
+        
         
     );
     
@@ -152,23 +189,34 @@
 <div class="col-sm-2" style="padding-left: 4px; padding-right: 5px;">
     <!-- Role Box -->
     <div id="role_box" class="bottom_10">
-        <button class="btn btn-circle center-block text-primary"><span class="glyphicon glyphicon-user"></span></button>
-        <p id="role_btn" class="text-center text-primary"><?php echo ucfirst($this->session->userdata['type']); ?> <span class="glyphicon glyphicon-chevron-down"></span></p>
-        <?php if($this->session->userdata['type'] != 'student' && count($this->session->userdata['roles']) > 1) { $roles = $this->session->userdata['roles'];?>
-            <ul class="list-group" id="role_list">
-                <p class="text-center">Change your current role</p>
-                <?php for($i = 1;$i <= count($roles);$i++){
-                    if($roles[($i - 1)] == $this->session->userdata['type']){
-                            continue;
-                    }else{?>
-                <li class="list-group-item"><a href="<?php echo site_url()."/home/change_role/".$roles[($i - 1)];?>"><span class="glyphicon push_right_bit glyphicon-user"></span><?php echo ucfirst($roles[($i - 1)]); ?><span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
-                    <?php }} ?>
-            </ul>
-        <?php } ?>
-              
+        <div class="col-sm-4" style="border-right:#0093D0 solid 1px; height: 50px;padding-top: 5px;">
+            <button class="btn btn-circle text-primary"><span class="glyphicon glyphicon-user"></span></button>
+        </div>
+        <div class="col-sm-8">
+            <p id="role_btn" class="text-left text-primary pull-left"><?php echo ucfirst($this->session->userdata['type']); ?></p>
+            <?php if($this->session->userdata['type'] != 'student' && count($this->session->userdata['roles']) != 1) { ?>
+                <p id="cng_btn" class="text-left text-warning pull-left">Change Role<span class="caret"></span></p>
+            <?php } else {?>
+                <div class="clearfix"></div>
+                <p id="cng_btn" class="text-left text-warning pull-left"> <?php echo ucfirst($this->session->userdata['fname']); ?> </p>
+            <?php }?>
+        </div>               
     </div>
-    
-    
+    <div class="clearfix"></div>
+    <?php if($this->session->userdata['type'] != 'student' && count($this->session->userdata['roles']) > 1) { $roles = $this->session->userdata['roles'];?>
+        <ul class="list-group" id="role_list">
+            <?php for($i = 1;$i <= count($roles);$i++){
+                if($roles[($i - 1)] == $this->session->userdata['type']){
+                        continue;
+                }else{?>
+            <li class="list-group-item"><a href="<?php echo site_url()."/home/change_role/".$roles[($i - 1)];?>"><span class="glyphicon push_right_bit glyphicon-user"></span><?php echo ucfirst($roles[($i - 1)]); ?><span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
+                <?php }} ?>
+        </ul>
+    <?php } ?>    
+    <div class="clearfix"></div>
+    <?php //echo current_url(); ?>
+    <div class="col-sm-10 col-sm-offset-1 bottom_10"><hr/></div>
+    <div class="clearfix"></div>
     <!-- Side Bar view -->
     <div class="panel-group" id="accordion">
         <?php foreach ($accordion[$this->session->userdata['type']] as $key => $value) { ?>
@@ -203,7 +251,7 @@
 <?php } ?>
 <script>
     $('#role_list').hide();
-    $('#role_btn').on('click', function () {
+    $('#cng_btn').on('click', function () {
             $('#role_list').slideToggle(500);
             return false;
     });

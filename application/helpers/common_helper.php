@@ -46,6 +46,7 @@
         $CI =& get_instance();
         $CI->load->view('templates/header',$data);
         $CI->load->view('main_wrapper');
+        $CI->load->view('templates/footer');
       
   }
   
