@@ -5,13 +5,6 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <label>Search using project name</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-search text-success"></span></span>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label>Choose Project</label>
                     <select id="pro" class="form-control">
                         <?php 
@@ -112,7 +105,7 @@
             });
        <?php }else{ ?>
             $('#sav_form').click(function(){
-                $('#msg_grp').html('<div class="alert alert-danger text-center">You do not have access to edit these data</div>');
+                $('#msg_grp').html('<div class="alert alert-danger text-center">You need Supervisor priviledges to edit this form</div>');
                 return false;
                 });
         <?php } ?>

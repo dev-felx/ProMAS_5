@@ -81,27 +81,6 @@
                   echo '</select>';
                 } ?>
         </div>
-        <?php if($this->session->userdata('type') == 'supervisor' || $this->session->userdata('type') == 'student'){ ?>
-        <hr/>
-        <div class="checkbox" id="res_qn">
-            <label>
-                <input type="checkbox" name="output" value="1"> Does this event give output?
-            </label>
-        </div>
-        <div id="res_wrap">
-            <div class="form-group">
-                <select id="res" name="res" class="form-control">
-                    <option value="1">Report Document</option>
-                    <option value="2">Presentation Document</option>
-                    <option value="3">Picture</option>
-                    <option value="4">url</option>
-                </select>
-            </div>
-            <div class="form-group">
-                    <input class="form-control" type="text" placeholder="Output Name..." id="res_name" name="res_name">
-            </div>
-        </div>
-        <?php } ?>
         <div class="form-group">
             <button id="add_btn" class=" col-sm-4 btn btn-success pull-right" type="button">Add</button>
             <button class="show_def col-sm-4 btn btn-danger pull-right push_right_bit" type="button">Cancel</button>

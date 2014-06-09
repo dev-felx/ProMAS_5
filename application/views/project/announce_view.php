@@ -1,13 +1,7 @@
 <div>
     <h4 class="col-sm-3 pull-left">Your Announcements</h4> 
-    <button class="btn btn-success pull-right push_left_bit glyph_big"><span class="glyphicon glyphicon-cog"></span></button>
-    <button id="send" class="btn btn-success pull-right">Send Announcement</button>
-    <form class="col-sm-3 pull-right">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search Announcemens">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-search text-success"></span></span>
-        </div>
-    </form>
+    <button class="btn btn-success pull-right push_left_bit glyph_big">Help</button>
+    <button id="send" class="btn btn-success pull-right">Create Announcement</button>
 </div>
 <div class="clearfix"></div>
 <hr/>

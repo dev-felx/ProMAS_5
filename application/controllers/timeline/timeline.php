@@ -168,7 +168,7 @@ class Timeline extends CI_Controller {
     public function c_event(){
         $values = array(
             'space_id'=>  $this->session->userdata['space_id'],
-            'type'=>  'coordinator'
+            'creator_type'=>  'coordinator'
          );
         echo json_encode($this->event_model->load_events($values));
     }

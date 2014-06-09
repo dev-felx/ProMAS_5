@@ -13,6 +13,9 @@ class Access extends CI_Controller{
     }
     
     public function switcher(){
+            //check for session 
+            $roles = array('superuser','administrator','coordinator','supervisor','student');
+            check_session_roles($roles);
             //Check type of user and grant access
             if($this->session->userdata('type') == 'coordinator'){
                 $this->session->set_userdata('archive_level', 3);

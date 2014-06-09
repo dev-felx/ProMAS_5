@@ -154,21 +154,25 @@ body{
 
 /*Role Box*/
 #role_box{
+    height: 55px;
     padding: 5px;
     border-radius: 4px;
 }
 #role_btn {
-    cursor: pointer;
     margin-bottom: 5px;
     margin-top: 3px;
+    font-size: 120%;
 }
 
+#cng_btn{
+    cursor: pointer;
+}
 
 /* To be shifted to main*/
 
 #work_space{
     border-left: #999 solid 1px;
-    min-height: 400px;
+    min-height: 550px;
 }
 
 hr{
@@ -307,4 +311,11 @@ hr{
     border: solid #0093D0 1px;
     border-radius: 4px;
     padding: 10px;
+}
+
+/*Footer styles*/
+
+#foot{
+    height: 40px;
+    margin-top: 20px;
 }
