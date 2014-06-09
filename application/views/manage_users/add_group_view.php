@@ -30,11 +30,6 @@
     </div>
         <div class="row">
         <div class="hr"><hr/></div></div>
-            <div class="row">
-                <div>
-                   <h4 class="text-left ">List of Uploads</h4>
-                </div>
-            </div> 
             <div class='row'>
                 <div id='file_list' >
                    <?php
@@ -79,7 +74,10 @@
                   
                </div>
             </div>
-    
+        <div class="row">
+            <a class="btn btn- btn-warning" href="<?php echo site_url(); ?>/manage_users/manage/users/<?php echo $user; ?>" onclick="" role="button" >Cancel</a>
+        </div>
+        </div>
     <div id="upload_file_modal" class=" modal fade in" >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -111,7 +109,6 @@
                 </form>
             </div>
         </div>
-    </div>
     </div>
     </div>
 <script>

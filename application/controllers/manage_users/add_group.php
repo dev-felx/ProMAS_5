@@ -311,19 +311,20 @@ class Add_group extends CI_Controller{
                 $files = glob('./sProMAS_documents/'.  $acc_yr.'/registration_files/'.$user.'/*'); // get all file names
                 foreach($files as $file){ // iterate files
                     if(is_file($file)){
-                        unlink($file); // delete file
+                        if(unlink($file)){
+                            $file_del=TRUE;
+                        } // delete file
                     }
                 }
                 $data['user']=$user;
-                if(unlink($_POST['file_path'])){
+                if($file_del==TRUE){
                     $data['message'] = 'File deleted successfully';
-                    $data['views']= array('manage_users/add_group_view');
-                    page_load($data);
-                }else{
+                }  else {
                     $data['message'] = 'File not deleted, Try again';
+                }  
                     $data['views']= array('manage_users/add_group_view');
                     page_load($data);
-                }
+                
             }//end function delete file
 
 }
