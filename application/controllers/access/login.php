@@ -32,7 +32,6 @@ class Login extends CI_Controller{
     }
     
     public function verify_user(){
-        
         $this->session->keep_flashdata('url');
        //check if it is student logging in or other user
         $this->form_validation->set_rules("username","","trim|required|");

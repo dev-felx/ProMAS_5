@@ -76,27 +76,38 @@ if($user =='student'){
                         </div>
                         
                         <?php if($user == 'student'){ ?>
-                        
-                        <div class='hr'><hr/></div>
+                            
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="" class="control-label">Course</label>
-                                        <select  name="course" class="form-control" >
-                                          <option value='<?php echo $user_data[0]['course_id']; ?>' ></option>
-                                          <?php foreach ($course_data as $value){ ?>
-                                          <option value="<?php echo $value['course_id'];  ?>"><?php echo $value['name']; ?></option>';
-                                          <?php }?>
-                                        </select>
-                                </div>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="inputCourse">Course :</label>
+                    <div class="col-sm-0">
+                        <p class="form-control-static"><?php if(isset($user_data[0]['name'])){ echo $user_data[0]['name']; }?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <select name="course_id" class="form-control">
+                        <option ></option>
+                        <?php foreach ($course_data as $value){ ?>
+                        <option value="<?php echo $value['course_id'];  ?>"><?php echo $value['name']; ?></option>';
+                        <?php }?>
+                    </select><?php show_form_error('course_id');  ?>
+                </div>
+            </div>
+                    <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="inputCourse">Project :</label>
+                    <div class="col-sm-0">
+                    <p class="form-control-static"><?php echo $proj_data[0]['title']; ?></p>
+                    </div>
+                </div>
+            </div>
                 
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="" class="control-label">Project(Group)</label>
-                                        <select  name="project" class="form-control" >
+                                    <select  name="project" class="form-control" >
                                             <option value='<?php echo $user_data[0]['project_id']; ?>'></option>
                                           <?php foreach ($project_data as $value){ ?>
                                           <option value="<?php echo $value['project_id'];  ?>"><?php echo $value['group_no'].': '. $value['title']; ?></option>';
@@ -197,9 +208,6 @@ if($user =='student'){
                          </div>
 
         </form>
-
-    
-
-  </div>
+    </div>
     </div>
     </div>

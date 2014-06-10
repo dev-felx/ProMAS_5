@@ -79,14 +79,14 @@ class Manage extends CI_Controller{
             $values=array(
                 'student_id'=>$user_id,
              );
-            
             $data['user_data'] = $this->manage_users->get_student($values);
         
             $value = array(
                 'student_projects.project_id >' =>0, 
             );
             $data['project_data'] = $this->project_model->get_all_project($value);
-        
+            $data['proj_data'] = $this->project_model->get_project($data['user_data'][0]['group_no']);
+            
             $course_value= array(
                 'course_id >'=>0
             );
