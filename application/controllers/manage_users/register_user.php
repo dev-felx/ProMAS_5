@@ -32,7 +32,6 @@ class Register_user extends CI_Controller {
             
             $data['userdata']=$this->manage_users->get_student($values);
             $data['course_data']=  $this->course_model->get_all_course($values_course);
-            
         }else{
             $values = array(
                 'non_student_users.user_id'=>$this->session->userdata['user_id']
@@ -59,17 +58,18 @@ class Register_user extends CI_Controller {
             
             $this->form_validation->set_rules('fname','','required');
             $this->form_validation->set_rules('lname','','required');
-            $this->form_validation->set_rules('phone','','required');
+            $this->form_validation->set_rules('phone','','required|regex_match[/^[0-9+]+$/]|xss_clean');
             $this->form_validation->set_rules('course','','required');
             $this->form_validation->set_rules('password','','required');
             $this->form_validation->set_rules('password_con','','required');
             $this->form_validation->set_message('required',' is required');
+            $this->form_validation->set_message('regex_match',' numbers required');
             
             $values = array(
-                        'student_id'=>$this->session->userdata['user_id']
-                    );
+                'student_id'=>$this->session->userdata['user_id']
+            );
             $values_course= array(
-              'course_id >'=>0  
+                'course_id >'=>0  
             );
             
             $data['userdata']=$this->manage_users->get_student($values);
@@ -79,8 +79,6 @@ class Register_user extends CI_Controller {
         
                 $data['message']='<div class="alert alert-danger text-center">Fields can not be empty</div>';
                 $this->load->view('profile/register_user_view',$data);
-        
-                
             }else{
                 
                 if($_POST['password'] !== $_POST['password_con']){
@@ -117,7 +115,7 @@ class Register_user extends CI_Controller {
             
             $this->form_validation->set_rules('fname','','required');
             $this->form_validation->set_rules('lname','','required');
-            $this->form_validation->set_rules('phone','','required');
+            $this->form_validation->set_rules('phone','','required|regex_match[/^[0-9+]+$/]|xss_clean');
             $this->form_validation->set_rules('office','','required');
             $this->form_validation->set_rules('seniority','','required');
             $this->form_validation->set_rules('password','','required');
@@ -125,6 +123,7 @@ class Register_user extends CI_Controller {
             $this->form_validation->set_rules('college','','required');
             $this->form_validation->set_rules('dept','','required');
             $this->form_validation->set_message('required',' is required');
+            $this->form_validation->set_message('regex_match',' numbers required');
             
             $values = array(
                 'non_student_users.user_id'=>$this->session->userdata['user_id']

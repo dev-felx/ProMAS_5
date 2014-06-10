@@ -147,23 +147,17 @@
         }// end function add_student
         
         public function add_group($data){
-            
-            return $this->db->insert('groups', $data); 
-        
+            return $this->db->insert('student_projects', $data); 
         }// end function add_group
         
         
         public function check_value_exists($table, $data){
-            
             $query = $this->db->get_where($table, $data);
-           
             if($query->num_rows() > 0){
-                        
                 return TRUE;
-             } else{
-                
+            } else{
                 return FALSE;
-                }     
+            }     
         }// end function check value exists
          
         public function delete_non_student($id){

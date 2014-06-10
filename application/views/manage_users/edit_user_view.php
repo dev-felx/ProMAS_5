@@ -16,10 +16,6 @@ if($user =='student'){
     <?php 
         $this->load->view('manage_users/manage_user_head_view');
     ?>
-    <div class="row">
-        <hr style="border: none; height: 1px; background:#0093D0;"/>
-    </div>
-    
     <div class='row'>
         <div  id='reg_form' class=" col-sm-10 col-sm-offset-">
         

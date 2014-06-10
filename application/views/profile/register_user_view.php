@@ -1,59 +1,7 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Meta -->  
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <!-- Title -->
-    <title><?php if(isset($title)){ echo $title;}else{echo 'ProMAS';} ?></title>
-
-    <!-- Style-sheets -->
-    <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css">
-    <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap_tweaks.css" >
-    <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" >
-        
-    <!-- Scripts -->
-    <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.0.js"></script>
-    <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.js"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-  </head>
-  <body>
-      
-      <nav class=" navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">ProMAS</a>
-                </div>
-
-                
-            </div>
-        
-          </nav>
-      
-      <div class="container">
+        $this->load->view('templates/header_out');
+       ?>
+<div class="container">
           
           <div class="row-fluid">
               <div class=" page-header">
@@ -126,7 +74,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label" for="inputPhoneNumber"> Phone Number</label><?php show_form_error('phone'); ?>
-                            <input name="phone" type="text" class="form-control" id="inputPhoneNumber" placeholder="PhoneNumber" value="<?php echo $userdata[0]['phone_no']; ?>">
+                            <input name="phone" type="text" class="form-control" id="inputPhoneNumber" placeholder="+255715123456" value="">
                         </div>
                     </div>
                 <?php if($this->session->userdata['type'] != 'student') echo '</div>'; ?>
@@ -211,9 +159,10 @@
                  </div>
                 
                 <div class="row">
-                    <div class="col-sm-offset-0 col-sm-3">
+                    <div class=" btn-group col-sm-offset-0 col-sm-6">
                         <div class="form-group" >
-                            <button name="submit" type="submit" class="btn btn-primary btn-block">Save</button>
+                            <button name="submit" type="submit" class="btn btn-primary ">Save</button>
+                            <a class="btn btn-warning" href="<?php echo site_url(); ?>/access/logout" role="button" >Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -227,8 +176,7 @@
           </script>
             
       </div>
- 
-        </body>
-       
-</html>
+        <?php
+        $this->load->view('templates/footer_out');
+       ?>
 

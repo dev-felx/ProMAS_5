@@ -6,17 +6,16 @@
  */
 ?>
 
-<div id='add_group' class='container-fluid'>
+<div class='container-fluid'>
  <?php 
     $this->load->view('manage_users/manage_user_head_view');
            
     if(isset($results) && !isset($exists)){
     ?>
-                
     <div class="row">
         <div class="table-responsive col-md-8">
             <table class="table table-striped table-bordered table-condensed">
-                <h4>Users registered and email sent</h4>
+                <p class="text-center alert alert-success"><b>The following users registered and email sent</b></p>
             <!-- table heading -->
         <tr>
             <?php   
@@ -25,9 +24,7 @@
                     echo '<th>'.$key.'</th>';
                 }
             ?>
-        </tr>
-            
-                <!-- table body -->
+        </tr><!-- table body -->
         <?php 
         $i=1;
            foreach ($results as $row) {
@@ -36,31 +33,25 @@
                foreach ($row as $value) {
                    echo '<td>'.$value.'</td>';
                }
-            
-               $i++;
+            $i++;
                }
                echo '</tr>';  
            ?>
-                
             </table>
         </div>
      </div>
                
  <?php }//end if
- 
- elseif(isset($exists) && !isset ($results)){
-                    
+ elseif(isset($exists) && !isset($results)){
     ?>           
-    
-    
     <div class="row">
-        <div class="table-responsive col-md-8">
+        <div class="table-responsive col-md-8" >
+            <?php if($user == 'student'){ ?>
+            <p class="alert alert-warning text-center"><b>The following students were not registered, registration number already exists</b></p>
+            <?php }else{ ?>
+            <p class="alert alert-warning text-center"><b>The following users were not registered, email(username) already exists</b></p>
+            <?php }?>
             <table class="table table-striped table-bordered table-condensed">
-                <?php if($user == 'student'){ ?>
-                <h4>Unregistered students, user(s) with same registration number exists</h4>
-                <?php }else{ ?>
-                <h4>Unregistered users, user(s) with same email(username) already exists</h4>
-                <?php }?>
             <!-- table heading -->
         <tr>
             <?php   
@@ -70,8 +61,7 @@
                 }
             ?>
         </tr>
-            
-                <!-- table body -->
+            <!-- table body -->
         <?php 
         $j=1;
            foreach($exists as $row) {
@@ -83,31 +73,22 @@
                $j++;
                }
                echo '</tr>';  
-           ?>
-                
-            </table>
+           ?></table>
         </div>
      </div>
-    
-    <?php }//end if  
-    
-    elseif( isset($results) && isset($exists)){?>
-    
+    <?php }elseif( isset($results) && isset($exists)){?>
     <div class="row">
         <div class="table-responsive col-md-8">
             <table class="table table-striped table-bordered table-condensed">
-                <h4>Users registered and email sent</h4>
+                <p class="text-center alert alert-success"><b>The following users registered and email sent</b></p>
             <!-- table heading -->
         <tr>
             <?php   
                 echo '<th>No</th>';
                 foreach ($results[0] as $key => $value) {
                     echo '<th>'.$key.'</th>';
-                }
-            ?>
-        </tr>
-            
-                <!-- table body -->
+                }?>
+        </tr><!-- table body -->
         <?php 
         $i=1;
            foreach ($results as $row) {
@@ -116,35 +97,30 @@
                foreach ($row as $value) {
                    echo '<td>'.$value.'</td>';
                }
-            
-               $i++;
+                $i++;
                }
                echo '</tr>';  
            ?>
-                
             </table>
         </div>
      </div>
     
     <div class="row">
         <div class="table-responsive col-md-8">
-            <table class="table table-striped table-bordered table-condensed">
-                <?php if($user == 'student'){ ?>
-                <h4>Unregistered students,user with same registration number exists</h4>
+            <?php if($user == 'student'){ ?>
+                <p class="alert alert-warning text-center"><b>The following students were not registered, registration number already exists</b></p>
                 <?php }else{ ?>
-                <h4>Unregistered users, user with same email(username) already exists</h4>
+                <p class="alert alert-warning text-center"><b>The following users were not registered, email(username) already exists</b></p>
                 <?php }?>
+                <table class="table table-striped table-bordered table-condensed">
                 <!-- table heading -->
-        <tr>
-            <?php   
+        <tr><?php   
                 echo '<th>No</th>';
                 foreach ($exists[0] as $key => $value) {
                     echo '<th>'.$key.'</th>';
                 }
             ?>
-        </tr>
-            
-                <!-- table body -->
+        </tr><!-- table body -->
         <?php 
         $j=1;
            foreach($exists as $row) {
@@ -156,13 +132,8 @@
                $j++;
                }
                echo '</tr>';  
-           ?>
-                
-            </table>
+           ?></table>
         </div>
      </div>
-    
-    
-        
-        <?php } ?>
+    <?php } ?>
 </div>
