@@ -36,8 +36,9 @@ class Assess extends CI_Controller{
         $projects = $this->announcement_model->get_grps($this->session->userdata('user_id'));
         
         //week interval
-         if($_POST['interval'] >= '2'){  $st = 0; }else{ $st = 1;}
-         $stepper = (int)$_POST['interval'];
+        $interval = $this->assessment_model->get_interval();
+        if($interval >= '2'){  $st = 0; }else{ $st = 1;}
+        $stepper = (int)$interval;
         foreach ($projects as $value) {
             //create groups forms
             $data2 = array(
@@ -77,6 +78,8 @@ class Assess extends CI_Controller{
                 }
             }
         }
+        
+        
              redirect('assessment/assess/', 'location');
                     
     }
@@ -96,6 +99,16 @@ class Assess extends CI_Controller{
         //load view
         page_load($data);
         
+    }
+    
+    public function ignore_from(){
+        $res = $this->assessment_model->ignore_form($_POST['form_id']);
+        if($res){
+            $response['forms'] = $this->assessment_model->get_weekly($this->session->userdata('user_id'));
+            $response['status'] = 'cool';
+        }
+        header('Content-type: application/json');
+        exit(json_encode($response));
     }
     public function report(){
         //get data

@@ -4,7 +4,7 @@
     }
 </style>
 <form id="ind_form" class="form-horizontal" role="form" method="POST">
-    <div class="alert alert-warning text-center"><Strong>Warning!</strong> Average on all form, both filled and not filled</div>
+    <div class="alert alert-warning text-center"><Strong>Warning!</strong> Average on all forms, both filled and not filled except Ignored</div>
     <input type="hidden" id="form_id" name="form_id" class="form-control ">
     <div class="form-group">
         <label for="inputName" class="col-sm-4 control-label">Student Name.</label>

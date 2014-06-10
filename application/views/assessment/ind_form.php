@@ -68,7 +68,7 @@
     <div class="form-group">
         <div class="col-sm-4 col-sm-offset-6">
             <button id="sav_form" type="button" class="btn btn-success pull-right push_left_bit">Save</button>
-            <button type="button" class="btn btn-primary pull-right">Ignore Form</button>
+            <button id="ig_form" type="button" class="btn btn-primary pull-right">Ignore Form</button>
         </div>
     </div>
 </form>
