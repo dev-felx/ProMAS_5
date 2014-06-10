@@ -79,115 +79,85 @@ class Add_group extends CI_Controller{
                 //fetching content from the csv file
                 $content = $this->csv_reader->read_csv_file($_POST['file_path'],$user);
                 $data['user'] = $user;
-                
                 if($user == 'student'){
-                    
                     foreach($content as $field){
-                       
                         $values = array(
                                 'group_no' =>$field['Group no']
                             );
-                        
-                        $table = 'groups';
-                        
+                        $table = 'student_projects';
                             //checking if the group no exist in the db
                         $result = $this->manage_users->check_value_exists($table, $values);
-                        
                         //if the group does not exist
                         if(!$result){
-                           
                             //add group into the database if it does not exist
                            $result = $this->manage_users->add_group($values);
-                        
                         }//end if the value does not exist
-                        
                     }//foreach($content as $field)
                   
                     $i=0;
                     $j=0;
-                    
                     foreach($content as $field){
-
                         $values = array(
                                 'registration_no' =>$field['Registration no']
                             );
-                        
                         $table = 'students';
                         //checking if the student exist in the db
                         $result = $this->manage_users->check_value_exists($table, $values);
-                        
+                        $this->load->model('project_model');
+                        $result_project = $this->project_model->get_project_id($field['Group no']);
                         //if student does not exist
                         if(!$result){
-                        
                             $values = array(
                                 'first_name' =>$field['Firstname'] ,
                                 'last_name' =>$field['Lastname'] ,
                                 'registration_no' =>$field['Registration no'] ,
                                 'password' =>md5(strtolower($field['Lastname'])) ,
                                 'email' => $field['Email'],
-                                'group_id' =>$field['Group no'],
+                                'group_no' =>$field['Group no'],
+                                'project_id' =>$result_project[0]['project_id'],
                                 'space_id'=>$this->session->userdata['space_id'],
                             );
-                            
                             //add a student into the database
                             $userdata = $this->manage_users->add_student($values);
-              
                     if($userdata != NULL ){
-                    
                         $this->miscellaneous_model->add_student_id($userdata[0]['student_id']);
-                        
-                       $fname= $userdata[0]['first_name'];
-                       $lname= strtolower($userdata[0]['last_name']);
-                       $reg_no= $userdata[0]['registration_no'];
-                       $email = $userdata[0]['email'];
-                       
-                       $from = "admin@promas.com";
-                       //$to = $email;
-                       $to = $email;
-                       $subject = "ProMAS | Account registration";
-                                $message = " 
+                        $fname= $userdata[0]['first_name'];
+                        $lname= strtolower($userdata[0]['last_name']);
+                        $reg_no= $userdata[0]['registration_no'];
+                        $email = $userdata[0]['email'];
+                        $from = "admin@promas.com";
+                        $to = $email;
+                        $subject = "ProMAS | Account registration";
+                        $url = base_url();
+                        $message = " 
                                     <html>
                                     <head>
                                     <title>ProMAS | Account Registration</title>
                                     </head>
                                     <body>
                                             <h4>Hello $fname,</h4>
-                                             <p>Use credentials below to login into the system and complete registration</p>   
-                                             <p>Username : $reg_no </p>   
-                                             <p>Password : $lname  </p>
-                                             <p>Click the link below</p>    
-                                             <a href='http://localhost/ProMAS_4/index.php/access/login'>Login into promas</a>
+                                            <p>Use credentials below to login into the system and complete registration</p>   
+                                            <p>Username : $reg_no </p>   
+                                            <p>Password : $lname  </p>
+                                            <p>Click the link below</p>
+                                            <a href='$url index.php/access/login'>Login into promas</a>
                                             <p>Sincerely,</p>
                                             <p>ProMAS admin.</p>
                                     </body>
                                     </html>";
-
                                 //sending email
                                 $send_email =  send($from,$to,$subject,$message);
-
                                 if($send_email == TRUE){
-                                
                                 $data['results'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Registration no'=> $field['Registration no']);
                                 $i++;
                             }
-                                
                             }   
-                        
-                            }////end if the value does not exist
-                        
-                        
-                        else{
-                            
+                        }else{
                                 $data['exists'][$j] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Registration no'=> $field['Registration no']);
                                 $j++;
                         }//if student exists    
-                    
-                    
                     }// end foreach($content as $field)
-                    
-                    
-                    
-               }//end if $user == 'student'
+                }//end if $user == 'student'
                
                elseif ($user == 'supervisor') {
                    
@@ -207,14 +177,14 @@ class Add_group extends CI_Controller{
                        //if user does not exist
                        if(!$result){
                            
-                           $values = array(
-                              'first_name' =>$field['Firstname'] ,
-                              'last_name' =>$field['Lastname'] ,
-                              'password' =>md5(strtolower($field['Lastname'])) ,
-                              'email' => $field['Email']  ,
-                              'username'=> $field['Email'],
-                              'space_id'=>$this->session->userdata['space_id'],
-                                  );
+                               $values = array(
+                                  'first_name' =>$field['Firstname'] ,
+                                  'last_name' =>$field['Lastname'] ,
+                                  'password' =>md5(strtolower($field['Lastname'])) ,
+                                  'email' => $field['Email']  ,
+                                  'username'=> $field['Email'],
+                                  'space_id'=>$this->session->userdata['space_id'],
+                                      );
                            
                                 //role to be stored into db
                                 $role = strtolower($user);
@@ -233,6 +203,7 @@ class Add_group extends CI_Controller{
                                     //$to = $email;
                                     $to = $email;
                                     $subject = "ProMAS | Account registration";
+                                    $url =  base_url();
                                     $message = " 
                                         <html>
                                         <head>
@@ -244,7 +215,7 @@ class Add_group extends CI_Controller{
                                                  <p>Username : $email </p>   
                                                  <p>Password : $lname  </p>
                                                  <p>Click the link below</p>    
-                                                 <a href='http://localhost/ProMAS_4/index.php/access/login'>Login into promas</a>
+                                                 <a href=' $url index.php/access/login'>Login into promas</a>
                                                 <p>Sincerely,</p>
                                                 <p>ProMAS admin.</p>
                                         </body>
@@ -254,7 +225,6 @@ class Add_group extends CI_Controller{
                                     $send_email =  send($from,$to,$subject,$message);
                             
                                     if($send_email == TRUE){
-                              
                                         $data['results'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Username'=> $field['Email']);
                                         $i++;
 
@@ -271,23 +241,14 @@ class Add_group extends CI_Controller{
                                 $j++;
                         }//if  user exists    
 
-                        
                     }//end foreach loop
                    
-                    
                    }//end else if $user == 'supervisor'
             
                    if(isset($data['exists']) || isset($data['results'])){
-                       
-                       
                     $data['views']= array('manage_users/register_view');
-                    
                     page_load($data);
-                
-                       
-                   }//end isset($data['exists']) || isset($data['results']
-                   
-                   
+                }//end isset($data['exists']) || isset($data['results']
             }// end function register
             
     
