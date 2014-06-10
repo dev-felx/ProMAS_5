@@ -73,11 +73,13 @@ class Add_group extends CI_Controller{
             }//end function do upload
             
             
-            public function register_file($user){
+            public function register_users($user){
                 $this->load->model('miscellaneous_model');
                 $this->load->library('csv_reader');
+               
                 //fetching content from the csv file
                 $content = $this->csv_reader->read_csv_file($_POST['file_path'],$user);
+                print_r($content); die();
                 $data['user'] = $user;
                 if($user == 'student'){
                     foreach($content as $field){
@@ -87,13 +89,14 @@ class Add_group extends CI_Controller{
                         $table = 'student_projects';
                             //checking if the group no exist in the db
                         $result = $this->manage_users->check_value_exists($table, $values);
+                        echo $field['Group no'];
                         //if the group does not exist
                         if(!$result){
                             //add group into the database if it does not exist
                            $result = $this->manage_users->add_group($values);
                         }//end if the value does not exist
                     }//foreach($content as $field)
-                  
+                  die();
                     $i=0;
                     $j=0;
                     foreach($content as $field){

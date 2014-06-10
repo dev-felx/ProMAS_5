@@ -49,7 +49,7 @@
                                         </button>
                                         <input type="hidden" name="file_path" value="<?php echo $file_path[$i]; ?>">
                                     </form>
-                                    <form method="POST" action="<?php echo site_url(); ?>/manage_users/add_group/register_file/<?php echo $user; ?>">
+                                    <form method="POST" action="<?php echo site_url(); ?>/manage_users/add_group/register_users/<?php echo $user; ?>">
                                         <button type='submit' href="" class="btn_edge btn btn-primary btn-sm pull-right">
                                             <span class="glyphicon glyphicon-registration-mark push_right_bit">
                                             </span>Register
