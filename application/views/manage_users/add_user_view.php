@@ -15,7 +15,6 @@
         <div  id='add_user_form' class="container-fluid col-sm-6 col-sm-offset-3">
         
         <form  style="padding-top: 10px"  class=" " role="form" action="<?php echo site_url(); ?>/manage_users/add_user/add/<?php echo $user; ?>" method="POST">
-        
             <?php if(isset($message)) {
                 echo $message;
                 } else{ ?>
@@ -58,14 +57,25 @@
             
             <?php if(isset($user) && (($user=='student') || ($user=='supervisor')) && ($user_data !==NULL)  ){ ?>
             <div class="form-group">       
-                <label for="group" class=" control-label">Group/Project <?php if($user=='supervisor') echo'(Option)'; ?></label><?php if($user=='student') show_form_error('email'); ?>
-                <select name="group_project" class="form-control">
+                <label for="group" class=" control-label">Group/Project <?php if($user=='supervisor') echo'(Option)'; ?></label><?php if($user=='student') show_form_error('group'); ?>
+                <div class="radio">
+                  <label>
+                    <input class="grp_assign" type="radio" name="group" id="" value="new" checked="">
+                    Assign new group
+                  </label>
+                </div>
+                <div class="radio"><label>
+                   <input class="grp_assign" type="radio" name="group" id="exists" value="exists"  >
+                    Assign existing group
+                  </label>
+                </div>
+                <select id="exists_group" name="group_project" class="form-control hide">
                     <option></option>
                     <?php foreach ($user_data as $value){ ?>
-                    <option value="<?php echo $value['project_id'];  ?>"><?php echo $value['group_no'].': '. $value['title']; ?></option>';
+                    <option value="<?php echo $value['project_id'];  ?>"><?php 
+                    if($value['title']==NULL){ $value['title']='Title not defined'; }
+                    echo $value['group_no'].': '. $value['title']; ?></option>';
                  <?php } ?>
-                    <option value="" disabled="true">No projects to assign</option>
-                 
                 </select>
             </div>
             <?php }?>
@@ -83,3 +93,14 @@
     </div>
 
 </div>
+
+<script>
+$('.grp_assign').click(function(e) {
+        if($('#exists').is(':checked')) { 
+                $('#exists_group').removeClass('hide');
+            }else{
+                $('#exists_group').addClass('hide');
+            }
+    });    
+</script>
+    

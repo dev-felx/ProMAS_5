@@ -63,7 +63,7 @@
             <div class="alert-info alert text-center pad_10">Upcoming events</div>
             <div class="col-sm-12 up_event">
                 <?php   
-                if($event != null){
+                if( !isset($event)&& $event != null){
                 foreach ($event as $row) {?>
                 <div class="up_event_item">
                     <div><strong><?php echo $row->start; ?> - <?php echo $row->end; ?></strong></div>

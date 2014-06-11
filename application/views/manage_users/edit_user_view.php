@@ -8,7 +8,6 @@
 if($user =='student'){
     $id= 'student_id';
     }else{   $id = 'user_id';
-        
         }
 ?>
 
@@ -80,7 +79,7 @@ if($user =='student'){
                         <div class="row">
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="inputCourse">Course :</label>
-                    <div class="col-sm-0">
+                    <div class="">
                         <p class="form-control-static"><?php if(isset($user_data[0]['name'])){ echo $user_data[0]['name']; }?></p>
                     </div>
                 </div>
@@ -98,7 +97,7 @@ if($user =='student'){
                     <div class="row">
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="inputCourse">Project :</label>
-                    <div class="col-sm-0">
+                    <div class="">
                     <p class="form-control-static"><?php echo $proj_data[0]['title']; ?></p>
                     </div>
                 </div>
@@ -110,7 +109,9 @@ if($user =='student'){
                                     <select  name="project" class="form-control" >
                                             <option value='<?php echo $user_data[0]['project_id']; ?>'></option>
                                           <?php foreach ($project_data as $value){ ?>
-                                          <option value="<?php echo $value['project_id'];  ?>"><?php echo $value['group_no'].': '. $value['title']; ?></option>';
+                                          <option value="<?php echo $value['project_id'];  ?>"><?php 
+                                          if($value['title']==NULL){ $value['title']='Title not defined'; }
+                                          echo $value['group_no'].': '. $value['title']; ?></option>';
                                           <?php }?>
                                         </select>
                                 </div>

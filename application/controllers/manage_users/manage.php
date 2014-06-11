@@ -75,33 +75,24 @@ class Manage extends CI_Controller{
         $data['message']= $message;
         
         if($user== 'student'){
-            
             $values=array(
                 'student_id'=>$user_id,
              );
             $data['user_data'] = $this->manage_users->get_student($values);
-        
             $value = array(
                 'student_projects.project_id >' =>0, 
             );
             $data['project_data'] = $this->project_model->get_all_project($value);
-            $data['proj_data'] = $this->project_model->get_project($data['user_data'][0]['group_no']);
-            
+            $data['proj_data'] = $this->project_model->get_project($data['user_data'][0]['project_id']);
             $course_value= array(
                 'course_id >'=>0
             );
             $this->load->model('course_model');
             $data['course_data']= $this->course_model->get_all_course($course_value);
-            
-           
-        }
-        
-        else{
-            
+        }else{
             $values = array(
                 'non_student_users.user_id'=>$user_id
             );
-            
             $data['user_data'] = $this->manage_users->get_non_student($values);
         
         }
@@ -123,41 +114,31 @@ class Manage extends CI_Controller{
         if($user== 'student'){
         
             $this->form_validation->set_rules("reg_no","Reg #","required");
-            //$this->form_validation->set_rules("project","Reg #","required");
             $this->form_validation->set_message("required",' *');
             
           if($this->form_validation->run() === FALSE ){
-              
               $message = '<div class="alert alert-warning text-center">Fields can not be empty</div>';
               $this->edit($user_id, $user,$message);
+          }else{
               
-          }
-           
-          else{
-              
-               $values = array(
+            $project = $this->project_model->get_project($_POST['project']);
+            $values = array(
               'registration_no'=>$_POST['reg_no'],  
               'first_name'=>$_POST['fname'],  
               'last_name'=>$_POST['lname'],  
               'phone_no'=>$_POST['phone'],  
               'email'=>$_POST['email'],
               'project_id'=>$_POST['project'],
-              'group_id'=>$_POST['project'],
+              'course_id'=>$_POST['course_id'],
+              'group_no'=>$project[0]['group_no'],
               'acc_status'=>$_POST['acc_status'],
               'reg_status'=>$_POST['reg_status'],
-              
             );
-            
-           $result = $this->manage_users->update_student($user_id,$values);
-        
-           if($result > 0){
-          
-            $message = '<div class="alert alert-success text-center">Profile updated successful</div>';
-            $this->edit($user_id, $user,$message);
-        
-            
+            $result = $this->manage_users->update_student($user_id,$values);
+            if($result > 0){
+                $message = '<div class="alert alert-success text-center">Profile updated successful</div>';
+                $this->edit($user_id, $user,$message);
             }
-            
           }//end else form validation
            
         }else{

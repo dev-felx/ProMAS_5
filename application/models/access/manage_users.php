@@ -136,7 +136,6 @@
         }// end function add_non_student
         
         public function add_student($data){
-            
             $result = $this->db->insert('students', $data);
             if(isset($result) && $result =1){
                 $id = $this->db->insert_id();
@@ -150,7 +149,6 @@
             return $this->db->insert('student_projects', $data); 
         }// end function add_group
         
-        
         public function check_value_exists($table, $data){
             $query = $this->db->get_where($table, $data);
             if($query->num_rows() > 0){
@@ -161,27 +159,18 @@
         }// end function check value exists
          
         public function delete_non_student($id){
-         
-          return  $this->db->delete('non_student_users', array('user_id' => $id)); 
-        
-            
+            return  $this->db->delete('non_student_users', array('user_id' => $id)); 
         }
         
         public function delete_student($id){
-         
-           return  $this->db->delete('students', array('student_id' => $id)); 
-        
+            return  $this->db->delete('students', array('student_id' => $id)); 
         }
         public function delete_all_student($data){
             return  $this->db->delete('students',$data); 
         }
         public function delete_all_non_student($user){
-           //$query =  'DELETE * FROM non_student_users INNER JOIN roles AS n ON s.npc_templateid = n.idTemplate 
-            //         WHERE n.type = "monster"';
-            
             $this->db->select('*');
             $this->db->from('non_student_users');
-            //$this->db->where('roles.role',$user);
             $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
             $query = $this->db->get();
             $result= $query->result_array();
