@@ -32,7 +32,10 @@
 <!-- Calender wrap header -->
 <div>
     <h4 class="col-sm-3 pull-left">Project Schedule</h4> 
-    <button type="button" class="btn btn-success pull-right push_left_bit glyph_big" data-toggle="tooltip" data-placement="bottom" title="help">Help <span class="glyphicon glyphicon-question-sign"></span></button>
+    <button type="button" class="btn btn-success pull-right push_left_bit glyph_big" data-toggle="tooltip" data-placement="bottom" title="Coordinator Event: Green, 
+Supervisor Event: Blue, 
+Student Event: Orange. 
+Click on event to edit or delete. ">Help <span class="glyphicon glyphicon-question-sign"></span></button>
     <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
     <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
     
