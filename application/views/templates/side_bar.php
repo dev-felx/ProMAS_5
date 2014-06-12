@@ -111,6 +111,7 @@
                                     
                                ),
         'Project' => array(
+                                    array('Groups' => 'manage_users/group'),
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
