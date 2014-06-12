@@ -138,7 +138,7 @@ $('body').on('hidden.bs.modal', '.modal', function () {
 <div id="upload_review_modal" class=" modal fade in" >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="upload_review_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload__review" method="POST">
+                <form id="upload_review_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload_review" method="POST">
                 <div class="modal-header">
                     <div id="msg_review" class="alert alert-info text-center"><b>Upload Document for Review</b>
                     <p>Allowed types are pdf, zip, rar, jpg, jpeg, gif, doc and docx</p></div>
@@ -269,13 +269,11 @@ $(document).ready(function(){
                         $('#msg_reviw').removeClass('alert-info');
                         $('#msg_review').addClass('alert-warning');
                         $('#msg_review').html("Fields can not be empty");
-                        
                     }else if(data.status === 'success') {
                         $('#msg_review').removeClass('alert-info');
                         $('#msg_review').addClass('alert-success');
                         $('#msg_review').html('Document successfuly shared');
                         setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload();},3000);
-
                     }else if(data.status === 'file_error') {
                       //  $.each(data.file_errors, function(key,val){
                         $('#msg_review').removeClass('alert-info');

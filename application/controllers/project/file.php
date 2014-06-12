@@ -463,31 +463,32 @@ class File extends CI_Controller{
         if($this->form_validation->run()==FALSE){
             $response['status'] = 'not_valid';
         }else{
-            $this->load->model('project_space_model');
-        $values = array(
-          'space_id'=>$this->session->userdata['space_id']  
-        );
-        $space_data = $this->project_space_model->get_all_project_space($values);
-        $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']);                 
-        
-        $this->load->library('upload');
-        
-        if($this->session->userdata['type']=='student'){
-            $rev_no=1;
-            $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$this->session->userdata['group_no'].'/';
-            $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
-            $config['overwrite']= TRUE;
-            $config['remove_spaces']= FALSE;
-            $config['max_size']='2048'; // in Kb
-            $config['file_name']=$_POST['file_name'].' v'.$rev_no.' by student';
-            //if upload path does not exist create directories
-            if (!is_dir($config['upload_path'])) {
-                mkdir($config['upload_path'], 0777, TRUE);
-            }
             
-            $this->upload->initialize($config);
+            $this->load->model('project_space_model');
+            $values = array(
+              'space_id'=>$this->session->userdata['space_id']  
+            );
+            $space_data = $this->project_space_model->get_all_project_space($values);
+            $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']);                 
 
-            if(!$this->upload->do_upload()){
+            $this->load->library('upload');
+
+            if($this->session->userdata['type']=='student'){
+                $rev_no=1;
+                $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$this->session->userdata['group_no'].'/';
+                $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
+                $config['overwrite']= TRUE;
+                $config['remove_spaces']= FALSE;
+                $config['max_size']='2048'; // in Kb
+                $config['file_name']=$_POST['file_name'].' v'.$rev_no.' by student';
+                //if upload path does not exist create directories
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, TRUE);
+                }
+
+                $this->upload->initialize($config);
+
+                if(!$this->upload->do_upload()){
                 $response['file_errors'] = $this->upload->display_errors();
                 $response['status'] = 'file_error';
                 
