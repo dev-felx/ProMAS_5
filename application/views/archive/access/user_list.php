@@ -65,11 +65,11 @@
         </div>
     </form>
 </div>
-<div id="add_many" class="">
+<div id="add_many" class="adds">
     <?php $this->load->view('/archive/access/add_multiple'); ?>
 </div>
 <div class="clearfix"></div>
-<div id="user_list_table_wrap" class="col-sm-12 hide">
+<div id="user_list_table_wrap" class="col-sm-12">
     <table id="user_list_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
         <tr>
@@ -111,15 +111,17 @@
 </div>
 <script>
     $('#add_single').hide();
-    //$('#add_many').hide();
+    $('#add_many').hide();
     $(document).ready(function(){
         $('#show_single').click(function(){
             $('.adds').hide();
             $('#add_single').slideDown();
+            $('#user_list_table_wrap').hide();
             return false;
         });
         $('#cancel').click(function(){
             $('#add_single').hide();
+            $('#user_list_table_wrap').show();
             return false;
         });
         $('#stu_radio').change(function(){
@@ -156,10 +158,12 @@
      $('#show_many').click(function(){
             $('.adds').hide();
             $('#add_many').slideDown();
+            $('#user_list_table_wrap').hide();
             return false;
         });
         $('#cancel_many').click(function(){
-            $('#add_many').hide();
+            $('#add_many').hide
+            $('#user_list_table_wrap').show();
             return false;
         });
         
