@@ -126,4 +126,15 @@ class Assessment_model extends CI_Model{
         $result =  $query->row_array();
         return $result['assess_interval'];
     }
+    
+    
+    public function get_panel_head($project_id){
+        $this->db->select('*');
+        $this->db->from('assess_pres');
+        $this->db->distinct();
+        $this->db->where(array('project_id' => $project_id));
+        $query = $this->db->get();
+        $result =  $query->row_array();
+        return $result;
+    }
 }

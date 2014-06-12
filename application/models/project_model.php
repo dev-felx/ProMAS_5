@@ -64,4 +64,11 @@ class Project_model extends CI_Model{
         $query = $this->db->get('student_projects');
         return $query->result_array();
     }
+    
+    public function get_project_row($proj_id){
+        $query = $this->db->get_where('student_projects',array('project_id' =>$proj_id));
+        if($query->num_rows()>0 ){
+            return $query->row_array();
+        }
+    }
 }//end class
