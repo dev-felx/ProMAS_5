@@ -53,7 +53,6 @@ class Profile extends CI_Controller{
             $data['course_data']= $this->course_model->get_all_course($course_value);
             $data['user_data'] = $this->manage_users->get_student($values);
         }else{
-            
             $values = array(
                 'non_student_users.user_id'=>$user_id
             );

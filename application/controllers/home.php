@@ -26,43 +26,31 @@ class Home extends CI_Controller{
   
             //load user's views
             page_load($data);
-        }
-        
-        else if($this->session->userdata['type']=='administrator'){
+        }else if($this->session->userdata['type']=='administrator'){
             //prepare data to be sent to view
             $data['views'] = array('landing/admin_land');
-  
             //load user's views
             page_load($data);
-            
-        }
-        else if($this->session->userdata['type']=='coordinator'){
+        }else if($this->session->userdata['type']=='coordinator'){
             //if space id exist 
             if(($this->session->userdata['space_id'] != NULL) ){
-                
                 $values = array(
                     'space_id'=>  $this->session->userdata['space_id'],
                     'type'=>  'coordinator'
                 );
                 $data['event'] = $this->event_model->upcoming_events($values);
-                
                 //prepare data to be sent to view
                 $data['views'] = array('landing/coor_land');
                 //load user's views
                 page_load($data);
                 
-            }
-            
-            else{//if it doesnot exist
-                
+            }else{//if it doesnot exist
                 redirect('project/project_space', 'location');
             }
             
             
-        }
-        else if($this->session->userdata['type']=='supervisor'){
+        }else if($this->session->userdata['type']=='supervisor'){
             $this->load->model('announcement_model');
-            
             $values = array(
                     'space_id'=>  $this->session->userdata['space_id'],
                     'type'=>  'supervisor'
@@ -76,10 +64,7 @@ class Home extends CI_Controller{
   
             //load user's views
             page_load($data);
-            
-            
-        }
-        else if($this->session->userdata['type']=='student'){
+        }else if($this->session->userdata['type']=='student'){
             
             $values = array(
                     'space_id'=>  $this->session->userdata['space_id'],
@@ -92,13 +77,11 @@ class Home extends CI_Controller{
   
             //load user's views
             page_load($data);
-        }
-        else if($this->session->userdata['type']=='panel_head'){
+        }else if($this->session->userdata['type']=='panel_head'){
             
             redirect('assessment/assess_panel/pres', 'location');
             
-        }
-        else{
+        }else{
            
             redirect('access/login','location');
         }

@@ -29,8 +29,7 @@ class File extends CI_Controller{
             $data['filter_fields']= array('#','Name','Group','Due date','Status');
             
             $this->load->model('project_model');
-            $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0,
-                'space_id'=>  $this->session->userdata['space_id']));
+            $data['all_groups'] = $this->project_model->get_all_project(array('project_id >'=>0,'space_id'=>  $this->session->userdata['space_id']));
             
             $this->load->model('announcement_model');
             $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
@@ -117,7 +116,7 @@ class File extends CI_Controller{
                     $this->load->model('announcement_model');
                     $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
                     foreach ($groups as $value){ 
-                        $data['group_no']=$value['project_id'];
+                        $data['group_no']=$value['group_no'];
                         $result = $this->document_model->new_doc($data);
                     }//paramaters for notifications
                     $scope= 3;
@@ -129,7 +128,7 @@ class File extends CI_Controller{
                         $projects = $this->project_model->get_all_project($value_proj);
                     
                     foreach ($projects as $value){
-                        $data['group_no'] = $value['project_id'];
+                        $data['group_no'] = $value['group_no'];
                         $result = $this->document_model->new_doc($data);
                     }
                     $scope= 2;
@@ -163,6 +162,8 @@ class File extends CI_Controller{
                 if($notify){
                     $response['status'] = 'success';
                 }
+                }else{
+                    $response['status'] = 'fail';
                 }
         }
         
@@ -246,7 +247,7 @@ class File extends CI_Controller{
                            $rev_no=$_POST['rev_no'];
                         }
                         $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$_POST['group_no'].'/';
-                        $config['allowed_types']= 'pdf|doc|docx';
+                        $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
                         $config['overwrite']= TRUE;
                         $config['remove_spaces']= FALSE;
                         $config['max_size']='2048';
@@ -307,15 +308,6 @@ class File extends CI_Controller{
         $this->form_validation->set_message('required','%s');
     
         if($this->form_validation->run()==FALSE){
-            
-            $errors = array();
-                // Loop through $_POST and get the keys
-                foreach ($this->input->post() as $key => $value)
-                {
-                    // Add the error message for this field
-                    $errors[$key] = form_error($key);
-                }
-            $response['errors'] = array_filter($errors); // Some might be empty
             $response['status'] = 'not_valid';
         }else{
             
@@ -324,117 +316,145 @@ class File extends CI_Controller{
               'space_id'=>$this->session->userdata['space_id']  
             );
             $space_data = $this->project_space_model->get_all_project_space($values);
-            $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']); 
-        
+            $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']);
+            
             $this->load->library('upload');
-            $config['upload_path']= './sProMAS_documents/'.$acc_year.'/uploads/documents/shared/';
-            $config['allowed_types']= 'pdf|doc|docx';
+            $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
             $config['overwrite']= TRUE;
             $config['remove_spaces']= FALSE;
             $config['max_size']='2048';
             $config['file_name']=$_POST['file_name'];
             
-            //if upload path does not exist create directories
-            if (!is_dir($config['upload_path'])) {
-                mkdir($config['upload_path'], 0777, TRUE);
-            }
-            
-            $this->upload->initialize($config);
+            //obtaining a file extension
+            $path_parts = pathinfo($_FILES["userfile"]["name"]);
+            $extension = $path_parts['extension'];
 
-            if(!$this->upload->do_upload()){
-                $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
-                $response['status'] = 'file_error';
-                
-                
-            } else {
-                //obtaining a file extension
-                $path_parts = pathinfo($_FILES["userfile"]["name"]);
-                $extension = $path_parts['extension'];
-                
-                
-                $data_doc = array(
+            $data_doc = array(
                     'name'=>$_POST['file_name'],
                     'doc_status'=>2, //document has been shared value
                     'space_id' => $this->session->userdata['space_id'],
                     'creator_id' => $this->session->userdata['user_id'],
                     'creator_role' => $this->session->userdata['type'],
                     );
-                
-                $data_rev = array(
+
+            if($_POST['group'] == 'All groups'){
+            if($this->session->userdata['type']=='supervisor'){
+                $this->load->model('announcement_model');
+                $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
+                foreach ($groups as $value){ 
+                    $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$value['group_no'].'/shared/';
+                    //if upload path does not exist create directories
+                    if (!is_dir($config['upload_path'])) {
+                        mkdir($config['upload_path'], 0777, TRUE);
+                    }
+                    $this->upload->initialize($config);
+                    if(!$this->upload->do_upload()){
+                        $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
+                        $response['status'] = 'file_error';
+                    } else {
+                    
+                    $data_rev = array(
                         'rev_date_upload'=>date("Y-m-d",time()),
                         'rev_status'=>1,//status of the revision if approved or not
-                        'rev_file_name'=>$file_name,
-                        'rev_file_path'=>$config['upload_path'].$file_name.'.'.$extension,
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
                     );
                 
-                if($_POST['group'] == 'All groups'){
-                if($this->session->userdata['type']=='supervisor'){
-                    $this->load->model('announcement_model');
-                    $groups = $this->announcement_model->get_grps($this->session->userdata['user_id']);
-                    foreach ($groups as $value){ 
-                        $data_doc['group_no']=$value['project_id'];
-                        $result = $this->document_model->share_doc($data_doc,$data_rev);
-                    }
-                    $scope= 3;
-                    $sc_p1 = $this->session->userdata['user_id'];
-                }elseif($this->session->userdata['type']=='coordinator'){
-                    $this->load->model('project_model');
-                    $value_proj = array(
-                        'student_projects.project_id >'=>0);
-                    $projects = $this->project_model->get_all_project($value_proj);
-                    foreach ($projects as $value){
-                        $data_doc['group_no'] = $value['project_id'];
-                        $result = $this->document_model->share_doc($data_doc,$data_rev);
-                    }
-                    $scope= 2;
-                    $sc_p1 = 'stu';
-                }
-                }else if($_POST['group'] == 'Choose groups'){
-                    foreach($_POST['groups'] as $value) {
-                        $data_doc['group_no'] = $value;
-                        $result = $this->document_model->share_doc($data_doc,$data_rev);
-                    }
-                }else if($_POST['group'] == 'All supervisors'){
-                    foreach($_POST['groups'] as $value) {
-                        $values['file_owner_id'] = $value;
-                        $result = $this->file_model->new_file($values);
+                    $data_doc['group_no']=$value['group_no'];
+                    $result = $this->document_model->share_doc($data_doc,$data_rev);
                     }
                 }
+                $scope= 3;
+                $sc_p1 = $this->session->userdata['user_id'];
+            }elseif($this->session->userdata['type']=='coordinator'){
+                $this->load->model('project_model');
+                $value_proj = array(
+                    'student_projects.project_id >'=>0);
+                $projects = $this->project_model->get_all_project($value_proj);
+                foreach ($projects as $value){
+                    $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$value['group_no'].'/shared/';
+                    //if upload path does not exist create directories
+                    if (!is_dir($config['upload_path'])) {
+                        mkdir($config['upload_path'], 0777, TRUE);
+                    }
+                    $this->upload->initialize($config);
+                    if(!$this->upload->do_upload()){
+                        $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
+                        $response['status'] = 'file_error';
+                    } else {
+                    
+                    $data_rev = array(
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>1,//status of the revision if approved or not
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                    );
                 
-                if($result !== NULL){
-                    
-                        if($_POST['group']=='All groups'){
-                            $desc = 'Document: ' .$_POST['file_name'].' shared by '.$this->session->userdata['type'];
-                            $email= TRUE;
-                            $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
-                        }else if($_POST['group'] == 'Choose groups'){
-                            foreach ($_POST['groups'] as $value) {
-                                $this->load->model('project_model');
-                                $project_id = $this->project_model->get_project_id($value);
-                                $scope = 5;
-                                $sc_p1=$project_id[0]['project_id'];
-                                $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
-                                $email= TRUE;
-                                $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
-                        }
-
-                        }
-                    
-                if($notify){
-                    $response['status'] = 'success';
+                    $data_doc['group_no'] = $value['group_no'];
+                    $result = $this->document_model->share_doc($data_doc,$data_rev);
+                    }
                 }
-                    
-                }
-                
+                $scope= 2;
+                $sc_p1 = 'stu';
             }
+            }else if($_POST['group'] == 'Choose groups'){
+                foreach($_POST['groups'] as $value) {
+                    $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$value.'/shared/';
+                    //if upload path does not exist create directories
+                    if (!is_dir($config['upload_path'])) {
+                        mkdir($config['upload_path'], 0777, TRUE);
+                    }
+                    
+                    $this->upload->initialize($config);
+                    if(!$this->upload->do_upload()){
+                        $response['file_errors'] = $this->upload->display_errors(); // Some might be empty
+                        $response['status'] = 'file_error';
+                    } else {
+                    
+                    $data_rev = array(
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>1,//status of the revision if approved or not
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                    );
+                
+                    $data_doc['group_no']=$value;
+                    $result = $this->document_model->share_doc($data_doc,$data_rev);
+                    }
+                }
+            }
+            
+            if($result !== NULL){
+
+                if($_POST['group']=='All groups'){
+                    $desc = 'Document: ' .$_POST['file_name'].' shared by '.$this->session->userdata['type'];
+                    $email= TRUE;
+                    $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                }else if($_POST['group'] == 'Choose groups'){
+                    foreach ($_POST['groups'] as $value) {
+                        $this->load->model('project_model');
+                        $project_id = $this->project_model->get_project_id($value);
+                        $scope = 5;
+                        $sc_p1=$project_id[0]['project_id'];
+                        $desc = 'Document: ' .$_POST['title'].' requested by '.$this->session->userdata['type'];
+                        $email= TRUE;
+                        $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                    }
+
+                }
+            }
+                    
+            if($notify){
+                $response['status'] = 'success';
+            }
+                    
             }//end outer else form validation
    
             // You can use the Output class here too
             header('Content-type: application/json');
             exit(json_encode($response));
             
-            
-                }//end function share doc
+            }//end function share doc
      
  
             public function preview($file_path){
