@@ -18,16 +18,16 @@ $('body').on('hidden.bs.modal', '.modal', function () {
 <div class="container-fluid">
 <div class="row" >
         <div class='pull-left'><h4>Project Documents</h4></div>
-        <div class="btn-group pull-right">
-            <button type="button" data-toggle="modal" href="#upload_review_modal" class="btn btn-success pull-right push_right_bit" >Upload Document</button>
-            <button type="button" data-toggle="modal" href="#shared_doc_modal" class="btn btn-success pull-right push_right_bit" >Shared Documents</button>
+        <div class=" pull-right">
+            <button type="button" data-toggle="modal" href="#upload_review_modal" class="btn btn-success push_right_bit" >Upload Document</button>
+            <button type="button" data-toggle="modal" href="#shared_doc_modal" class="btn btn-success " >Shared Documents</button>
         </div>
     </div>
     <div class="row" style="margin-bottom: 15px;">
         <div class="hr"><hr/></div>
     </div>
         
-<div id="ptoject_doc_view" class=" col-sm-10" >
+<div id="ptoject_doc_view" class=" col-sm-12" >
 
 <table id="table_id" class=" table table-bordered table-striped dataTable">
              <!--table heading--> 

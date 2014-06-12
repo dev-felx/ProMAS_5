@@ -1,3 +1,3 @@
 <?php
-
-echo 'welcome admin';
+redirect('manage_users/manage/users/coordinator', 'location')
+?>

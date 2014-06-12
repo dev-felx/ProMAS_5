@@ -63,7 +63,7 @@ class Register_user extends CI_Controller {
             $this->form_validation->set_rules('password','','required');
             $this->form_validation->set_rules('password_con','','required');
             $this->form_validation->set_message('required',' is required');
-            $this->form_validation->set_message('regex_match',' numbers required');
+            $this->form_validation->set_message('regex_match',' Valid phone no required');
             
             $values = array(
                 'student_id'=>$this->session->userdata['user_id']
@@ -123,7 +123,7 @@ class Register_user extends CI_Controller {
             $this->form_validation->set_rules('college','','required');
             $this->form_validation->set_rules('dept','','required');
             $this->form_validation->set_message('required',' is required');
-            $this->form_validation->set_message('regex_match',' numbers required');
+            $this->form_validation->set_message('regex_match','Valid phone no required');
             
             $values = array(
                 'non_student_users.user_id'=>$this->session->userdata['user_id']

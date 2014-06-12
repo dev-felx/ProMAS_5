@@ -6,7 +6,7 @@
 
 <html lang="en">
     <head id="head">
-        <title>Login | ProMAS</title>
+        <title>Login | sProMAS</title>
         
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,22 +18,18 @@
         
     </head>
             
-    
+        
     <body data-twttr-rendered="true">
-        
-        <div id="header-content">
-            
-        </div>
-        
-        
-            
-            <div class="container-fluid">
+        <div class="container-fluid">
+        <?php $this->load->view('templates/header_out'); ?>
+    
+            <div style="margin-top: 50px">
             <div class="row" >
-                 <div style="margin-bottom: -15px" class="col-sm-10 col-sm-offset-2">
+                 <div style="margin-bottom: px" class="col-sm-10 col-sm-offset-2">
                     
-                        <div class="btn  btn-block">
-                            <button type="button" class="btn btn-primary col-sm-1 " data-toggle="modal" data-target="#myOverview">Overview</button>
-                            <button type="button" class="btn btn-primary col-sm-1" style="margin-left: 5px;">Archive</button>
+                        <div class="">
+                            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myOverview">Overview</button>
+                            <a href="<?php echo site_url('archive/archive'); ?>" class="btn btn-primary ">Archive Home</a>
                         </div>
                 </div>
                 
@@ -48,7 +44,7 @@
                 
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-4">
-                    <div class="col-sm-offset-1 ">
+                    <div class="text-center ">
                 <h3  style="color:#0093D0">ProMAS Login</h3>
                     </div>
                 </div>
@@ -111,21 +107,19 @@
                         
                 </div>
             </div>
+        </div>        
            
         </div>
-
         <footer class="login_footer" >
             <div class="col-sm-8 col-sm-offset-2">
                     <hr style="border: none; height: 2px; color: blue; background: #0093D0;"/>
                 </div>
-                <div class="col-sm-8 col-sm-offset-2" style="margin-top: -20px; color: #0093D0; ">
+                <div class="col-sm-8 col-sm-offset-2" style="margin-top: px; color: #0093D0; ">
                     <h5 class="pull-left">UDSM | CoICT | Computer Science and Engineering Department</h5>
                     <h5 class="pull-right">Copyright &COPY; <?php echo date('20y', time()); ?> ProMAS</h5>
                 </div>
-            
-            
         </footer>
-
+</div>
 
         
         
@@ -135,7 +129,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4>Project Management And Archiving System(ProMAS)</h4>
+                <h4>Student Project Management And Archiving System(sProMAS)</h4>
             </div>
             <div class="modal-body">
                

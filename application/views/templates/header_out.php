@@ -37,10 +37,12 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">ProMAS</a>
+                    <a style="font-size: 170%" class=" navbar-brand" href="#">sProMAS</a>
+                    <p style="font-size: 110%; color: white" class="navbar-text">Students Project Management and Archiving System</p>
                 </div>
                 <?php if(!isset($this->session->userdata['user_id'])){ ?>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
+                       
                     <ul class="nav navbar-nav navbar-right">                            
                         <li><a href="<?php echo site_url(); ?>/access/login">Sign In</a></li>
                     </ul>

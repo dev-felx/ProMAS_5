@@ -16,8 +16,8 @@
             
             <div class="row hr" style="padding-bottom: px"><hr/></div>
             
-            <div class="text-info fade in text-center"><b >Define Time line</b> </div>
-            <div class="text-info fade in text-center ">A time line is defined as a start and end date for an academic year</div>
+            <div class="text-info fade in text-center"><b >Define Timeline</b> </div>
+            <div class="text-info fade in text-center ">A timeline is defined as a start and end date for an academic year</div>
             
             <div class="radio row">
                     <label>
@@ -40,6 +40,7 @@
                     </div>
                 </div>
             </div>
+            <?php if($space_data !=NULL ){ ?>
             <div class="radio row">
               <label>
                 <input type="radio" name="timeline" class="timeline" id="choose" value="choose">
@@ -57,6 +58,7 @@
                     </select>
                 </div>
             </div>
+            <?php  } ?>
 
             <div class="row hr" style="padding-bottom: px"><hr/></div>
             
