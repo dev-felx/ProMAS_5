@@ -23,8 +23,8 @@ class Project_space  extends CI_Controller {
         );
         
         $data['space_data'] = $this->project_space_model->get_all_project_space($values);
-        $data['views'] = array('project/project_space');
-        page_load($data);
+        $this->load->view('project/project_space');
+        
     }
 
     

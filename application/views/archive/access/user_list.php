@@ -65,7 +65,7 @@
         </div>
     </form>
 </div>
-<div id="add_many" class="adds">
+<div id="add_many" class="">
     <?php $this->load->view('/archive/access/add_multiple'); ?>
 </div>
 <div class="clearfix"></div>
@@ -111,7 +111,7 @@
 </div>
 <script>
     $('#add_single').hide();
-    $('#add_many').hide();
+    //$('#add_many').hide();
     $(document).ready(function(){
         $('#show_single').click(function(){
             $('.adds').hide();

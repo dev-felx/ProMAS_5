@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 ?>
-
+<?php $this->load->view('templates/header_out'); ?>
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/js/jquery-ui.js"></script>
 <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/css/jquery-ui.css" media="screen">
 
@@ -80,7 +80,7 @@
     </form>    
 
 </div>
-    
+<?php $this->load->view('templates/footer_out'); ?> 
     <script>
         $(document).ready(function(){
     // do your checks of the radio buttons here and show/hide what you want to
