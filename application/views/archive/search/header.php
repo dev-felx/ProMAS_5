@@ -14,7 +14,7 @@
         <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" media="screen">
         
         <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.0.js"></script>
-        <script src="<?php echo base_url(); ?>assets/jquery/jquery_1.5.2.js" type="text/javascript"></script>
+        <!--<script src="<?php // echo base_url(); ?>assets/jquery/jquery_1.5.2.js" type="text/javascript"></script>-->
         <script type="text/javascript">
             function clickable(search_term){
                 $("#search_term").val('');
@@ -22,7 +22,7 @@
                 alert('You clicked -- '+search_term);
             }
             $(document).ready(function() {
-                $("#search_key").live("keyup",function() {
+                $("#search_key").on("keyup",function() {
                     var search_key = $("#search_key").val();
                     var response_brought = $("#response_brought");
                     var dataString = "search_key=" + search_key;
