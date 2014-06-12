@@ -61,13 +61,15 @@
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
             <div class="alert-info alert text-center pad_10">Upcoming events</div>
-            <div class="col-sm-12 up_event">
-                <?php   
-                if( !isset($event)&& $event != null){
+            <div>
+                <?php
+                if($event != null){
                 foreach ($event as $row) {?>
-                <div class="up_event_item">
-                    <div><strong><?php echo $row->start; ?> - <?php echo $row->end; ?></strong></div>
-                    <div><?php echo $row->title; ?></div>
+                <div class="up_event_item panel panel-info">
+                    <div class="panel-heading">
+                        <h5 class="panel-title"><?php echo date("d M", strtotime($row->start)); ?> - <?php echo date("d M", strtotime($row->end)); ?></h5>
+                    </div>
+                    <div class="panel-body"><?php echo $row->title; ?></div>
                 </div>
                 <?php }}else{ ?>
                 <p class="text-warning text-center">No Upcoming Events</p>   
@@ -84,9 +86,8 @@
 
 <!-- Calender Itself -->
 <div id="calender_cont" class="col-sm-10 bottom_10">
-        <?php
-            //echo $this->input->get('pid', TRUE);
-            $this->load->view('timeline/calender');
+    <?php
+        $this->load->view('timeline/calender');
     ?>
 </div>
 <div id="popover_content_wrapper" class="hidden">

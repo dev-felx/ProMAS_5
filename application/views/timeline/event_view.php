@@ -4,23 +4,27 @@
  * Desc: This file view events list.
  */
 ?>
-<div class="row">
-    <h4>Event list</h4>
-    <div class="col-sm-9">
-        
-          <?php if($test!=NULL){ ?>
-        <table id="" class="table table-striped">
+<div style="margin-bottom: -5px; ">
+    <div class="col-md-9">
+        <div><h4>Event's list</h4></div>
+        <div>
+            <hr style="border: none; height: 1px; background:#0093D0;"/>
+        </div>
+        <div class="clearfix"></div>
+        <?php if($test!=NULL){ ?>
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
-                <th></th>
-                <th>Event Title</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>Due Date</th>
+                <tr>
+                    <th>Event Title</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>Due Date</th>
+                </tr>
             </thead>
             <tbody>
             <?php
             foreach ($test as $row) {?>
-                <tr class="row">
+                <tr>
                     <td><?php echo $row->title; ?></td>
                     <td><?php echo $row->desc; ?></td>
                     <td><?php echo $row->start; ?></td>
@@ -33,8 +37,7 @@
         <?php }else{ ?>
         <div class="alert alert-warning text-center">No Event Added</div>
             <?php } ?>
-    </div>
-            
+    </div>  
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <div id="add_new" class="sider"><?php $this->load->view('timeline/add_event_view'); ?></div>
     </div>
