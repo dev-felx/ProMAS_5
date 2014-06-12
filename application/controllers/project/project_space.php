@@ -22,7 +22,7 @@ class Project_space  extends CI_Controller {
             'space_id >' =>0
         );
         $data['space_data'] = $this->project_space_model->get_all_project_space($values);
-        $this->load->view('project/project_space');
+        $this->load->view('project/project_space',$data);
         
     }
 
@@ -45,8 +45,7 @@ class Project_space  extends CI_Controller {
                 'space_id >' =>0
             );
             $data['space_data'] = $this->project_space_model->get_all_project_space($values);
-            $data['views'] = array('project/project_space');
-                page_load($data);
+            $this->load->view('project/project_space',$data);
         }else {
 
             if($_POST['timeline']=='create'){
@@ -91,8 +90,7 @@ class Project_space  extends CI_Controller {
                 );
                 $data['space_data'] = $this->project_space_model->get_all_project_space($values);
                 $data['message']="Project space was not defined under coordinator";
-                $data[views] = array('project/project_space');
-                page_load($data);
+                $this->load->view('project/project_space',$data);
             }//end else $userdata is null
 
             }//end else form validation is ok
