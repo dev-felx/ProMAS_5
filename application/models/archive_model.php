@@ -112,7 +112,7 @@ class Archive_model extends CI_Model {
         $this->db->from('archive_users');
         $this->db->where(array('username' => $data['username']));
         $pre_query = $this->db->get();
-        if($pre_query->num_rows() > 0){
+        if($pre_query->num_rows() > 0){ 
             return false;
         }else{
             $query = $this->db->insert('archive_users', $data);

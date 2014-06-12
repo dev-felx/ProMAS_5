@@ -156,9 +156,7 @@ class Add_group extends CI_Controller{
                                 $j++;
                         }//if student exists    
                     }// end foreach($content as $field)
-                }//end if $user == 'student'
-               
-               elseif ($user == 'supervisor') {
+                }elseif ($user == 'supervisor') {
                    
                    $i=0;
                    $j=0;

@@ -11,10 +11,15 @@ class Users extends CI_Controller{
         parent::__construct();
         $this->load->model('archive_model');
         $this->load->model('access/manage_users');
+        $this->load->helper(array('file','directory'));
+        $this->load->model('project_space_model');
+        $this->acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
+        
     }
     
     public function index(){
         //get data
+        $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
         $data['req_count'] = count($this->archive_model->get_req());
         $data['req'] = $this->archive_model->get_req();
         $data['users'] = $this->archive_model->get_all();
@@ -240,4 +245,114 @@ class Users extends CI_Controller{
             redirect('archive/users/show_req','location'); 
         }
     }
+    
+    public function add_multiple($user){
+        
+                $this->load->library('csv_reader');
+                //fetching content from the csv file
+                $content = $this->csv_reader->read_csv_file($_POST['file_path'],$user);
+                $data['user'] = $user;
+                $i=0;
+                $j=0;
+                $k=0;
+                
+                   foreach($content as $field){
+                            $values = array(
+                                  'first_name' =>$field['Firstname'] ,
+                                  'last_name' =>$field['Lastname'] ,
+                                  'password' =>md5(strtolower($field['Lastname'])) ,
+                                  'reg_no' =>$field['Registration no'] ,
+                                  'username'=> $field['Email'],
+                                  'level'=>2,
+                                  'type'=>'student'
+                            );
+                            //print_r($values);                            die();
+                            $res = $this->archive_model->new_user($values);
+                            
+                            if($res){
+                                $fname= $field['Firstname'];
+                                $lname= strtolower($field['Lastname']);
+                                $email = $field['Email'];
+                                $from = "admin@promas.com";
+                                $to = 'stud1@localhost.com';
+                                $subject = "ProMAS | Account activation";
+                                $url =  site_url();
+                                $message = " 
+                                    <html>
+                                    <head>
+                                    <title>ProMAS | Account </title>
+                                    </head>
+                                    <body>
+                                            <h4>Hello $fname,</h4>
+                                             <p>Use credentials below to login into the system </p>   
+                                             <p>Username : $email </p>   
+                                             <p>Password : $lname  </p>
+                                             <p>Click the link below</p>    
+                                             <a href='$url/archive/archive'>Login into promas archive</a>
+                                            <p>Sincerely,</p>
+                                            <p>ProMAS admin.</p>
+                                    </body>
+                                    </html>";
+                                //sending email
+                                $send_email = send($from,$to,$subject,$message);
+                            
+                                if($send_email){
+                                    $data['success'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Username'=> $field['Email']);
+                                    $i++;
+                                }else if(!$send_email){
+                                    $data['email'][$k] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Username'=> $field['Email']);
+                                    $k++;
+                                }
+                            }else{
+                                $data['error'][$j] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Username'=> $field['Email']);
+                                $j++;
+                            }
+                    }//end foreach loop
+                 
+                    if(!isset($data['success']) && isset($data['email'])){
+                        echo 'mia';
+                    }
+                    
+//                   if(isset($data['exists']) || isset($data['results'])){
+//                    $data['views']= array('manage_users/register_view');
+//                    page_load($data);
+//                }//end isset($data['exists']) || isset($data['results']
+        }// end function register
+        
+            public function delete_file($user){
+                $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
+                $data['user']=$user;
+                if(unlink($_POST['file_path'])){
+                    $data['message'] = 'File deleted successfully';
+                    //$data['views']= array('manage_users/add_group_view');
+                    //page_load($data);
+                }else{
+                    $data['message'] = 'File not deleted, Try again';
+                    //$data['views']= array('manage_users/add_group_view');
+                    //page_load($data);
+                }
+            }//end function delete file
+            
+            public function delete_all_files($user){
+                $data['acc_yr'] = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
+                $acc_yr = str_replace('/','-' ,$this->acc_year[0]['academic_year']);
+                
+                $files = glob('./sProMAS_documents/'.  $acc_yr.'/registration_files/'.$user.'/*'); // get all file names
+                foreach($files as $file){ // iterate files
+                    if(is_file($file)){
+                        if(unlink($file)){
+                            $file_del=TRUE;
+                        } // delete file
+                    }
+                }
+                $data['user']=$user;
+                if($file_del==TRUE){
+                    $data['message'] = 'File deleted successfully';
+                }  else {
+                    $data['message'] = 'File not deleted, Try again';
+                }  
+                    //$data['views']= array('manage_users/add_group_view');
+                    //page_load($data);
+                
+            }//end function delete file
 }

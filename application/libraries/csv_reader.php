@@ -12,9 +12,9 @@ class Csv_reader{
         
         if($type == 'student'){
             $key_field = "no,Firstname,Lastname,Registration no,Email,Group no";
-        }
-        
-        else{
+        }else if($type == 'archive_users'){
+            $key_field = "no,Firstname,Lastname,Registration no,Email";
+        }else{
             $key_field = "no,Firstname,Lastname,Email";
         }
         

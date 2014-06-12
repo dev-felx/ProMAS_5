@@ -9,7 +9,7 @@
         <ul class="dropdown-menu" role="menu">
           <li><a id="show_single" href="#">Single</a></li>
           <li class="divider"></li>
-          <li><a id="show_many" href="#">Multiple</a></li>
+          <li><a id="show_many" >Multiple</a></li>
         </ul>
     </div>
     <a href="<?php echo site_url('/archive/users/show_req'); ?>" role="button" class="btn btn-success pull-right">Access Requests<span class="badge push_left_bit"><?php echo $req_count; ?></span></a>
@@ -69,7 +69,7 @@
     <?php $this->load->view('/archive/access/add_multiple'); ?>
 </div>
 <div class="clearfix"></div>
-<div id="user_list_table_wrap" class="col-sm-12">
+<div id="user_list_table_wrap" class="col-sm-12 hide">
     <table id="user_list_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
         <tr>
