@@ -91,9 +91,13 @@ class Home extends CI_Controller{
     
        	
         public function change_role($role){
-            $this->session->set_userdata('type', $role);
-            redirect('home','location');
-		}
+            if($this->session->userdata('user_id') != null){
+                $this->session->set_userdata('type', $role);
+                redirect('home','location');
+            }else{
+                redirect('access/login','location');
+            }
+	}
     }
 
 ?>

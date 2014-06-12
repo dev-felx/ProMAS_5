@@ -111,6 +111,7 @@
                                     
                                ),
         'Project' => array(
+                                    array('Groups' => 'manage_users/group'),
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
@@ -193,7 +194,7 @@
             <button class="btn btn-circle text-primary"><span class="glyphicon glyphicon-user"></span></button>
         </div>
         <div class="col-sm-8">
-            <p id="role_btn" class="text-left text-primary pull-left"><?php echo ucfirst($this->session->userdata['type']); ?></p>
+            <p id="role_btn" class="text-left text-primary pull-left"><?php echo str_replace('_',' ',ucfirst($this->session->userdata['type'])); ?></p>
             <?php if($this->session->userdata['type'] != 'student' && count($this->session->userdata['roles']) != 1) { ?>
                 <p id="cng_btn" class="text-left text-warning pull-left">Change Role<span class="caret"></span></p>
             <?php } else {?>
@@ -209,7 +210,7 @@
                 if($roles[($i - 1)] == $this->session->userdata['type']){
                         continue;
                 }else{?>
-            <li class="list-group-item"><a href="<?php echo site_url()."/home/change_role/".$roles[($i - 1)];?>"><span class="glyphicon push_right_bit glyphicon-user"></span><?php echo ucfirst($roles[($i - 1)]); ?><span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
+            <li class="list-group-item"><a href="<?php echo site_url()."/home/change_role/".$roles[($i - 1)];?>"><span class="glyphicon push_right_bit glyphicon-user"></span><?php echo str_replace('_',' ',ucfirst($roles[($i - 1)])); ?><span class="glyphicon glyphicon-chevron-right pull-right visible-xs"></span></a></li>
                 <?php }} ?>
         </ul>
     <?php } ?>    
