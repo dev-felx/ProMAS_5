@@ -22,7 +22,8 @@ class Login extends CI_Controller{
             $this->cookie_login($_COOKIE['remember_promas']);
         }//end isset($_COOKIE['remember_promas']
         else if($this->session->userdata('user_id') != NULL){
-                 redirect('/home/', 'location');
+            redirect('/home/', 'location');
+                 
         }else {
      
             $this->load->view('access/login_page');

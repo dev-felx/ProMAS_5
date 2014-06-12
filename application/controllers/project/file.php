@@ -455,6 +455,87 @@ class File extends CI_Controller{
             exit(json_encode($response));
             
             }//end function share doc
+    public function upload_review(){
+        $this->form_validation->set_rules("file_name","Name","required");
+        $this->form_validation->set_rules("group","Group","required");
+        $this->form_validation->set_message('required','%s');
+    
+        if($this->form_validation->run()==FALSE){
+            $response['status'] = 'not_valid';
+        }else{
+            $this->load->model('project_space_model');
+        $values = array(
+          'space_id'=>$this->session->userdata['space_id']  
+        );
+        $space_data = $this->project_space_model->get_all_project_space($values);
+        $acc_year = str_replace('/','-' ,$space_data[0]['academic_year']);                 
+        
+        $this->load->library('upload');
+        
+        if($this->session->userdata['type']=='student'){
+            $rev_no=1;
+            $config['upload_path']= './sProMAS_documents/'.$acc_year.'/groups/group_'.$this->session->userdata['group_no'].'/';
+            $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
+            $config['overwrite']= TRUE;
+            $config['remove_spaces']= FALSE;
+            $config['max_size']='2048'; // in Kb
+            $config['file_name']=$_POST['file_name'].' v'.$rev_no.' by student';
+            //if upload path does not exist create directories
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
+            
+            $this->upload->initialize($config);
+
+            if(!$this->upload->do_upload()){
+                $response['file_errors'] = $this->upload->display_errors();
+                $response['status'] = 'file_error';
+                
+            } else {
+                //obtaining a file extension
+                $path_parts = pathinfo($_FILES["userfile"]["name"]);
+                $extension = $path_parts['extension'];
+                
+                $data_doc= array(
+                    'doc_status' =>1,//status of the document submitted
+                    'name'=>$config['file_name'],
+                    'space_id' => $this->session->userdata['space_id'],
+                    'creator_id' => $this->session->userdata['user_id'],
+                    'creator_role' => $_POST['group'],
+                    'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
+                    'group_no'=>$this->session->userdata['group_no'],
+                    );
+                    
+                    $data_rev = array(
+                        'doc_id'=>$_POST['doc_id'],
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>0,//status of the revision if approved or not
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                        'rev_no'=>$rev_no
+                    );
+                    //controlling number existing version of the document to be only 2
+                    if(($_POST['rev_status']==0)){
+                        $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
+                    }else if($_POST['rev_status']==1){
+                        $result = $this->document_model->insert_new_revision($data_rev);
+                    }
+                    
+                    if($result !== NULL){
+                        $response['status'] = 'success';
+                    }
+            
+                    }//end else file uploaded successfully
+            
+                    }
+                    
+            }//end outer else form validation
+   
+            // You can use the Output class here too
+            header('Content-type: application/json');
+            exit(json_encode($response));
+            
+            }//end function share doc
      
  
             public function preview($file_path){

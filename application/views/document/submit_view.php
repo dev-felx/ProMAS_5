@@ -19,6 +19,7 @@ $('body').on('hidden.bs.modal', '.modal', function () {
 <div class="row" >
         <div class='pull-left'><h4>Project Documents</h4></div>
         <div class="btn-group pull-right">
+            <button type="button" data-toggle="modal" href="#upload_review_modal" class="btn btn-success pull-right push_right_bit" >Upload Document</button>
             <button type="button" data-toggle="modal" href="#shared_doc_modal" class="btn btn-success pull-right push_right_bit" >Shared Documents</button>
         </div>
     </div>
@@ -134,6 +135,39 @@ $('body').on('hidden.bs.modal', '.modal', function () {
         </div>
     </div>
 
+<div id="upload_review_modal" class=" modal fade in" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="upload_review_form" class="" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/file/upload__review" method="POST">
+                <div class="modal-header">
+                    <div id="msg_review" class="alert alert-info text-center"><b>Upload Document for Review</b>
+                    <p>Allowed types are pdf, zip, rar, jpg, jpeg, gif, doc and docx</p></div>
+                </div>
+                <div class="modal-body">
+                   <div class="form-group">
+                       <label class="control-label" for="title">Document name</label><?php show_form_error('name'); ?>
+                      <input class="form-control" type="text" name="file_name">
+                    </div>
+                    <div class="form-group">    
+                       <input type="file" name="userfile">
+                    </div>
+                    <div class="form-group">
+                        <label for="receiver">To be reviewed by</label><?php show_form_error('receiver'); ?>
+                        <?php
+                        echo '<div class="radio"><label><input class="group" name="group" type="radio" value="coordinator">Coordinator</label></div>';
+                        echo '<div class="radio"><label><input class="group" name="group" type="radio" value="supervisor">Supervisor</label></div>';
+                        ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="upload_review_doc">Upload</button>
+                    <a href="#" class="btn" data-dismiss="modal">Close</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <div id="shared_doc_modal" class=" modal fade in" >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -210,6 +244,43 @@ $(document).ready(function(){
                         $('#msg_upload').removeClass('alert-info');
                         $('#msg_upload').addClass('alert-warning');
                         $('#msg_upload').html(data.file_errors);
+                    //});
+                    }
+                 },
+                 cache: false,
+                 contentType: false,
+                 processData: false
+            });
+            return false;
+        });
+        });
+        
+        $('#upload_review_doc').click(function() {
+        $("#upload_review_form").submit(function(){
+            var formData = new FormData($(this)[0]);
+            var formUrl = $("#upload_review_form").attr("action");
+            $.ajax({
+                url: formUrl,
+                type: 'POST',
+                data: formData,
+                async: false,
+                 success:function(data){
+                     if(data.status === 'not_valid'){
+                        $('#msg_reviw').removeClass('alert-info');
+                        $('#msg_review').addClass('alert-warning');
+                        $('#msg_review').html("Fields can not be empty");
+                        
+                    }else if(data.status === 'success') {
+                        $('#msg_review').removeClass('alert-info');
+                        $('#msg_review').addClass('alert-success');
+                        $('#msg_review').html('Document successfuly shared');
+                        setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload();},3000);
+
+                    }else if(data.status === 'file_error') {
+                      //  $.each(data.file_errors, function(key,val){
+                        $('#msg_review').removeClass('alert-info');
+                        $('#msg_review').addClass('alert-warning');
+                        $('#msg_review').html(data.file_errors);
                     //});
                     }
                  },

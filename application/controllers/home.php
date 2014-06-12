@@ -70,11 +70,10 @@ class Home extends CI_Controller{
                     'space_id'=>  $this->session->userdata['space_id'],
                     'type'=>  'student'
                 );
-            $data['event'] = $this->event_model->upcoming_events($values);
             
+            $data['event'] = $this->event_model->upcoming_events($values);
             //prepare data to be sent to view
             $data['views'] = array('landing/student_land');
-  
             //load user's views
             page_load($data);
         }else if($this->session->userdata['type']=='panel_head'){
