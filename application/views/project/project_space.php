@@ -82,29 +82,7 @@
         </form>
     </div>
 </div>
-<<<<<<< HEAD
-<?php $this->load->view('templates/footer_out'); ?> 
-    <script>
-        $(document).ready(function(){
-    // do your checks of the radio buttons here and show/hide what you want to
-
-    $("#choose_form").hide();
-     
-        $(document).on('click', '.myRadio' , function() {
-     if (this.value > 0){ 
-        $("#choose_form").show();           
-        $("#create_form").hide();
-     }
-     else {
-         
-        $("#create_form").show();           
-        $("#choose_form").hide();
-        }       
-  })
-
-});
-=======
-    
+    <?php $this->load->view('templates/footer_out'); ?>
 <script>
     $(document).ready(function(){
         $('.timeline').click(function(e) {
@@ -123,7 +101,6 @@
     });    
  
     });
->>>>>>> 2d6cae00f801e0f7d8074466c1e088eaa8793976
 </script>
 
 <script> 
