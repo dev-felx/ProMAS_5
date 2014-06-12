@@ -10,7 +10,7 @@ class Archive_model extends CI_Model {
     public function st($term){
         $this->db->select('*');
         $this->db->from('project_profile'); 
-        $this->db->like('name', $term);
+        $this->db->like('project_name', $term);
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -26,7 +26,7 @@ class Archive_model extends CI_Model {
     public function search($term){
         $this->db->select('*');
         $this->db->from('project_profile'); 
-        $this->db->like('name', $term);
+        $this->db->like('project_name', $term);
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -90,7 +90,7 @@ class Archive_model extends CI_Model {
     public function explore_filter($ft){
         $this->db->select('*');
         $this->db->from('project_profile');
-        $this->db->order_by('name', $ft);
+        $this->db->order_by('project_name', $ft);
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
