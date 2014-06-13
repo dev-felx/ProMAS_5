@@ -16,8 +16,7 @@ class Archive extends CI_Controller {
     }
 
     public function index(){
-        $data['view'] = 'suggest';
-        $this->load->view('archive/search/homepage', $data);
+        $this->load->view('archive/search/homepage');
     }
     
     public function suggestions(){
@@ -29,6 +28,11 @@ class Archive extends CI_Controller {
     }
 
     public function search(){
+        $data['view'] = 'suggest';
+        $this->load->view('archive/search/search', $data);
+    }
+    
+    public function search_result(){
         $searchterm = $this->input->post('search_key');
         $search_term = mysql_real_escape_string(strip_tags($searchterm));
         $data['res'] = $this->archive_model->search($search_term);
@@ -36,16 +40,13 @@ class Archive extends CI_Controller {
     }
     
     public function profile($id){
-        $data['res'] = $this->archive_model->profile($id);
-        $this->load->view('archive/search/profile_view', $data);
-    }
-    
-    public function get_participants($id){
-        $data['pat'] = $this->archive_model->profile($id);
+        $data['result'] = $this->archive_model->profile($id);
+        $data['part'] = $this->archive_model->participants($id);
+        $data['docu'] = $this->archive_model->documents($id);
         $this->load->view('archive/search/profile_view', $data);
     }
 
-        public function explore(){
+    public function explore(){
         $data['res'] = $this->archive_model->explore();
         $this->load->view('archive/search/explore', $data);
     }

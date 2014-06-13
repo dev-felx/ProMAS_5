@@ -43,6 +43,7 @@ class Archive_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('project_profile'); 
         $this->db->where('project_profile_id', $id);
+        $this->db->join('departments', 'departments.department_id = project_profile.project_profile_id');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -58,6 +59,22 @@ class Archive_model extends CI_Model {
     public function participants($id){
         $this->db->select('*');
         $this->db->from('participants'); 
+        $this->db->where('project_profile_id', $id);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            return FALSE;
+        }
+    }
+    
+    public function documents($id){
+        $this->db->select('*');
+        $this->db->from('archive_documents'); 
         $this->db->where('project_profile_id', $id);
         $query = $this->db->get();
         
@@ -112,7 +129,7 @@ class Archive_model extends CI_Model {
         $this->db->from('archive_users');
         $this->db->where(array('username' => $data['username']));
         $pre_query = $this->db->get();
-        if($pre_query->num_rows() > 0){ 
+        if($pre_query->num_rows() > 0){
             return false;
         }else{
             $query = $this->db->insert('archive_users', $data);

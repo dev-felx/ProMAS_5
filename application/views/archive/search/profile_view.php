@@ -1,25 +1,4 @@
-<?php
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
-<html lang="en">
-    <head id="head">
-        <title>sProMAS Archive</title>
-        
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" media="screen">
-        <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/css/main.css" media="screen">
-        
-        <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.0.js"></script>
-    </head>
-
-    <body data-twttr-rendered="true">
-        <?php //$this->load->view('archive/search/header'); ?>
+        <?php $this->load->view('archive/search/header'); ?>
         <div class="container-fluid">
             <div class="row">
                 <div id="leftside" class="col-sm-2">
@@ -49,7 +28,14 @@
                                 <?php print $v->name; ?> at University of Dar es Salaam.</p>
                         </div>
                         <div class="tab-pane" id="documents">
-                            <p>List of Assosiated documents goes Here</p>
+                            <div class="list-group col-sm-8">
+                            <?php
+                                foreach ($docu as $d){?>
+                                <a href="#" class="list-group-item list-group-item-info"><?php print $d->document_name; ?><button type="button" class="btn btn-xs btn-primary pull-right">Download</button></a>
+                                <?php
+                                }
+                            ?>
+                            </div>
                         </div>
                         <div class="tab-pane" id="participants">
                         <?php
