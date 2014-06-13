@@ -46,12 +46,39 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group hidden detail">
-                    <label>Project Supervisor<span><button class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
+                    <label>Project Supervisor<span><button id="show_super_add" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
                     <p id="super" class="form-control-static"></p>
+                    <div class="hidden" id='super_ch_cont'>
+                    <div class="col-sm-7">
+                        <select id="super_ch" class="form-control col-sm-7">
+                            <?php
+                                foreach ($supers_add as $value) {
+                                   echo '<option value="'.$value['user_id'].'">'.$value[first_name].' '.$value['last_name'];
+                                   echo '</option>';
+                                }
+                            ?>
+                        </select>  
+                    </div>
+                    <button id='super_ch_now' class="btn btn-success btn-sm col-sm-2">Change</button>
+                    </div>
                 </div>
+                <div class="clearfix"></div>
                 <div class="form-group hidden detail">
-                    <label>Project Assessment Panel Head<span><button class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
+                    <label>Project Assessment Panel Head<span><button id="show_panel_add" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
                     <p id='panel' class="form-control-static"></p>
+                    <div class="hidden" id='panel_ch_cont'>
+                    <div class="col-sm-7">
+                        <select id="panel_ch" class="form-control col-sm-7">
+                            <?php
+                                foreach ($panels_add as $value) {
+                                   echo '<option value="'.$value['user_id'].'">'.$value[first_name].' '.$value['last_name'];
+                                   echo '</option>';
+                                }
+                            ?>
+                        </select>  
+                    </div>
+                    <button id='panel_ch_now' class="btn btn-success btn-sm col-sm-2">Change</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -106,7 +133,32 @@
             $('#stu_add_cont').removeClass('hidden');
             return false;
          });
+         $('#show_super_add').click(function(){
+            $('#super_ch_cont').removeClass('hidden');
+            $('#super').hide();
+            return false;
+         });
+         $('#show_panel_add').click(function(){
+            $('#panel_ch_cont').removeClass('hidden');
+            $('#panel').hide();
+            return false;
+         });
          
-         $('#')
+         $('#stu_add_now').click(function(){
+             var id = $('#stu_add_val').val();
+             var pro_id = $('#project').val();
+             if(confirm('Warning: Student will be removed from current group')){
+                 var t = "<?php echo site_url(); ?>";
+                 var c = t+"/manage_users/group/add_stu";
+                 $.post( c, {id: id, pro_id: pro_id}).done(function(data) {
+                     if(data.status === 'true'){
+                         $('#project').trigger('change');
+                     }
+                 },'json');
+             }else{
+                $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
+             }
+             return false;
+         });
     });
 </script>

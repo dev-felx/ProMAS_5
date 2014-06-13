@@ -63,6 +63,17 @@ class Group extends CI_Controller{
    }
    
    public function add_stu(){
-       
+       $user_id = $_POST['id'];
+       $project = $this->project_model->get_project_row($_POST['pro_id']);
+       $data = array(
+           'project_id' => $_POST['pro_id'],
+           'group_no' => $project['group_no']
+       );
+       $res = $this->manage_users->update_student($user_id,$data);
+       if($res){
+            $response['status'] = 'true';
+            header('Content-type: application/json');
+            exit(json_encode($response));
+       }
    }
 }
