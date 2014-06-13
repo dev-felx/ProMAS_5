@@ -14,8 +14,9 @@ class Document_model extends CI_Model{
         if(isset($query_doc) && $query_doc == 1){
             $id = $this->db->insert_id();
             $query_rev = $this->db->insert('revisions',array('doc_id'=>$id));
-            return $query_rev;
-        }
+            $query = $this->db->get_where('revisions', array('doc_id' => $id));
+            return $query->result_array();
+          }
         
     }
     public function share_doc($data_doc,$data_rev){
