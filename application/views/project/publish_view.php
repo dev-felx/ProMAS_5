@@ -12,12 +12,7 @@
         <div class='pull-left'><h4>Publish Project to Archive</h4></div>
         
             
-        <form class="col-sm-3 pull-right">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search Project">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-search text-success"></span></span>
-            </div>
-        </form>
+        
 <!--        <div class="btn-group pull-right">
             <button data-toggle="modal" href="#share_modal" type="button" class="btn btn-success push_right_bit " >Share Document</button>
             <a data-toggle="modal" href="#req_modal" type="button" class="btn btn-success  " >Request Document</a>
@@ -57,7 +52,8 @@
                         <h5 class="text-success"><strong>Documents</strong></h5>
                         <div  class=" text-info text-center hide"  id="req_load"></div>
                         <div id="check_box"></div>
-                        
+                        <a id="request_modal_button" type="button" class="upload_m action_view btn_edge btn btn-success btn-sm"><span  href="#upload_modal"class=" push_right_bit"></span>Request Document</a>
+                        <a id="upload_modal_button" data-group_no="" type="button" class=" action_view btn_edge btn btn-primary btn-sm"><span class="glyphicon glyphicon-upload push_right_bit"></span>Upload Document</a>
                     </div>
                     <div id="part"  class="row-fluid ">
                         <div class="hr"><hr/></div>
@@ -80,13 +76,103 @@
 </div>
     </div>
 
+<div id="req_modal" class=" modal fade in" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="req_form"  class="" action="<?php echo site_url(); ?>/project/file/request" method="post">
+                   
+                        <div class="modal-header">
+                            <div id="msg" class="alert alert-info text-center"><b>Request Document</b></div>
+                        </div>
+                       <div class="modal-body">
+                           <div class="form-group">
+                                <label class="control-label" for="title">Document name</label><?php show_form_error('title'); ?>
+                                      
+                                <div class="radio"><label>
+                                   <input class="req_docs" type="radio" name="req_doc" id="" value="Project Proposal"  checked="">
+                                    Project Proposal
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input class="req_docs" type="radio" name="req_doc" id="" value="Final Year Report">
+                                    Final Year Report
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                      <input class="req_docs" type="radio" name="req_doc" id="others" value="0">
+                                    Others
+                                  </label>
+                                </div>
+                              <input class="form-control hide" placeholder="Name of the document to request" type="text" id="req_title" name="title">
+                            </div>
+                            </div>
+
+                           <div class="form-group container-fluid">
+                            <label for="Due Date" class=" control-label">Due date</label><?php show_form_error('duedate'); ?>
+                            <div class="">
+                                <input type="text" id="datepicker" class=" datepicker form-control" name="duedate" placeholder="Due Date">
+                           </div>
+                            </div>
+
+                           <div class="modal-footer">
+                                <button type="submit" class="btn btn-success" id="send_req">Request</button>
+                                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                            </div>
+                    </form>
+                    </div>
+            </div>
+        </div>
+ 
+
+<div id="upload_modal" class=" modal fade in" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="msg_upload" class="alert alert-info text-center"><strong>Upload a new Document to publish </strong><span id="msg_upload_span"></span></div>
+                <h5 class="text-info"> <b></b></h5>
+                </div>
+                <form id="upload_form" method="POST" class=" form-horizontal" role="form" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/publish_project/upload_doc">
+                <div class="modal-body">
+                        <div class="form-group">
+                            <div class='container-fluid'>
+                                <label class="control-label" for="friedName">Document Name: <?php show_form_error('fName'); ?> </label>
+                                <input type="text" class="form-control"  name="fName">
+                                <input name="group_no" type="hidden">
+                            </div>
+                        </div>
+
+                       <div class="form-group">
+                            <div class='col-sm-8 '>
+                                <label class="control-label" for="uploadForm_file"> File to Upload: </label>
+                                <input type="file" name="userfile">
+                            </div>
+                        </div>  
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="upload_document">Upload</button>
+                    <a href="#" class="btn" data-dismiss="modal">Close</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <script>
     
-    
-    $('#projects').change(function(){
+    $('body').on('click', '#upload_modal_button', function () {
+        $('[name="group_no"]','#upload_form').attr('value',$(this).data('group_no'));
+        $('#upload_modal').modal();
+    });
+    $('body').on('click', '#request_modal_button', function () {
         
+        $('#req_modal').modal();
+    });
+    $('#projects').change(function(){
        var group_no =  $(this).val();
        var function_url = "<?php echo site_url(); ?>/project/publish_project/get_project_details/".concat(group_no);
+       $('#upload_modal_button').data('group_no',group_no);
     
     $.get( function_url).done(function(data) {
         $('#check_box').html('');
@@ -97,6 +183,7 @@
             
         }
         if(data.documents !==null){
+            
             for(var i = 0; i < data.documents.length; i++){
                 var button;
                 var path = '<?php echo site_url(); ?>/project/file/download/'+data.documents[i][0].rev_file_path;
@@ -104,7 +191,6 @@
                     button = '<div  class=""><button type="button" class="btn btn-link btn-xs"><strong>Required..</strong></button><a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>\n\
                                 <a type="button" data-rev_id="'+data.documents[i][0].rev_id+'" data-doc_id="'+data.documents[i][0].doc_id+'" data-name="'+data.documents[i][0].name+'" data-group_no="'+data.documents[i][0].group_no+'" class=" req_doc_btn_p btn btn-primary btn-xs"><span  href="#"></span>Request</a></div>\n\
                                 ';
-                var x 
                 }else{
                     button = '<button type="button" class="btn btn-link btn-xs"><strong>Optional..</strong></button>\n\
                                 <a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>';
@@ -112,6 +198,10 @@
                     
                $('#check_box').append('<div class=" row-fluid checkbox"><label class="col-sm-6"><input name="chck" class="chk" type="checkbox" value="'+data.documents[i][0]['req_status']+'">'+data.documents[i][0]['name']+'</label>'+button+'</div>');
             }//end for loop
+                
+            for(var i = 0; i < data.documents.length; i++){
+                    $('#select').append('<option class="select_option" value="'+data.documents[i][0].doc_id+'">'+data.documents[i][0].name+'</option>');
+                }
         }else{
             $('#check_box').append('<div class="alert alert-warning text-center">No document has been submitted</div>');    
         }
@@ -121,6 +211,13 @@
     
     });
     $('#projects').trigger('change');
+    
+    $('body').on('click', '.select_option', function () {
+        var doc_name =$(this).text();
+        var doc_id =$(this).val();     
+        $('#list_doc_option').append('<a data-doc_id_option id="list_doc_option" class="list-group-item list-group-item-success">'+doc_name+'\
+            <button class="pull-right" id="remove_option">Remove</button> </a>');
+    });
     
     $('body').on('click', '.req_doc_btn_p', function () {
        var grp_no = $(this).data('group_no'); 
@@ -199,6 +296,43 @@
         });
     }
     
+    $('#upload_document').click(function() {
+        $("#upload_form").submit(function(){
+            var formData = new FormData($(this)[0]);
+            var formUrl = $("#upload_form").attr("action");
+            $.ajax({
+                url: formUrl,
+                type: 'POST',
+                data: formData,
+                async: false,
+                 success:function(data){
+                     if(data.status === 'success') {
+                        $('#msg_upload').removeClass('alert-info');
+                        $('#msg_upload').addClass('alert-success');
+                        $('#msg_upload').html('Document successfuly uploaded');
+                        setTimeout(function(){ $('#upload_file_modal').modal('hide'); window.location.reload();},3000);
+
+                    }else if(data.status === 'file_error') {
+                      //  $.each(data.file_errors, function(key,val){
+                        $('#msg_upload').removeClass('alert-info');
+                        $('#msg_upload').addClass('alert-warning');
+                        $('#msg_upload').html(data.file_errors);
+                    //});
+                    }else if(data.status === 'name_required') {
+                      //  $.each(data.file_errors, function(key,val){
+                        $('#msg_upload').removeClass('alert-info');
+                        $('#msg_upload').addClass('alert-warning');
+                        $('#msg_upload').html('Name field can not be empty');
+                    //});
+                    }
+                 },
+                 cache: false,
+                 contentType: false,
+                 processData: false
+            });
+            return false;
+        });
+        });
  
 
 

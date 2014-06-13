@@ -203,10 +203,6 @@ $('body').on('hidden.bs.modal', '.modal', function () {
 <script>
 $(document).ready(function(){
     
-//    $('#table_id').dataTable({
-//        "sDom":'<"row-fluid"<"pull-left"l><"pull-right"f>>',
-//          });
-    
     $('body').on('click', '.upload_m', function () {
         $('[name="status"]','#upload_form').attr('value',$(this).data('status'));
         $('[name="rev_id"]','#upload_form').attr('value',$(this).data('rev_id'));

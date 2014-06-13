@@ -253,5 +253,59 @@ class Publish_project extends CI_Controller{
         exit(json_encode($response));
     }
     
+    public function upload_doc(){
+        $this->load->library('upload');
+        $this->form_validation->set_rules("fName","Name","required");
+        $this->form_validation->set_message('required','%s is required');
+        if($this->form_validation->run() === FALSE){
+            $response['status'] = 'name_required';
+        }else {
+            $this->load->model('project_space_model');
+            $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
+            $acc_yr = str_replace('/','-' ,$acc_year[0]['academic_year']);
+        
+            $config['upload_path']= './sProMAS_documents/'.$acc_yr.'/groups/group_'.$_POST['group_no'].'/';
+            $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
+            $config['max_size']='2048';
+            $config['file_name']= $_POST['fName'];
+            
+            //if upload path does not exist create directories
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, TRUE);
+            }
+            $this->upload->initialize($config);
+            if(!$this->upload->do_upload()){
+                $response['file_errors'] = $this->upload->display_errors();
+                $response['status'] = 'file_error';
+            }else {
+                
+                $data_doc= array(
+                        'doc_status' =>1,//status of the document submitted
+                        'name'=>$config['file_name'],
+                        'space_id' => $this->session->userdata['space_id'],
+                        'creator_id' => $this->session->userdata['space_id'],
+                        'creator_role' =>$this->session->userdata['type'],
+                        'due_date'=>date("Y-m-d",time()+(60*60*24*30)),
+                        'group_no'=>$_POST['group_no'],
+                        );
+                    
+                $result = $this->document_model->new_doc($data_doc);
+                    $data_rev = array(
+                        'doc_id'=>$_POST['doc_id'],
+                        'rev_date_upload'=>date("Y-m-d",time()),
+                        'rev_status'=>0,//status of the revision if approved or not
+                        'rev_file_name'=>$config['file_name'],
+                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                        'rev_no'=>$rev_no
+                    );
+                
+                $response['status'] = 'success';
+                }
+            }//end outer else
+            header('Content-type: application/json');
+            exit(json_encode($response));
+            }//end function do upload
+            
+    
     
 }

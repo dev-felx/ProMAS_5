@@ -489,23 +489,28 @@ class File extends CI_Controller{
                 $this->upload->initialize($config);
 
                 if(!$this->upload->do_upload()){
-                $response['file_errors'] = $this->upload->display_errors();
-                $response['status'] = 'file_error';
-                
-            } else {
-                //obtaining a file extension
-                $path_parts = pathinfo($_FILES["userfile"]["name"]);
-                $extension = $path_parts['extension'];
-                
-                $data_doc= array(
-                    'doc_status' =>1,//status of the document submitted
-                    'name'=>$config['file_name'],
-                    'space_id' => $this->session->userdata['space_id'],
-                    'creator_id' => $this->session->userdata['user_id'],
-                    'creator_role' => $_POST['group'],
-                    'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
-                    'group_no'=>$this->session->userdata['group_no'],
-                    );
+                    $response['file_errors'] = $this->upload->display_errors();
+                    $response['status'] = 'file_error';
+                } else {
+                    //obtaining a file extension
+                    $path_parts = pathinfo($_FILES["userfile"]["name"]);
+                    $extension = $path_parts['extension'];
+                    
+                    if($_POST['group']=='supervisor'){
+                        $creator_id ='67';
+                    }else if($_POST['group']=='coordinator'){
+                        $creator_id ='67';
+                    }
+                    
+                    $data_doc= array(
+                        'doc_status' =>1,//status of the document submitted
+                        'name'=>$config['file_name'],
+                        'space_id' => $this->session->userdata['space_id'],
+                        'creator_id' => $creator_id,
+                        'creator_role' => $_POST['group'],
+                        'due_date'=>date("Y-m-d",time()+(60*60*24*30)),
+                        'group_no'=>$this->session->userdata['group_no'],
+                        );
                     
                     $data_rev = array(
                         'doc_id'=>$_POST['doc_id'],
