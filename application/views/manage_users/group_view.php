@@ -1,5 +1,8 @@
 <div>
     <h4 class="col-sm-3 pull-left"><?php echo $sub_title; ?></h4> 
+    <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/student'); ?>">Manage Students</a>
+    <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/supervisor'); ?>">Manage Supervisors</a>
+    <a class="btn btn-success pull-right" href="<?php echo site_url('manage_users/manage/users/panel_head'); ?>">Manage Panel Heads</a>
 </div>
 <div class="clearfix"></div>
 <hr/>
@@ -29,6 +32,7 @@
                     <label class="control-label">Students</label>
                     <ul id="stud" class="list-group"></ul>
                     <button id='show_stu_add' class="btn btn-primary btn-sm col-sm-2"><span class="glyphicon glyphicon-plus"></span>Add Student</button>
+                    <div class="clearfix bottom_10"></div>
                     <div class="hidden" id='stu_add_cont'>
                     <div class="col-sm-7">
                         <select id="stu_add_val" class="form-control col-sm-7">
@@ -41,7 +45,8 @@
                             ?>
                         </select>  
                     </div>
-                    <button id='stu_add_now' class="btn btn-success btn-sm col-sm-2">Add</button>
+                    <button id='stu_add_now' class="btn btn-success btn-sm col-sm-1">Add</button>
+                    <button id="can_stu" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -59,7 +64,8 @@
                             ?>
                         </select>  
                     </div>
-                    <button id='super_ch_now' class="btn btn-success btn-sm col-sm-2">Change</button>
+                    <button id='super_ch_now' class="btn btn-success btn-sm col-sm-1">Change</button>
+                    <button id="can_super" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -77,7 +83,8 @@
                             ?>
                         </select>  
                     </div>
-                    <button id='panel_ch_now' class="btn btn-success btn-sm col-sm-2">Change</button>
+                    <button id='panel_ch_now' class="btn btn-success btn-sm col-sm-1">Change</button>
+                    <button id="can_panel" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -106,8 +113,8 @@
                             $('#stud').append('<li id="'+data['students'][i].student_id+'" class="stu_btn list-group-item">'+x+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
                          }
                          $('#panel').html(data.panel[0].first_name+' '+data.panel[0].last_name);
-                         $('#super').html(data.panel[0].first_name+' '+data.panel[0].last_name);      
-                         $('.detail').removeClass('hidden');   
+                         $('#super').html(data.super[0].first_name+' '+data.super[0].last_name);      
+                         $('.detail').removeClass('hidden');
                      }else{
                         $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
                      }
@@ -128,7 +135,7 @@
             }
          });
          
-         
+         //buttons
          $('#show_stu_add').click(function(){
             $('#stu_add_cont').removeClass('hidden');
             return false;
@@ -138,12 +145,28 @@
             $('#super').hide();
             return false;
          });
+         $('#can_super').click(function(){
+            $('#super_ch_cont').addClass('hidden');
+            $('#super').show();
+            return false;
+         });
+         $('#can_panel').click(function(){
+            $('#panel_ch_cont').addClass('hidden');
+            $('#panel').show();
+            return false;
+         });
          $('#show_panel_add').click(function(){
             $('#panel_ch_cont').removeClass('hidden');
             $('#panel').hide();
             return false;
          });
+         $('#can_stu').click(function(){
+           $('#stu_add_cont').addClass('hidden');
+            return false;
+         });
          
+         
+         //other functions
          $('#stu_add_now').click(function(){
              var id = $('#stu_add_val').val();
              var pro_id = $('#project').val();
@@ -156,9 +179,46 @@
                      }
                  },'json');
              }else{
-                $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
+                $('#msg_frm').html('<div class="alert alert-danger">Error Adding Student</div>');
              }
              return false;
+         });
+         
+         
+         $('#super_ch_now').click(function(){
+                var pro_id = $('#project').val();
+                var user_id = $('#super_ch').val();
+                if(confirm('Warning: Supervisor will be added this group')){
+                    var t = "<?php echo site_url(); ?>";
+                    var c = t+"/manage_users/group/ch_super";
+                    $.post( c, {id: user_id, pro_id: pro_id}).done(function(data) {
+                        if(data.status === 'true'){
+                            $('#project').trigger('change');
+                            $('#can_super').trigger('click');
+                        }
+                    },'json');
+                }else{
+                   $('#msg_frm').html('<div class="alert alert-danger">Error Changing Supervisor</div>');
+                }
+                return false;
+         });
+         
+         $('#panel_ch_now').click(function(){
+                var pro_id = $('#project').val();
+                var user_id = $('#panel_ch').val();
+                if(confirm('Warning: This panel head will be added this group')){
+                    var t = "<?php echo site_url(); ?>";
+                    var c = t+"/manage_users/group/ch_panel";
+                    $.post( c, {id: user_id, pro_id: pro_id}).done(function(data) {
+                        if(data.status === 'true'){
+                            $('#project').trigger('change');
+                            $('#can_panel').trigger('click');
+                        }
+                    },'json');
+                }else{
+                   $('#msg_frm').html('<div class="alert alert-danger">Error changing panel Head</div>');
+                }
+                return false;
          });
     });
 </script>

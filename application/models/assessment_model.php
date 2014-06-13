@@ -30,7 +30,19 @@ class Assessment_model extends CI_Model{
         return $result;
     }
     
-    
+    public function new_pres($data){
+        $this->db->select('*');
+        $this->db->from('assess_pres');
+        $this->db->where(array('project_id' => $data['project_id']));
+        $query_temp = $this->db->get();
+        if($query_temp->num_rows() > 0){
+            $this->db->where('project_id', $data['project_id']);
+            return $this->db->update('assess_pres', array('owner'=>$data['owner']));
+        }else{
+            $query = $this->db->insert('assess_pres', $data);
+            return $query;
+        }
+    }
     public function new_group($data){
         $query = $this->db->insert('assess_groups', $data);
         return $query;
@@ -136,5 +148,10 @@ class Assessment_model extends CI_Model{
         $query = $this->db->get();
         $result =  $query->row_array();
         return $result;
+    }
+    
+    public function update_pres_onpro($id,$data){
+        $this->db->where('project_id', $id);
+        return $this->db->update('assess_pres', $data);
     }
 }
