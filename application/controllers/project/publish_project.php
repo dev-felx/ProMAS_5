@@ -67,37 +67,37 @@ class Publish_project extends CI_Controller{
         
     }
     
-    public function request_doc($doc_id,$rev_id,$group_no,$doc_name){
-        $data_doc = array(
-                'doc_status' =>1,
-            );
-        $data_rev = array(
-                'rev_status' =>1,
-            );
-        $this->load->model('document_model');
-        $result = $this->document_model->update_document($rev_id,$doc_id,$data_doc,$data_rev);
-        if($result!=NULL){    
-            $this->load->model('project_model');
-            $project_id = $this->project_model->get_project_id($group_no);
-            $scope = 5;
-            $sc_p1=$project_id[0]['project_id'];
-            $desc = 'Document: ' .$doc_name.' needs to be modified contact your '.$this->session->userdata['type'].' for details';
-            $email= TRUE;
-            $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
-    
-            if($notify==TRUE){
-                $response['status'] = 'success';
-            }else{
-                $response['status'] = 'not_vslid';
-            }
-
-        }else{
-            $response['status'] = 'not_vslid';
-        }
-        header('Content-type: application/json');
-        exit(json_encode($response));
-        }
-    
+//    public function request_document($doc_id,$rev_id,$group_no,$doc_name){
+//        $data_doc = array(
+//                'doc_status' =>1,
+//            );
+//        $data_rev = array(
+//                'rev_status' =>1,
+//            );
+//        $this->load->model('document_model');
+//        $result = $this->document_model->update_document($rev_id,$doc_id,$data_doc,$data_rev);
+//        if($result!=NULL){    
+//            $this->load->model('project_model');
+//            $project_id = $this->project_model->get_project_id($group_no);
+//            $scope = 5;
+//            $sc_p1=$project_id[0]['project_id'];
+//            $desc = 'Document: ' .$doc_name.' needs to be modified contact your '.$this->session->userdata['type'].' for details';
+//            $email= TRUE;
+//            $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+//    
+//            if($notify==TRUE){
+//                $response['status'] = 'success';
+//            }else{
+//                $response['status'] = 'not_vslid';
+//            }
+//
+//        }else{
+//            $response['status'] = 'not_vslid';
+//        }
+//        header('Content-type: application/json');
+//        exit(json_encode($response));
+//        }
+//    
     public function publish_documents($doc_id,$project_id){
         
         $this->load->model('document_model');
@@ -152,8 +152,8 @@ class Publish_project extends CI_Controller{
         $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>  $this->session->userdata['space_id']));
         
         $project_profile_data= array(
-          'name'=>$project[0]['title'],  
-          'abstract'=>$project[0]['description'],  
+          'project_name'=>$project[0]['title'],  
+          'description'=>$project[0]['description'],  
           'academic_year'=>$acc_year[0]['academic_year'],
           'publish_status'=>0,
           'department_id'=>$project[0]['department_id'],  
@@ -254,21 +254,24 @@ class Publish_project extends CI_Controller{
     }
     
     public function upload_doc(){
-        $this->load->library('upload');
+        
         $this->form_validation->set_rules("fName","Name","required");
         $this->form_validation->set_message('required','%s is required');
         if($this->form_validation->run() === FALSE){
             $response['status'] = 'name_required';
         }else {
+            
             $this->load->model('project_space_model');
             $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
             $acc_yr = str_replace('/','-' ,$acc_year[0]['academic_year']);
-        
+            
+            $this->load->library('upload');
             $config['upload_path']= './sProMAS_documents/'.$acc_yr.'/groups/group_'.$_POST['group_no'].'/';
             $config['allowed_types']= 'pdf|doc|docx|zip|rar|jpg|jpeg|gif|png';
             $config['max_size']='2048';
             $config['file_name']= $_POST['fName'];
             
+                
             //if upload path does not exist create directories
             if (!is_dir($config['upload_path'])) {
                 mkdir($config['upload_path'], 0777, TRUE);
@@ -278,34 +281,98 @@ class Publish_project extends CI_Controller{
                 $response['file_errors'] = $this->upload->display_errors();
                 $response['status'] = 'file_error';
             }else {
-                
+                //obtaining a file extension
+                $path_parts = pathinfo($_FILES["userfile"]["name"]);
+                $extension = $path_parts['extension'];
+            
                 $data_doc= array(
                         'doc_status' =>1,//status of the document submitted
                         'name'=>$config['file_name'],
                         'space_id' => $this->session->userdata['space_id'],
-                        'creator_id' => $this->session->userdata['space_id'],
+                        'creator_id' => $this->session->userdata['user_id'],
                         'creator_role' =>$this->session->userdata['type'],
-                        'due_date'=>date("Y-m-d",time()+(60*60*24*30)),
+                        'due_date'=>date("Y-m-d",time()+(60*60*24*14)),
                         'group_no'=>$_POST['group_no'],
+                        'req_status'=>0,
                         );
-                    
+                $this->load->model('document_model');    
                 $result = $this->document_model->new_doc($data_doc);
+                if($result!=NULL){   
                     $data_rev = array(
-                        'doc_id'=>$_POST['doc_id'],
-                        'rev_date_upload'=>date("Y-m-d",time()),
-                        'rev_status'=>0,//status of the revision if approved or not
-                        'rev_file_name'=>$config['file_name'],
-                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
-                        'rev_no'=>$rev_no
-                    );
-                
-                $response['status'] = 'success';
+                            'rev_date_upload'=>date("Y-m-d",time()),
+                            'rev_status'=>1,//status of the revision if approved or not
+                            'rev_file_name'=>$config['file_name'],
+                            'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                            'rev_no'=>1
+                        );
+                        $data_doc_update= array(
+                            'doc_status' =>1,
+                        );
+
+                    $result_update = $this->document_model->update_document($result[0]['rev_id'],$result[0]['doc_id'],$data_doc_update,$data_rev);
+                    
+                    if($result_update!=NULL){
+                        $response['status'] = 'success';
+                    }
+                    
+                }else{
+                    $response['status'] = 'not_valid';
+                    
+                }
                 }
             }//end outer else
             header('Content-type: application/json');
             exit(json_encode($response));
-            }//end function do upload
             
+            
+                }//end function do upload
+           
+    public function request_doc(){
+        if($_POST['req_doc']=='0'){
+            $this->form_validation->set_rules("title","Document title","required");
+        }
+        $this->form_validation->set_rules("duedate","Receiver","required");
+        $this->form_validation->set_message('required','*');
+    
+        if($this->form_validation->run()==FALSE){
+            $response['status'] = 'not_valid';
+        }else{
+           
+            $data = array(
+                'space_id' => $this->session->userdata['space_id'],
+                'creator_id' => $this->session->userdata['user_id'],
+                'creator_role' => $this->session->userdata['type'],
+                'due_date'=>date('Y-m-d',strtotime(mysql_real_escape_string($_POST['duedate']))),
+                'group_no'=>$_POST['group_no']
+            );
+            if($_POST['req_doc']=='0'){
+                $data['name']=$_POST['title'];
+                $data['req_status']=0;//optional document for archive
+            }else{
+                $data['name']=$_POST['req_doc'];
+                $data['req_status']=1;//required document for archive
+            }
+            $this->load->model('document_model');
+            $result = $this->document_model->new_doc($data);
+            if($result!=NULL){
+                $scope= 3;
+                $sc_p1 = $this->session->userdata['user_id'];
+                $desc = 'Document: ' .$_POST['title'].' needs to be submitted contact your '.$this->session->userdata['type'].' for details';
+                $email= TRUE;
+                $notify = create_notif($desc,$scope,$email,$sc_p1,$sc_p2 = null,$url = null,$glyph = 'bell');
+                if($notify){
+                    $response['status'] = 'success';
+                }
+            }else{
+                $response['status'] = 'fail';
+            }
+        }
+        
+        // You can use the Output class here too
+        header('Content-type: application/json');
+        exit(json_encode($response));
+        
+    }
     
     
 }

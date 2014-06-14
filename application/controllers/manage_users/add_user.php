@@ -17,6 +17,8 @@ class Add_user extends CI_Controller {
         check_session_roles($roles);
         $this->load->model('access/manage_users');
         $this->load->model('project_model');
+        $this->load->model('assessment_model');
+        $this->load->model('miscellaneous_model');
     }
     
     public function individual($user,$message=NULL){
@@ -41,7 +43,7 @@ class Add_user extends CI_Controller {
                 $this->form_validation->set_rules('reg_no', 'Registration No', 'required|trim');
                 $this->form_validation->set_rules('group', 'project', 'required|trim');
             }
-            if($_POST['group']=='exists'){
+            if(isset($_POST['group'])&&$_POST['group']=='exists'){
                 $this->form_validation->set_rules('group_project', '', 'required|trim');
             }
             
@@ -84,7 +86,6 @@ class Add_user extends CI_Controller {
                         );
                     $userdata = $this->manage_users->add_student($values);
                     if($userdata != NULL ){
-                        $this->load->model('miscellaneous_model');
                         $this->miscellaneous_model->add_student_id($userdata[0]['student_id']);
                         $fname= $userdata[0]['first_name'];
                         $lname= lcfirst($userdata[0]['last_name']);
@@ -154,6 +155,19 @@ class Add_user extends CI_Controller {
                        if( ($user=='supervisor')  && isset($_POST['group_project']) && $_POST['group_project'] != NULL ){
                            $this->load->model('project_model');
                            $result_project = $this->project_model->update_project($_POST['group_project'],array('supervisor_id'=>$userdata[0]['user_id']));
+                        }else if($user=='panel_head'){
+                            if(isset($_POST['pros'])){
+                                foreach ($_POST['pros'] as $value) {
+                                    $project = $this->project_model->get_project_row($value);
+                                    $data = array(
+                                        'project_id' => $value,
+                                        'owner' => $userdata[0]['user_id'],
+                                        'space_id' => $this->session->userdata('space_id'),
+                                        'project_name'=> $project['title']
+                                    );
+                                    $this->assessment_model->new_pres($data);
+                                }
+                            }
                         }
                     
                        $fname= $userdata[0]['first_name'];

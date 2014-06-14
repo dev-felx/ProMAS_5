@@ -80,6 +80,14 @@
             
         }//end function get_non_student
         
+        public function get_non_student_no_role($data){
+            $this->db->select('*');
+            $this->db->from('non_student_users');
+            $this->db->where($data);
+            $query= $this->db->get();
+            return $query->result_array();
+        }
+        
         public function update_student($user_id,$data){
             
             $this->db->where('students.student_id', $user_id);

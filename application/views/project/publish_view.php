@@ -41,18 +41,12 @@
                     </div>
                 </form>
                 <div id="project_details" class=" hide">
-                    <div id="abstract" class="row-fluid ">
-                        <div class="hr"><hr/></div>
-                        <h5 class=" text-success"><strong>Abstract</strong></h5>
-                        <textarea class="form-control" rows="3"></textarea>
-                    </div>
-                    
                     <div id="doc"  class="row-fluid ">
                         <div class="hr"><hr/></div>
                         <h5 class="text-success"><strong>Documents</strong></h5>
                         <div  class=" text-info text-center hide"  id="req_load"></div>
                         <div id="check_box"></div>
-                        <a id="request_modal_button" type="button" class="upload_m action_view btn_edge btn btn-success btn-sm"><span  href="#upload_modal"class=" push_right_bit"></span>Request Document</a>
+                        <a id="request_modal_button" data-group_no="" type="button" class="upload_m action_view btn_edge btn btn-success btn-sm"><span  href="#upload_modal"class=" push_right_bit"></span>Request Document</a>
                         <a id="upload_modal_button" data-group_no="" type="button" class=" action_view btn_edge btn btn-primary btn-sm"><span class="glyphicon glyphicon-upload push_right_bit"></span>Upload Document</a>
                     </div>
                     <div id="part"  class="row-fluid ">
@@ -79,8 +73,8 @@
 <div id="req_modal" class=" modal fade in" >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="req_form"  class="" action="<?php echo site_url(); ?>/project/file/request" method="post">
-                   
+                <form id="req_form"  class="" action="<?php echo site_url(); ?>/project/publish_project/request_doc" method="post">
+                    <input name="group_no" type="hidden">
                         <div class="modal-header">
                             <div id="msg" class="alert alert-info text-center"><b>Request Document</b></div>
                         </div>
@@ -97,6 +91,12 @@
                                   <label>
                                     <input class="req_docs" type="radio" name="req_doc" id="" value="Final Year Report">
                                     Final Year Report
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input class="req_docs" type="radio" name="req_doc" id="" value="Project abstract">
+                                    Abstract
                                   </label>
                                 </div>
                                 <div class="radio">
@@ -130,8 +130,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div id="msg_upload" class="alert alert-info text-center"><strong>Upload a new Document to publish </strong><span id="msg_upload_span"></span></div>
-                <h5 class="text-info"> <b></b></h5>
+                    <div id="msg_upload" class="alert alert-info text-center"><strong>Upload a new Document to publish </strong><span id="msg_upload_span"></span>
+                    <p>Allowed types are pdf, zip, rar, jpg, jpeg, gif, doc and docx</p></div>
                 </div>
                 <form id="upload_form" method="POST" class=" form-horizontal" role="form" enctype="multipart/form-data" action="<?php echo site_url(); ?>/project/publish_project/upload_doc">
                 <div class="modal-body">
@@ -166,13 +166,14 @@
         $('#upload_modal').modal();
     });
     $('body').on('click', '#request_modal_button', function () {
-        
+        $('[name="group_no"]','#req_form').attr('value',$(this).data('group_no'));
         $('#req_modal').modal();
     });
     $('#projects').change(function(){
        var group_no =  $(this).val();
        var function_url = "<?php echo site_url(); ?>/project/publish_project/get_project_details/".concat(group_no);
        $('#upload_modal_button').data('group_no',group_no);
+       $('#request_modal_button').data('group_no',group_no);
     
     $.get( function_url).done(function(data) {
         $('#check_box').html('');
@@ -188,9 +189,10 @@
                 var button;
                 var path = '<?php echo site_url(); ?>/project/file/download/'+data.documents[i][0].rev_file_path;
                 if(data.documents[i][0]['req_status']==1){
-                    button = '<div  class=""><button type="button" class="btn btn-link btn-xs"><strong>Required..</strong></button><a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>\n\
-                                <a type="button" data-rev_id="'+data.documents[i][0].rev_id+'" data-doc_id="'+data.documents[i][0].doc_id+'" data-name="'+data.documents[i][0].name+'" data-group_no="'+data.documents[i][0].group_no+'" class=" req_doc_btn_p btn btn-primary btn-xs"><span  href="#"></span>Request</a></div>\n\
-                                ';
+                   // button = '<div  class=""><button type="button" class="btn btn-link btn-xs"><strong>Required..</strong></button><a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>\n\
+//                                <a type="button" data-rev_id="'+data.documents[i][0].rev_id+'" data-doc_id="'+data.documents[i][0].doc_id+'" data-name="'+data.documents[i][0].name+'" data-group_no="'+data.documents[i][0].group_no+'" class=" req_doc_btn_p btn btn-primary btn-xs"><span  href="#"></span>Request</a></div>';
+                       button = '<div  class=""><button type="button" class="btn btn-link btn-xs"><strong>Required..</strong></button>\n\
+                                <a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a></div>';
                 }else{
                     button = '<button type="button" class="btn btn-link btn-xs"><strong>Optional..</strong></button>\n\
                                 <a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>';
@@ -212,38 +214,31 @@
     });
     $('#projects').trigger('change');
     
-    $('body').on('click', '.select_option', function () {
-        var doc_name =$(this).text();
-        var doc_id =$(this).val();     
-        $('#list_doc_option').append('<a data-doc_id_option id="list_doc_option" class="list-group-item list-group-item-success">'+doc_name+'\
-            <button class="pull-right" id="remove_option">Remove</button> </a>');
-    });
-    
-    $('body').on('click', '.req_doc_btn_p', function () {
-       var grp_no = $(this).data('group_no'); 
-       var doc_id = $(this).data('doc_id'); 
-       var rev_id = $(this).data('rev_id'); 
-       var dc_name = $(this).data('name');
-       $('#req_load').removeClass('hide');
-       $('#req_load').html('<img style="height: 20px;" class="push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif"><strong>Sending....</strong>');
-       var function_url = "<?php echo site_url(); ?>/project/publish_project/request_doc/".concat(doc_id)+"/".concat(rev_id)+"/".concat(grp_no)+"/".concat(dc_name);
-       
-    setTimeout(function(){
-        $.get( function_url).done(function(data) {
-        if(data.status=='success'){
-            $('#req_load').removeClass('text-info');
-            $('#req_load').addClass('text-success');
-            $('#req_load').html('<strong>Request Sent</strong>');
-        }else if(data.status=='not valid'){
-            $('#req_load').html('Not Sent');
-        }
-    
-    },"json");
-    
-    },400);
-
-       
-    });
+//    $('body').on('click', '.req_doc_btn_p', function () {
+//       var grp_no = $(this).data('group_no'); 
+//       var doc_id = $(this).data('doc_id'); 
+//       var rev_id = $(this).data('rev_id'); 
+//       var dc_name = $(this).data('name');
+//       $('#req_load').removeClass('hide');
+//       $('#req_load').html('<img style="height: 20px;" class="push_right_bit" src="<?php //echo base_url(); ?>/assets/images/ajax-loader.gif"><strong>Sending....</strong>');
+//       var function_url = "<?php //echo site_url(); ?>/project/publish_project/request_doc/".concat(doc_id)+"/".concat(rev_id)+"/".concat(grp_no)+"/".concat(dc_name);
+//       
+//    setTimeout(function(){
+//        $.get( function_url).done(function(data) {
+//        if(data.status=='success'){
+//            $('#req_load').removeClass('text-info');
+//            $('#req_load').addClass('text-success');
+//            $('#req_load').html('<strong>Request Sent</strong>');
+//        }else if(data.status=='not valid'){
+//            $('#req_load').html('Not Sent');
+//        }
+//    
+//    },"json");
+//    
+//    },400);
+//
+//       
+//    });
     
     $('body').on('click', '#publish_btn', function () {
         var checkd = new Array();
@@ -256,7 +251,7 @@
         });
         var valid_doc= checkd.length;
         
-        if(valid_doc >= 2){
+        if(valid_doc >= 3){
             var group_no = $(this).data('group_no');
             var function_url = "<?php echo site_url(); ?>/project/publish_project/publish/".concat(group_no);
             $.get( function_url).done(function(data) {
@@ -332,6 +327,36 @@
             });
             return false;
         });
+        });
+        
+        $('.req_docs').click(function(e) {
+        if($('#others').is(':checked')) { 
+                $('#req_title').removeClass('hide');
+            }else{
+                $('#req_title').addClass('hide');
+            }
+    });
+    
+    $('#send_req').click(function() {
+        var url = $("#req_form").attr("action");
+        $.post( url, $("#req_form").serialize()).done(function(data) {
+        if(data.status === 'not_valid'){
+            $('#msg').removeClass('alert-info');
+            $('#msg').addClass('alert-warning');
+            $('#msg').html('Name, Group or Date can not be empty');
+        }else if(data.status === 'success') {
+            $('#msg').removeClass('alert-info');
+            $('#msg').addClass('alert-success');
+            $('#msg').html('Request sent');
+            setTimeout(function(){ $('#req_modal').modal('hide'); window.location.reload(); },3000);
+        }else if(data.status === 'fail') {
+            $('#msg').removeClass('alert-info');
+            $('#msg').addClass('alert-warning');
+            $('#msg').html('Request not sent');
+        }
+        
+        },"json");
+        return false;
         });
  
 

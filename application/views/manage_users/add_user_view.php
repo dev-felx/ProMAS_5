@@ -54,6 +54,20 @@
                     <input type="email" class="form-control" id="inputEmail" name="email" placeholder="" value="<?php echo set_value('email'); ?>">
                 </div>
             </div>
+            <?php if(isset($user) && $user == 'panel_head' && $user_data != null){?>
+            <div class="form-group">
+                <label class="control-label">Assign Project Groups<span class="badge push_left_bit">option</span></label>
+                <select multiple="multiple" class="form-control" name="pros[]">
+                    <?php 
+                     foreach ($user_data as $value) {
+                         echo '<option value="'.$value['project_id'].'">';
+                         echo 'Group: '.$value['group_no'].' '.$value['title'];
+                         echo '</option>';
+                     }
+                    ?>
+                </select>
+            </div>
+            <?php } ?>
             
             <?php if(isset($user) && (($user=='student') || ($user=='supervisor')) && ($user_data !==NULL)  ){ ?>
             <div class="form-group">       

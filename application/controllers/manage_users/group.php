@@ -21,7 +21,7 @@ class Group extends CI_Controller{
         
         //get additional data
        $data['students_add'] = $this->manage_users->get_student(array('space_id'=>$this->session->userdata('space_id')));
-       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'supervisor'));
+       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id')));
        $data['panels_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'panel_head'));
         
         //prepare views
@@ -41,8 +41,11 @@ class Group extends CI_Controller{
        
        //get the panel haed
        $panel_form = $this->assessment_model->get_panel_head($id);
-       $response['panel'] = $this->manage_users->get_non_student(array('non_student_users.user_id'=>$panel_form['owner'],'roles.role'=> 'panel_head'));
-         
+       if($panel_form == null){
+            $response['panel'] = array(array('first_name'=>'Not','last_name'=>'Set'));
+       }else{
+            $response['panel'] = $this->manage_users->get_non_student(array('non_student_users.user_id'=>$panel_form['owner'],'roles.role'=> 'panel_head'));
+       }
        $response['status'] = 'true';
        header('Content-type: application/json');
        exit(json_encode($response));
@@ -71,6 +74,32 @@ class Group extends CI_Controller{
        );
        $res = $this->manage_users->update_student($user_id,$data);
        if($res){
+            $response['status'] = 'true';
+            header('Content-type: application/json');
+            exit(json_encode($response));
+       }
+   }
+   
+   public function ch_super(){
+        $project_id = $_POST['pro_id'];
+        $data = array(
+            'supervisor_id' => $_POST['id']
+        );
+        $res = $this->project_model->update_project($project_id,$data);
+        if($res){
+            $response['status'] = 'true';
+            header('Content-type: application/json');
+            exit(json_encode($response));
+       }
+   }
+   
+   public function ch_panel(){
+       $project_id = $_POST['pro_id'];
+        $data = array(
+            'owner' => $_POST['id']
+        );
+        $res = $this->assessment_model->update_pres_onpro($project_id,$data);
+        if($res){
             $response['status'] = 'true';
             header('Content-type: application/json');
             exit(json_encode($response));
