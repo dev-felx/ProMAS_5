@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 ?>
-
 <div class="container-fluid">
     <div class="row">
         <div class='pull-left'><h4>Request Project Title</h4></div>
@@ -20,14 +19,14 @@
                 <h3 class="panel-title text-center">Fill In your Project Details</h3>
             </div>
             <div class="panel-body">
-                <form role="form" action="" method="">
+                <form role="form" action="<?php echo site_url(); ?>/project/request_title/request" method="POST">
                     <div class="form-group">
                         <label>Project Title</label>
-                        <input type="text" class="form-control" placeholder="Enter project Title...">
+                        <input type="text" name="title" class="form-control" placeholder="Enter project Title...">
                     </div>
                     <div class="form-group">
                         <label>Project Description</label>
-                        <textarea class="form-control" rows="4" placeholder="Enter project Title..."></textarea>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Enter project Title..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

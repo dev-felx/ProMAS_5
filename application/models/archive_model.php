@@ -43,7 +43,7 @@ class Archive_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('project_profile'); 
         $this->db->where('project_profile_id', $id);
-        $this->db->join('departments', 'departments.department_id = project_profile.project_profile_id');
+        //$this->db->join('departments', 'departments.department_id = project_profile.project_profile_id');
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -52,7 +52,8 @@ class Archive_model extends CI_Model {
             }
             return $response; 
         }else{
-            return FALSE;
+            $response['error'] = 'Profile details was not found';
+            return $response;
         }
     }
     
@@ -68,7 +69,8 @@ class Archive_model extends CI_Model {
             }
             return $response; 
         }else{
-            return FALSE;
+            $response['error'] = 'Participants not Found';
+            return $response;
         }
     }
     
@@ -77,14 +79,14 @@ class Archive_model extends CI_Model {
         $this->db->from('archive_documents'); 
         $this->db->where('project_profile_id', $id);
         $query = $this->db->get();
-        
         if ($query->num_rows() > 0){
             foreach ($query->result() as $row) {
                 $response[] = $row;
             }
             return $response; 
         }else{
-            return FALSE;
+            $response['error'] = 'Document not Found';
+            return $response;
         }
     }
     
@@ -116,7 +118,7 @@ class Archive_model extends CI_Model {
             }
             return $response; 
         }else{
-            return FALSE;
+            //return FALSE;
         }
     }
     

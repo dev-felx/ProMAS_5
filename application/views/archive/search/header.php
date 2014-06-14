@@ -16,11 +16,6 @@
         <script src="<?php echo base_url(); ?>assets/jquery/jquery-1.11.0.js"></script>
         <!--<script src="<?php // echo base_url(); ?>assets/jquery/jquery_1.5.2.js" type="text/javascript"></script>-->
         <script type="text/javascript">
-            function clickable(search_term){
-                $("#search_term").val('');
-                $("#hide_or_show_search_results_box").hide();
-                alert('You clicked -- '+search_term);
-            }
             $(document).ready(function() {
                 $("#search_key").on("keyup",function() {
                     var search_key = $("#search_key").val();
@@ -55,6 +50,20 @@
                     }
                     return false;
                 });
+                
+                function filter(){
+                    alert('Hallow');
+                    var term = $("#filter").val();
+                    
+                    $.ajax({
+                        type:"POST",
+                        url:"<?php echo site_url(); ?>/archive/archive/explore_filter/DESC",
+                        data:"ASC",
+                        success:function(data){
+                            $(#maincon).html(data);
+                        }
+                    });
+                };
             });
         </script>
     </head>
