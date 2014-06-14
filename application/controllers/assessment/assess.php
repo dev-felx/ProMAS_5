@@ -306,11 +306,11 @@ class Assess extends CI_Controller{
         //put titles
         fputcsv($fp, array('registration_number','first name', 'last name', 'project group number', 'project name', 'weekly assessmemt','report assessment', 'presentation assessment', 'total marks'));
         if($_POST['grp2'] == '0'){
-            $data['projects'] = $this->announcement_model->get_grps_coor($this->session->userdata('user_id'));
+            $data['projects'] = $this->assessment_model->get_grps_coor($this->session->userdata('space_id'));
         }else{
             $data['projects'] = $this->assessment_model->get_grps_list($_POST['receiver2']);
         }
-
+            //print_r($data['projects']);die();
             foreach ($data['projects'] as $value) {
                 $students = $this->assessment_model->get_project_stu_ex($value['project_id']);
                 foreach ($students as $sub_value) {
@@ -349,14 +349,21 @@ class Assess extends CI_Controller{
                 
                 //average
                 $num  = count($student_forms);
+                if($num != 0){
                 $form['initiative'] =  $form['initiative'] / $num;
                 $form['understand'] =  $form['understand'] / $num;
                 $form['contribution'] = $form['contribution'] / $num;
                 $form['qna'] = $form['qna'] / $num;
+                }else{
+                    $total = 0;
+                    return $total;
+                }
                  
                 $total = 0;
+                if( $form != null){
                 foreach ($form as $value) {
                     $total = $total + $value;
+                }
                 }
                 
                 return $total;
@@ -370,8 +377,10 @@ class Assess extends CI_Controller{
           $query = $this->db->get();
           $result =  $query->result_array();
           $total = 0;
+            if( $result != null){
             foreach ($result[0] as $value) {
                 $total = $total + $value;
+            }
             }
             return $total;
    
@@ -384,9 +393,11 @@ class Assess extends CI_Controller{
           $query = $this->db->get();
           $result =  $query->result_array();
           $total = 0;
+          if( $result != null){
             foreach ($result[0] as $value) {
                 $total = $total + $value;
             }
+          }
             return $total;
       }
       
