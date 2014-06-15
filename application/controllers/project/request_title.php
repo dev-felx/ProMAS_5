@@ -18,5 +18,23 @@ class Request_title extends CI_Controller{
         $data['views']= array('project/request_title');    
         page_load($data);
     }
+    
+    public function request(){
+        $this->form_validation->set_rules("title","Project Title", "required");
+        $this->form_validation->set_rules("desription","Project Description","required");
+        
+        if ($this->form_validation->run() == FALSE){
+            $response['status'] = 'false';
+            $response['data'] = validation_errors();
+            header('Content-type: application/json');
+            exit(json_encode($response));
+        }else {
+            $data = array(
+                'title' => $_POST['title'],
+                'description' => $_POST['description'],
+            );
+        }
+        
+    }
         
 }

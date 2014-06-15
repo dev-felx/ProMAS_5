@@ -102,7 +102,7 @@ class Publish_project extends CI_Controller{
         
         $this->load->model('document_model');
         $document = $this->document_model->get_doc_archive($doc_id,  $this->session->userdata['space_id']);
-        
+       // print_r($document);        die();
         $this->load->model('project_space_model');
         $acc_year = $this->project_space_model->get_all_project_space(array('space_id'=>$this->session->userdata['space_id']));
         $acc_yr = str_replace('/','-' ,$acc_year[0]['academic_year']);

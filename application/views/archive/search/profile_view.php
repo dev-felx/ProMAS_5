@@ -6,6 +6,7 @@
                 </div>
                 <div id="maincon" class="col-sm-8">
                     <?php foreach($result as $v){?>
+                   
                     <div class="page-header">
                         <h3 style="color: 0076a7;"><?php print $v->project_name ?></h3>
                     </div>
@@ -24,21 +25,24 @@
                             </object>
                         </div>
                         <div class="tab-pane" id="details">
-                            <p>This project was done during the academic year <?php print $v->academic_year; ?>, under the department of 
-                                <?php print $v->name; ?> at University of Dar es Salaam.</p>
+                            <p>This project was done during the academic year, under the department of 
+                                 at University of Dar es Salaam.</p>
                         </div>
                         <div class="tab-pane" id="documents">
                             <div class="list-group col-sm-8">
                             <?php
+                                if(!isset($docu['error'])){
                                 foreach ($docu as $d){?>
-                                <a href="#" class="list-group-item list-group-item-info"><?php print $d->document_name; ?><button type="button" class="btn btn-xs btn-primary pull-right">Download</button></a>
+                                <li class="list-group-item list-group-item-info"><?php print $d->document_name; ?><a href="<?php print $d->document_path ?>" class="btn btn-xs btn-primary pull-right">Download</a></li>
                                 <?php
-                                }
+                                } } else {?>
+                                <p><?php echo $docu['error']?></p>
+                            <?php }
                             ?>
                             </div>
                         </div>
                         <div class="tab-pane" id="participants">
-                        <?php
+                        <?php if(!isset($part['error'])){
                             foreach ($part as $p){
                                 if($p->type == 'coordinator'){ ?>
                                     <h4 style="color: 0076a7;">Project Coordinator</h4>
@@ -63,7 +67,11 @@
                                     &emsp;Email: <?php print $p->email; ?><br>
                                     &emsp;<?php print $p->address; ?>
                                 </address>
-                            <?php } }?>
+                        <?php } }                        
+                            }else {?>
+                                <address><?php echo $part['error']?></address>
+                            <?php }
+                        ?>
                         </div>
                         <div class="tab-pane" id="permission">
                             <div class="col-sm-8">

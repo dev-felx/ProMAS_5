@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- Title -->
-    <title><?php if(isset($title)){ echo $title;}else{echo 'ProMAS';} ?></title>
+    <title><?php if(isset($title)){ echo $title;}else{echo 'sProMAS';} ?></title>
 
     <!-- Style-sheets -->
     <link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css">
@@ -39,7 +39,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="<?php echo site_url(); ?>/home">ProMAS</a>
+                        <a class="navbar-brand" href="<?php echo site_url(); ?>/home">sProMAS</a>
                     </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
