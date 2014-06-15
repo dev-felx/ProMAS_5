@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <footer class="login_footer" >
+        <footer class="login_footer navbar-fixed-bottom" >
             <div class="col-sm-8 col-sm-offset-2">
                 <hr style="border: none; height: 2px; color: blue; background: #0093D0;"/>
             </div>

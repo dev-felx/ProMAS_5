@@ -51,19 +51,7 @@
                     return false;
                 });
                 
-                function filter(){
-                    alert('Hallow');
-                    var term = $("#filter").val();
-                    
-                    $.ajax({
-                        type:"POST",
-                        url:"<?php echo site_url(); ?>/archive/archive/explore_filter/DESC",
-                        data:"ASC",
-                        success:function(data){
-                            $(#maincon).html(data);
-                        }
-                    });
-                };
+               
             });
         </script>
     </head>
