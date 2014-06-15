@@ -71,4 +71,9 @@ class Project_model extends CI_Model{
             return $query->row_array();
         }
     }
+    
+    public function request_title($id, $data){
+        $this->db->where('project_id', $id);
+        return $this->db->update('student_projects', $data);
+    }
 }//end class

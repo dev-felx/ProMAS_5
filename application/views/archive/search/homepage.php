@@ -14,16 +14,4 @@
                 </div>
             </div>
         </div>
-        <footer class="login_footer navbar-fixed-bottom" >
-            <div class="col-sm-8 col-sm-offset-2">
-                <hr style="border: none; height: 2px; color: blue; background: #0093D0;"/>
-            </div>
-            <div class="col-sm-8 col-sm-offset-2" style="margin-top: -20px; color: #0093D0; ">
-                <h5 class="pull-left">UDSM | CoICT | Computer Science and Engineering Department</h5>
-                <h5 class="pull-right">Copyright &COPY; <?php echo date('20y', time()); ?> ProMAS</h5>
-            </div>
-        </footer>
-        <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.js"></script>
-        <script>$('#help').tooltip();</script>
-    </body>
-</html>
+        <?php $this->load->view('archive/search/footer'); ?>

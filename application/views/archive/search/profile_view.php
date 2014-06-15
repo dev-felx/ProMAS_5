@@ -141,7 +141,7 @@
                 </div>
             </div>
         </div>
-        <footer class="login_footer" >
+        <!--footer class="footer" style="position: absolute; width: 100%; bottom: 40px;">
             <div class="col-sm-8 col-sm-offset-2">
                 <hr style="border: none; height: 2px; color: blue; background: #0093D0;"/>
             </div>
@@ -149,7 +149,7 @@
                 <h5 class="pull-left">UDSM | CoICT | Computer Science and Engineering Department</h5>
                 <h5 class="pull-right">Copyright &COPY; <?php echo date('20y', time()); ?> ProMAS</h5>
             </div>
-        </footer>
+        </footer-->
         <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.js"></script>
         <script>$('#help').tooltip();</script>
         <script> 
