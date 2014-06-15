@@ -248,10 +248,10 @@ class Manage extends CI_Controller{
         }
         if($result>0){
             $message = ucfirst($user)."s successfully deleted";
-        } else{
+        }else{
             $message = "Users not deleted";
         }
-        $this->users($user,$message);
+            $this->users($user,$message);
         }
     }// end class Manage extends CI_Controller
 

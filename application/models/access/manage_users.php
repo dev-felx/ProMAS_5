@@ -182,7 +182,9 @@
             $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
             $query = $this->db->get();
             $result= $query->result_array();
-
+            $deleted_role = array();
+            $deleted_user = array();
+            $i =0; $j=0;
             foreach ($result as $value) {
                 if($value['role']==$user){
                     $this->db->select('*');
@@ -191,18 +193,18 @@
                     $query = $this->db->get();
                     $result_roles= $query->result_array();
                     if(count($result_roles)>1){
-                       return  $this->db->delete('roles',array('role_id'=>$value['role_id'])); 
+                       $deleted_role[$i] =  $this->db->delete('roles',array('role_id'=>$value['role_id'])); 
                     }elseif (count($result_roles)==1) {
-                       return  $this->db->delete('non_student_users',array('user_id'=>$value['user_id'])); 
+                       $deleted_user[$i]=  $this->db->delete('non_student_users',array('user_id'=>$value['user_id'])); 
                     }
-                    
                 }
             }
+            if($deleted_role!=NULL || $deleted_user!=NULL){
+                return 2;
+            }
+            
         }
         
-        
-   
-    
 }
 
 ?>
