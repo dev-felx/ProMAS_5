@@ -20,6 +20,7 @@ class Notify extends CI_Controller{
               $data['nots_read'] = $this->notification_model->get_not_read($this->session->userdata['user_id'],10);
             
             //prep view
+            $data['title'] = 'sProMAS | Notifications'; 
             $data['views'] = array('project/notify_view');
             page_load($data);
         }else{
@@ -28,6 +29,7 @@ class Notify extends CI_Controller{
             $data['nots_read'] = $this->notification_model->get_not_read_stu($this->session->userdata['user_id'],10);
             
             //prep view
+            $data['title'] = 'sProMAS | Notifications'; 
             $data['views'] = array('project/notify_view');
             page_load($data);
         }

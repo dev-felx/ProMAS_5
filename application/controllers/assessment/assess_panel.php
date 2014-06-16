@@ -33,6 +33,7 @@ class Assess_panel extends CI_Controller{
         //prepare views
         $data['sub_title'] = 'Presentation Assessment';
         $data['views'] = array('/assessment/pres_view');
+        $data['title'] = 'sProMAS | Assessment';
         //load view
         page_load($data);
         
