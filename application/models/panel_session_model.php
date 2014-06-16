@@ -29,6 +29,16 @@ class Panel_session_model extends CI_Model{
         $query= $this->db->get();
         return $query->result_array();
     }
+    
+    public function update_session_details($ph_id,$data){
+        $this->db->where('panel_head_id', $ph_id);
+        return $this->db->update('panel_session', $data);
+    }
+
+    public function add_session_details($data){
+        $result = $this->db->insert('panel_session', $data);
+        return $result;
+    }
     public function add_project($data){
         $result = $this->db->insert('assess_pres', $data);
         return $result;

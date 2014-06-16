@@ -36,6 +36,41 @@ class Panel_session extends CI_Controller{
        header('Content-type: application/json');
        exit(json_encode($response));
     }
+    public function change_panel_session(){
+       $panel_head = $_POST['panel_head_id'];
+       $venue = $_POST['venue'];
+       $time = date('Y-m-d H:i', strtotime(str_replace('.', '-', $_POST['time'])));
+       $data = array(
+           'venue'=>$venue,
+           'time'=>$time,
+           );
+       $data_exist = array(
+           'panel_head_id'=>$panel_head,
+           );
+        $table = 'panel_session';
+        //checking if the user exist in the db
+        $result_exist = $this->manage_users->check_value_exists($table, $data_exist);
+        if(!$result_exist){
+            $data['panel_head_id']=$panel_head;
+            $result = $this->panel_session_model->add_session_details($data);
+            if($result!=NULL){
+                $response['status'] = 'true';
+            }  else {
+               $response['status'] = 'false';
+
+            }
+        }else{
+            $result = $this->panel_session_model->update_session_details($panel_head,$data);
+            if($result!=NULL){
+                $response['status'] = 'true';
+            }  else {
+               $response['status'] = 'false';
+
+            }
+        }
+       header('Content-type: application/json');
+       exit(json_encode($response));
+    }
     
     public function add_project(){
        $project_id = $_POST['project_id'];

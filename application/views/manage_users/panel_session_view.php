@@ -1,3 +1,8 @@
+
+<link type="text/css" href="<?php echo base_url(); ?>assets/jquery/datetime/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="<?php echo base_url(); ?>assets/jquery/datetime//jquery.js"></script>
+<script src="<?php echo base_url(); ?>assets/jquery/datetime/jquery.datetimepicker.js"></script>
+
 <div>
     <h4 class="col-sm-3 pull-left"><?php echo $sub_title; ?></h4> 
     <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/panel_session/members/panel_member'); ?>">Manage Panel Members</a>
@@ -71,21 +76,23 @@
                 
                         <div class="clearfix"></div>
                 <div class="form-group hidden detail">
-                    <label>Venue and Time<span><button id="show_super_add" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
+                    <label>Venue and Time<span><button id="show_venue_ch" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
                     <p id="venue" class="form-control-static"></p>
-                    <div class="hidden" id='super_ch_cont'>
-                    <div class="col-sm-7">
-                        <select id="super_ch" class="form-control col-sm-7">
-                            //<?php
-//                                foreach ($supers_add as $value) {
-//                                   echo '<option value="'.$value['user_id'].'">'.$value[first_name].' '.$value['last_name'];
-//                                   echo '</option>';
-//                                }
-//                            ?>
-                        </select>  
+                    <div class="hidden" id='venue_ch_t'>
+                    <div class="row col-sm-12">
+                        <div id="venue_ch" class="form-group col-sm-7">
+                            <label for="exampleInputEmail1">Venue</label>
+                            <input id="venue_chn" type='text' class="form-control" id="exampleInputEmail1" placeholder="Enter venue">
+                          </div>
+                         <div id="time_ch" class='col-sm-4'>
+                             <label for="exampleInputEmail1">Time allocation</label>
+                            <input name="time" type='text' class="form-control" id='datetimepicker'/>
+                        </div>
                     </div>
-                    <button id='super_ch_now' class="btn btn-success btn-sm col-sm-1">Change</button>
-                    <button id="can_super" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
+                        <div class="row-fluid col-sm-4">
+                    <button id='venue_ch_now' class="btn btn-success btn-sm ">Change</button>
+                    <button id="can_venue" class="btn btn-warning btn-sm  push_left_bit">Cancel</button>
+                    </div>
                     </div>
                 </div>
                 
@@ -95,6 +102,10 @@
 </div>
 <script>
     $(document).ready(function(){
+        jQuery('#datetimepicker').datetimepicker({
+                format:'d.m.Y H:i',
+               
+        });
         //get project Info
         $('#project').change(function(){
             var id = $(this).val();
@@ -120,7 +131,7 @@
                             $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'</li>');
                          }
                          
-                         $('#venue').html(data.session_details[0].venue+' '+data.session_details[0].time);      
+                         $('#venue').html('<p class="">Venue : '+data.session_details[0].venue+'</p><p class="">Date & Time : '+data.session_details[0].time+'</p>');      
                          $('.detail').removeClass('hidden');
                      }else{
                         $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
@@ -151,14 +162,14 @@
             $('#member_add_cont').removeClass('hidden');
             return false;
          });
-         $('#show_super_add').click(function(){
-            $('#super_ch_cont').removeClass('hidden');
-            $('#super').hide();
+         $('#show_venue_ch').click(function(){
+            $('#venue_ch_t').removeClass('hidden');
+            $('#venue').hide();
             return false;
          });
-         $('#can_super').click(function(){
-            $('#super_ch_cont').addClass('hidden');
-            $('#super').show();
+         $('#can_venue').click(function(){
+            $('#venue_ch_t').addClass('hidden');
+            $('#venue').show();
             return false;
          });
          $('#can_project').click(function(){
@@ -206,16 +217,18 @@
          });
          
          
-         $('#super_ch_now').click(function(){
-                var pro_id = $('#project').val();
-                var user_id = $('#super_ch').val();
-                if(confirm('Warning: Supervisor will be added this group')){
+         $('#venue_ch_now').click(function(){
+                var panel_head_id = $('#project').val();
+                var venue = $('#venue_chn').val();
+                var time = $('#datetimepicker').val();
+                
+                if(confirm('Warning: Venue and time will be changed')){
                     var t = "<?php echo site_url(); ?>";
-                    var c = t+"/manage_users/group/ch_super";
-                    $.post( c, {id: user_id, pro_id: pro_id}).done(function(data) {
+                    var c = t+"/manage_users/panel_session/change_panel_session";
+                    $.post( c, {venue: venue,time: time, panel_head_id: panel_head_id}).done(function(data) {
                         if(data.status === 'true'){
                             $('#project').trigger('change');
-                            $('#can_super').trigger('click');
+                            $('#can_venue').trigger('click');
                         }
                     },'json');
                 }else{
