@@ -70,7 +70,7 @@ class Add_user extends CI_Controller {
                     }else if($_POST['group']=='new'){
                         $project = $this->project_model->get_max_group_no();
                         $grp_no = $project[0]['group_no']+1;  
-                        $proj = $this->project_model->add_project(array('group_no'=>$grp_no));
+                        $proj = $this->project_model->add_project(array('group_no'=>$grp_no,'space_id'=>$this->session->userdata['space_id']));
                         $project_id =$proj[0]['project_id'];
                         $group_no = $proj[0]['group_no'];
                     }
