@@ -21,7 +21,7 @@ class Group extends CI_Controller{
         
         //get additional data
        $data['students_add'] = $this->manage_users->get_student(array('space_id'=>$this->session->userdata('space_id')));
-       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id')));
+       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'supervisor'));
        $data['panels_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'panel_head'));
         
         //prepare views
@@ -37,8 +37,11 @@ class Group extends CI_Controller{
        
        //get project data and supervisor
        $project = $this->project_model->get_project_row($id);
-       $response['super'] = $this->manage_users->get_non_student(array('non_student_users.user_id'=>$project['supervisor_id']));
-       
+       if($project['supervisor_id'] == null){
+            $response['super'] = array(array('first_name'=>'Not','last_name'=>'Set'));
+       }else{
+            $response['super'] = $this->manage_users->get_non_student(array('non_student_users.user_id'=>$project['supervisor_id']));
+       }
        //get the panel haed
        $panel_form = $this->assessment_model->get_panel_head($id);
        if($panel_form == null){
