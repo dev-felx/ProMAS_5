@@ -61,11 +61,8 @@
             $this->db->where($data);
             $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
             $this->db->join('departments', "departments.department_id = non_student_users.department_id",'inner');
-            
             $query= $this->db->get();
-            
             if($query->num_rows()>0 ){
-                
                 return $query->result_array();
             }else{
             
@@ -77,6 +74,17 @@
                 
                 return $query->result_array();
             }
+            
+        }//end function get_non_student
+        public function get_non_student_no_department($data){
+            
+            $this->db->select('*');
+            $this->db->from('non_student_users');
+            $this->db->where($data);
+            $this->db->join('roles', "roles.user_id = non_student_users.user_id",'inner');
+            $query= $this->db->get();
+                
+                return $query->result_array();
             
         }//end function get_non_student
         

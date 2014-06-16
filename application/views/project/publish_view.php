@@ -272,22 +272,21 @@
             });
     function archive_doc(projct_id){
         $(".chk:checked").each(function() {
-           alert($(".dc_id").data('doc_id'));
-            //var doc_id = $(this).val();
-            
-           // var function_url = "<?php echo site_url(); ?>/project/publish_project/publish_documents/".concat(doc_id)+"/".concat(projct_id);
-//            $.get( function_url).done(function(data) {
-//                if(data.status ==='success'){
-//                    $('#msg_publish').addClass('text-center');
-//                    $('#msg_publish').addClass('text-success');
-//                    $('#msg_publish').html('<strong>Project published successfull</strong>');
-//                }else if(data.status ==='not valid'){
-//                    $('#msg_publish').addClass('text-center');
-//                    $('#msg_publish').addClass('text-danger');
-//                    $('#msg_publish').html('<strong>Project not published</strong>');
-//                }
-//
-//            },"json");
+            var doc_id = $(this).parent('label').parent('.dc_id').data('doc_id');
+          
+            var function_url = "<?php echo site_url(); ?>/project/publish_project/publish_documents/".concat(doc_id)+"/".concat(projct_id);
+            $.get( function_url).done(function(data) {
+                if(data.status ==='success'){
+                    $('#msg_publish').addClass('text-center');
+                    $('#msg_publish').addClass('text-success');
+                    $('#msg_publish').html('<strong>Project published successfull</strong>');
+                }else if(data.status ==='not valid'){
+                    $('#msg_publish').addClass('text-center');
+                    $('#msg_publish').addClass('text-danger');
+                    $('#msg_publish').html('<strong>Project not published</strong>');
+                }
+
+            },"json");
         });
     }
     

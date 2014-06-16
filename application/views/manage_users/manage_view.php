@@ -12,7 +12,7 @@
 <div id="manage_users" class="col-sm-12">            
     <div class='row' style="margin-bottom: -5px; ">
         <div class='pull-left'><h4>Manage Users - <?php echo ucfirst(str_replace('_',' ', $user));   ?></h4></div>
-            <div class="btn btn-group pull-right">
+            <div class=" pull-right">
             <?php if(($user == 'student') || ($user =='supervisor') ){ ?>
             <button type="button" class="btn btn-success dropdown-toggle push_right_bit" data-toggle="dropdown" >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></button>
             <ul class="dropdown-menu" role="menu">
@@ -20,7 +20,11 @@
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Multiple</a></li>
             </ul>
-            <?php }else{  ?>
+            <?php }else{  
+                if(($user == 'panel_head')){
+                ?>
+            <a type="button" class="btn btn-primary push_right_bit" href="<?php echo site_url(); ?>/manage_users/panel_session"  >Manage Panel Sessions</a>
+                <?php } ?>
             <a type="button" class="btn btn-success push_right_bit" href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>"  >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></a>
             <?php } ?>
             <a onclick="return confirm('Are you sure you want to delete all <?php echo $user; ?>s?')" href="<?php echo site_url(); ?>/manage_users/manage/delete_all/<?php echo $user; ?>" type="button" class="btn btn-danger push_right_bit " >Delete All <?php echo str_replace('_',' ', $user).'s'; ?></a>

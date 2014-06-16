@@ -10,7 +10,7 @@ class Register_user extends CI_Controller {
         parent::__construct();
     
         //checking session and allowed roles
-        $roles = array('superuser','administrator','coordinator','supervisor','student');
+        $roles = array('superuser','administrator','coordinator','supervisor','student','panel_head');
         check_session_roles($roles);
         
         $this->load->model('access/manage_users');
@@ -19,7 +19,6 @@ class Register_user extends CI_Controller {
     }
 
     public function index(){
-        
         
         if($this->session->userdata['type']=='student'){
             $values = array(
