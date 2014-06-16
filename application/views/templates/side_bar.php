@@ -180,6 +180,7 @@
     $accordion['panel_head'] = array(
         
        'Assesment' => array(
+                                    array('Session' => 'home'),
                                     array('Presentation' => 'assessment/assess_panel/pres'),
                         )
         

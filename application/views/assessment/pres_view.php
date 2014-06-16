@@ -1,5 +1,6 @@
 <div>
     <h4 class="col-sm-3 pull-left"><?php echo $sub_title; ?></h4> 
+    <a href="<?php echo site_url('home'); ?>" role="button" class="btn btn-success pull-right push_left_bit">My Session</a>
 </div>
 <div class="clearfix"></div>
 <hr/>

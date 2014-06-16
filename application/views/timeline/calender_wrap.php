@@ -63,16 +63,16 @@ Click on event to edit or delete. ">Help <span class="glyphicon glyphicon-questi
 <!-- Calender wrap side bar -->
 <div id="calender_left" class="col-sm-2 no_pad no_mag" style="margin-top: 44px;">
     <div id="flash_info" class="sider">
-            <div class="alert-info alert text-center pad_10">Upcoming events</div>
+        <div class="alert alert-success text-center pad_10" style="margin-bottom: 8px;">Upcoming events</div>
             <div>
                 <?php
                 if($event != null){
                 foreach ($event as $row) {?>
-                <div class="up_event_item panel panel-info">
-                    <div class="panel-heading">
+                <div class="up_event_item panel panel-info" style="margin-bottom: 8px;">
+                    <div class="panel-heading" style="padding: 5px;">
                         <h5 class="panel-title"><?php echo date("d M", strtotime($row->start)); ?> - <?php echo date("d M", strtotime($row->end)); ?></h5>
                     </div>
-                    <div class="panel-body"><?php echo $row->title; ?></div>
+                    <div class="panel-body text-center" style="padding: 5px;"><?php echo $row->title; ?></div>
                 </div>
                 <?php }}else{ ?>
                 <p class="text-warning text-center">No Upcoming Events</p>   

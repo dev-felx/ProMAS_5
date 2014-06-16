@@ -19,9 +19,10 @@ class Assess_panel extends CI_Controller{
     
     public function index(){
         //prepare view
-        $data['views'] = array('/assessment/assess_view');
-        
+        $data['views'] = array('/landing/panel_land');
+        $data['sub_title'] = 'My Presentation Assessment Session';
         //load view
+        
         page_load($data);
     }
     
