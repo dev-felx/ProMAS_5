@@ -21,7 +21,7 @@ class Group extends CI_Controller{
         
         //get additional data
        $data['students_add'] = $this->manage_users->get_student(array('space_id'=>$this->session->userdata('space_id')));
-       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id')));
+       $data['supers_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'supervisor'));
        $data['panels_add'] = $this->manage_users->get_non_student(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'panel_head'));
         
         //prepare views

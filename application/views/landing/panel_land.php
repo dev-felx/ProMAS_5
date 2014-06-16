@@ -10,7 +10,16 @@
   </div>
   <div class="panel-body">
       <form>
-          
+          <div class="form-group">
+                <label class="col-sm-2 control-label text-right">Panel Head</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static text-left">Hakit jahidk</p>
+                </div>
+          </div>
+          <div class="form-group">
+              <label>Venue</label>
+              <div>dbvksbdvlakj adlbvjaslbvl</div>
+          </div>
       </form>
   </div>
 </div>
