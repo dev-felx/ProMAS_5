@@ -27,7 +27,7 @@ class Announce extends CI_Controller{
             //prepare view data
             
             $data['views'] = array('project/announce_view');
-            $data['title'] = 'ProMAS | Announcements';
+            $data['title'] = 'sProMAS | Announcements';
             $data['receiver'] = array('All','Students','Supervisors');
 
             page_load($data);
@@ -37,7 +37,7 @@ class Announce extends CI_Controller{
             
             //prep view
             $data['views'] = array('project/announce_view');
-            $data['title'] = 'ProMAS | Announcements';
+            $data['title'] = 'sProMAS | Announcements';
             $data['receiver'] = array('All groups','Choose groups');
             $data['groups'] = $this->announcement_model->get_grps($this->session->userdata['user_id']);
             
@@ -48,7 +48,7 @@ class Announce extends CI_Controller{
             $data['anns_read'] = $this->announcement_model->get_ann_read_stu($this->session->userdata['user_id'],10);
             //prep views
             $data['views'] = array('project/announce_view');
-            $data['title'] = 'ProMAS | Announcements';
+            $data['title'] = 'sProMAS | Announcements';
             $data['receiver'] = array('All Members','Memebers + Supervisor');
             page_load($data);
         }

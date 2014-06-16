@@ -26,6 +26,7 @@ class Users extends CI_Controller{
         $data['views'] = array('archive/access/user_list');
   
         //load user's views
+        $data['title'] = 'sProMAS | Archive Users'; 
         page_load($data);
     }
     
@@ -45,6 +46,7 @@ class Users extends CI_Controller{
             }
             $req[$key] = array_merge($req[$key], $user);
         }
+        $data['title'] = 'sProMAS | Access Request'; 
         $data['req'] = $req;    
         $data['views'] = array('archive/access/req_list');
         

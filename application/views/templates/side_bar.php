@@ -32,7 +32,7 @@
 
     //for superuser
     $accordion['superuser'] = array(
-        'Users' => array(
+        'Manage users' => array(
                                     array('Administrator' => 'manage_users/manage/users/administrator'),
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
