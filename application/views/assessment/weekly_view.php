@@ -5,6 +5,16 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                          <button id="1" type="button" class="semester btn btn-primary">Semester 1</button>
+                        </div>
+                        <div class="btn-group">
+                          <button id="2" type="button" class="semester btn">Semester 2</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>Choose Project</label>
                     <select id="pro" class="form-control">
                         <?php 
@@ -45,6 +55,7 @@
     $('#ind_form').hide();
     $(document).ready(function(){  
         var curr_stu;
+        var curr_sem = 1;
         //defaults
         get_stu($( "#pro" ).val());
         $('#name').html(forms[0].student_name);
@@ -64,7 +75,7 @@
                 $('#ind_form').slideDown();
                 $('#msg_frm').html('');               
                 for (var i=0; i < forms.length; i++){
-                         if (forms[i]['student'] == curr_stu && forms[i]['week_no'] == week){
+                         if (forms[i]['student'] == curr_stu && forms[i]['week_no'] == week && forms[i]['semester'] == curr_sem){
                              if(forms[i].ignore == 1){
                                 $('#cont_msg').html('<div class="alert alert-warning text-center">Assement Form Ignored</div>') ;
                                 $('#ind_form').hide();
@@ -74,6 +85,7 @@
                                 $('#reg_no').html(forms[i].student);
                                 $('#wik').html(forms[i].week_no);
                                 $('#pro_name').html(forms[i].project_name);
+                                $('#sem').html(forms[i].semester);
 
                                 $('[name="init"]', '#ind_form').attr('value',forms[i].initiative);
                                 $('[name="init"]', '#ind_form').val(forms[i].initiative);
@@ -177,6 +189,13 @@
             curr_stu = $(this).attr('id');
             $( "#week" ).trigger('change');
         });
-
+        
+        //semester change
+        $('.semester').click(function(){
+            $('.semester').removeClass('btn-primary');
+            $(this).addClass('btn-primary');
+            curr_sem =  $(this).attr('id');
+            $("#week").trigger('change');
+        });
     });
 </script>

@@ -2,7 +2,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div id="leftside" class="col-sm-2">
-                    <img src="<?php echo base_url(); ?>assets/images/banner.jpg" alt="sProMAS Archive" class="img-rounded col-sm-12">
+                    <a href="<?php echo site_url('archive/archive/search'); ?>"><img src="<?php echo base_url(); ?>assets/images/banner.jpg" alt="sProMAS Archive" class="img-rounded col-sm-12"></a>
                 </div>
                 <div id="maincon" class="col-sm-8">
                     <?php foreach($result as $v){?>
@@ -20,9 +20,17 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div class="tab-pane active" id="abstract">
-                            <object data="<?php echo base_url(); ?>files/uploads/documents/prospectus.pdf" type="application/pdf" width="100%" height="70%">
-                                <p>It appears you don't have a PDF plugin for this browser. <a href="">click here to download the PDF file.</a></p>
-                            </object>
+                            <?php
+                                if(!isset($abst['error'])){
+                                foreach ($abst as $a){?>
+                                    <object data="<?php print $a->document_path ?>" type="application/pdf" width="100%" height="70%">
+                                        <p>It appears you don't have a PDF plugin for this browser. <a href="<?php print $a->document_path ?>">click here to download the PDF file.</a></p>
+                                    </object>
+                                <?php
+                                } } else {?>
+                                <p><?php echo $abst['error']?></p>
+                            <?php }
+                            ?>
                         </div>
                         <div class="tab-pane" id="details">
                             <p>This project was done during the academic year, under the department of 
@@ -141,7 +149,7 @@
                 </div>
             </div>
         </div>
-        <footer class="login_footer" >
+        <!--footer class="footer" style="position: absolute; width: 100%; bottom: 40px;">
             <div class="col-sm-8 col-sm-offset-2">
                 <hr style="border: none; height: 2px; color: blue; background: #0093D0;"/>
             </div>
@@ -149,7 +157,7 @@
                 <h5 class="pull-left">UDSM | CoICT | Computer Science and Engineering Department</h5>
                 <h5 class="pull-right">Copyright &COPY; <?php echo date('20y', time()); ?> ProMAS</h5>
             </div>
-        </footer>
+        </footer-->
         <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.js"></script>
         <script>$('#help').tooltip();</script>
         <script> 

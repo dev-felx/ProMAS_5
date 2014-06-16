@@ -36,8 +36,8 @@
 Supervisor Event: Blue, 
 Student Event: Orange. 
 Click on event to edit or delete. ">Help <span class="glyphicon glyphicon-question-sign"></span></button>
-    <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button"><span class="glyphicon glyphicon-list push_right_bit"></span>View Event List</a>
-    <button id='new_btn' class="btn btn-success pull-right "><span class="glyphicon glyphicon-plus push_right_bit"></span>New Event - Activity</button>&nbsp;
+    <a href="<?php echo site_url(); ?>/timeline/timeline/event" class="btn btn-success pull-right push_left_bit" role="button">View Event List</a>
+    <button id='new_btn' class="btn btn-success pull-right ">New Event - Activity</button>&nbsp;
     
     <!-- modified by Minja Junior -->
     <?php if($this->session->userdata('type') == 'supervisor'){?>

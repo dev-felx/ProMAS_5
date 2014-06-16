@@ -10,6 +10,19 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                          <button id="1" type="button" class="semester btn btn-primary">Semester 1</button>
+                        </div>
+                        <div class="btn-group">
+                          <button id="2" type="button" class="semester btn">Semester 2</button>
+                        </div>
+                        <div class="btn-group">
+                          <button id="3" type="button" class="semester btn">Full Year</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>Choose Project</label>
                     <select id="pro" class="form-control">
                         <?php 
@@ -38,7 +51,9 @@
         </div>
     </div>
 <script> 
-var forms = <?php echo json_encode($forms); ?>;
+var curr_sem = 1;
+var curr_stu;
+var forms;
 $('#ind_form').hide();
 $(document).ready(function(){  
     $( "#pro" ).change(function() {
@@ -67,10 +82,35 @@ $(document).ready(function(){
         $('body').on('click', '.stu_btn', function () { 
             $('.stu_btn').removeClass('stu_btn_active');
             $(this).addClass('stu_btn_active');
-            var curr_stu = $(this).attr('id');
-           
+            curr_stu = $(this).attr('id');
+            
+            //get forms
+             var t = "<?php echo site_url(); ?>";
+             var c = t+"/assessment/assess/calc_ave";
+             $.post( c, {sc: curr_sem}).done(function(data) {
+                forms = data.forms;
+                fill();
+            },'json'); 
+        });
+        
+        
+        $('.semester').click(function(){
+            $('.semester').removeClass('btn-primary');
+            $(this).addClass('btn-primary');
+            curr_sem =  $(this).attr('id');
+            $('#'+curr_stu).trigger('click');
+        });
+        
+        
+        function fill(){
             for (var i=0; i < forms.length; i++){
                  if (forms[i]['student'] == curr_stu){
+                    /* if(curr_sem <= 2){
+                         $('#sem').html(curr_sem);
+                     }else{
+                         $('#sem').html('Full Year');
+                     }*/
+                     
                      $('#name').html(forms[i].student_name);
                      $('#reg_no').html(forms[i].student);
                      $('#pro_name').html(forms[i].project_name);
@@ -93,6 +133,6 @@ $(document).ready(function(){
 
                  }
              }
-        });
+        }
 });
 </script>
