@@ -55,8 +55,13 @@ class Archive extends CI_Controller {
     }
     
     public function explore_filter(){
-        $term = $this->input->post('filter_cat'); echo $term;
-        $data['res'] = $this->archive_model->explore_filter($term);
+        $term = $this->input->post('filter_cat');
+        $did = $this->archive_model->get_department_id($term);
+        $data['res'] = $this->archive_model->filter_alpha($term);
+        $data['res'] = $this->archive_model->filter_year($term);
+        if(isset($did['department_id'])){
+            $data['res'] = $this->archive_model->filter_department($did['department_id']);
+        }
         $this->load->view('archive/search/filter', $data);
     }
 }
