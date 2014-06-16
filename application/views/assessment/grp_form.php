@@ -11,6 +11,11 @@
         <div class="col-sm-7">
             <p id="type_" class="form-control-static">type</p>
         </div>
+        
+        <label for="inputWeek No" class="col-sm-4 control-label">Semester</label>
+        <div class="col-sm-7">
+            <p id="sem" class="form-control-static">semester</p>
+        </div>
     </div>
     <div class="col-sm-10 col-sm-offset-1 bottom_10"><hr/></div>
     <div class="form-group">

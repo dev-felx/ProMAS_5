@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 ?>
+<script src="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/js/jquery-ui.js"></script>
+<link type="text/css" rel="Stylesheet" href="<?php echo base_url(); ?>assets/jquery/jquery-ui-1.10.3.custom/css/jquery-ui.css" media="screen">
 
 <div class="container-fluid">
     <div class="row">
@@ -198,12 +200,9 @@
                                 <a type="button" href="'+path+'" class="btn btn-primary btn-xs"><span class=" push_right_bit glyphicon glyphicon-download "></span>Download</a>';
                 }
                     
-               $('#check_box').append('<div class=" row-fluid checkbox"><label class="col-sm-6"><input name="chck" class="chk" type="checkbox" value="'+data.documents[i][0]['req_status']+'">'+data.documents[i][0]['name']+'</label>'+button+'</div>');
+               $('#check_box').append('<div class=" row-fluid checkbox"><a class="dc_id" data-doc_id="'+data.documents[i][0]['doc_id']+'"><label class="col-sm-6"><input name="chck" class="chk" type="checkbox" value="'+data.documents[i][0]['req_status']+'">'+data.documents[i][0]['name']+'</label>'+button+'</a></div>');
             }//end for loop
-                
-            for(var i = 0; i < data.documents.length; i++){
-                    $('#select').append('<option class="select_option" value="'+data.documents[i][0].doc_id+'">'+data.documents[i][0].name+'</option>');
-                }
+            
         }else{
             $('#check_box').append('<div class="alert alert-warning text-center">No document has been submitted</div>');    
         }
@@ -273,21 +272,22 @@
             });
     function archive_doc(projct_id){
         $(".chk:checked").each(function() {
-            var doc_id = $(this).val();
+           alert($(".dc_id").data('doc_id'));
+            //var doc_id = $(this).val();
             
-            var function_url = "<?php echo site_url(); ?>/project/publish_project/publish_documents/".concat(doc_id)+"/".concat(projct_id);
-            $.get( function_url).done(function(data) {
-                if(data.status ==='success'){
-                    $('#msg_publish').addClass('text-center');
-                    $('#msg_publish').addClass('text-success');
-                    $('#msg_publish').html('<strong>Project published successfull</strong>');
-                }else if(data.status ==='not valid'){
-                    $('#msg_publish').addClass('text-center');
-                    $('#msg_publish').addClass('text-danger');
-                    $('#msg_publish').html('<strong>Project not published</strong>');
-                }
-
-            },"json");
+           // var function_url = "<?php echo site_url(); ?>/project/publish_project/publish_documents/".concat(doc_id)+"/".concat(projct_id);
+//            $.get( function_url).done(function(data) {
+//                if(data.status ==='success'){
+//                    $('#msg_publish').addClass('text-center');
+//                    $('#msg_publish').addClass('text-success');
+//                    $('#msg_publish').html('<strong>Project published successfull</strong>');
+//                }else if(data.status ==='not valid'){
+//                    $('#msg_publish').addClass('text-center');
+//                    $('#msg_publish').addClass('text-danger');
+//                    $('#msg_publish').html('<strong>Project not published</strong>');
+//                }
+//
+//            },"json");
         });
     }
     
@@ -359,7 +359,9 @@
         return false;
         });
  
-
+$(function(){
+        $( "#datepicker" ).datepicker({ maxDate: "+1y"});
+    });
 
   
 </script>

@@ -154,4 +154,14 @@ class Assessment_model extends CI_Model{
         $this->db->where('project_id', $id);
         return $this->db->update('assess_pres', $data);
     }
+    
+    
+    public function get_stu_form_ave($reg,$sc){
+        $this->db->select('*');
+        $this->db->from('asses_week');
+        $this->db->where(array('student' => $reg,'ignore' => 0,'semester' => $sc));
+        $query = $this->db->get();
+        $result =  $query->result_array();
+        return $result;
+    }
 }

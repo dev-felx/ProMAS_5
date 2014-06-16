@@ -197,7 +197,7 @@ class Publish_project extends CI_Controller{
                 'space_id'=>  $this->session->userdata['space_id']
             );
             $spvs= array();
-            $supervisor=$this->non_student_model->get_non_student($values_non_s);
+            $supervisor=$this->non_student_model->get_non_student($values_non_s); 
             if($supervisor!=NULL){
                 $participant = array(
                         'first_name'=>$supervisor[0]['first_name'],
@@ -209,7 +209,7 @@ class Publish_project extends CI_Controller{
                         'project_profile_id'=>$proj_prof_id,
                         );
                         array_push($spvs, $participant);
-                    $result_spvs = $this->archive_participant_model->add_participants($spvs);
+                $result_spvs = $this->archive_participant_model->add_participants($spvs);
             }else{
                 echo 'Supervisor empty';
             }

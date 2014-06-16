@@ -12,6 +12,14 @@
             <div class="panel-body">
                 <form role="form" action="<?php echo site_url('assessment/assess/gen_csv_sup'); ?>" method="POST">
                     <div class="form-group">
+                        <label>Duration: </label>
+                        <select class="form-control" id="time" name="time">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Full Year</option>
+                       </select>
+                    </div>
+                    <div class="form-group">
                         <label>Export For: </label>
                         <select class="form-control" id="grp" name="grp">
                             <option value="0">All My Groups</option>
@@ -43,6 +51,14 @@
             </div>
             <div class="panel-body">
                 <form role="form" action="<?php echo site_url('assessment/assess/gen_csv_coor'); ?>" method="POST">
+                    <div class="form-group">
+                        <label>Duration: </label>
+                        <select class="form-control" id="time" name="time">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Full Year</option>
+                       </select>
+                    </div>
                     <div class="form-group">
                         <label>Export For: </label>
                         <select class="form-control" id="grp2" name="grp2">

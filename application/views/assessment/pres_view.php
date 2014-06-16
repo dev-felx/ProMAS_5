@@ -9,6 +9,17 @@
                 <h3 class="panel-title text-center">Project Groups</h3>
             </div>
             <div class="panel-body">
+                <?php if($forms != null){ ?>
+                <div class="form-group">
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                          <button id="1" type="button" class="semester btn btn-primary">Semester 1</button>
+                        </div>
+                        <div class="btn-group">
+                          <button id="2" type="button" class="semester btn">Semester 2</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Choose Project</label>
                     <select id="pro" class="form-control">
@@ -24,7 +35,8 @@
                     <ul id="stu" class="list-group">
                       </ul>
                 </div>
-                
+              <?php } ?>  
+                 
             </div>
         </div>
     </div>
@@ -33,15 +45,21 @@
             <div class="panel-heading">
                 <h3 class="panel-title text-center">Presentation Assessment Form</h3>
             </div>
-            <div class="panel-body">
-                <?php $this->load->view('assessment/pres_form'); ?>
+            <div class="panel-body"> 
+                <?php 
+                 if($forms != null){
+                    $this->load->view('assessment/pres_form'); 
+                 } else{ ?>
+                  <div class="alert alert-danger">No forms were found. Either you have not being assigned a group or forms were not created.<br/>Contact the coordinator please</div>
+              <?php } ?>    
+                
             </div>
         </div>
     </div>
 <script>
     var forms = <?php echo json_encode($forms); ?>;
     var curr_form;
-    
+    var curr_sem = 1;
     $(document).ready(function(){ 
         $( "#pro" ).change(function() {
             var id = $(this).val();
@@ -71,7 +89,10 @@
                 $('#pres_form').slideDown();
                 $('#msg_grp').html('');
                 for (var i=0; i < forms.length; i++){
-                    if (forms[i]['project_id'] == id){
+                    if (forms[i]['project_id'] == id && forms[i]['semester'] == curr_sem){
+                        $('#type').html(forms[i].pres_type);
+                        $('#sem').html(forms[i].semester);
+                        
                         $('[name="title"]', '#pres_form').html(forms[i].project_name);
                         $('[name="title"]', '#pres_form').val(forms[i].project_name);
                         
@@ -121,6 +142,14 @@
                     return false;
                 });
             <?php } ?>
+                
+            //semester change
+        $('.semester').click(function(){
+            $('.semester').removeClass('btn-primary');
+            $(this).addClass('btn-primary');
+            curr_sem =  $(this).attr('id');
+            $( "#pro" ).trigger('change');
+        });
     });
        
 </script>

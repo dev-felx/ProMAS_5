@@ -20,7 +20,6 @@ class File extends CI_Controller{
     public function index($message=NULL){
         
         if($this->session->userdata['type']!=='student'){
-            
             $values = array(
                 'creator_id'=>  $this->session->userdata['user_id'],
                 'creator_role'=>  $this->session->userdata['type'],
@@ -496,41 +495,56 @@ class File extends CI_Controller{
                     $path_parts = pathinfo($_FILES["userfile"]["name"]);
                     $extension = $path_parts['extension'];
                     
+                    
+                    
                     if($_POST['group']=='supervisor'){
-                        $creator_id ='67';
+                        $this->load->model('project_model');
+                        $project = $this->project_model->get_project_id($this->session->userdata['group_no']);
+                        $creator_id =$project[0]['supervisor_id'];
                     }else if($_POST['group']=='coordinator'){
-                        $creator_id ='67';
+                        $values_non_c=array(
+                            'roles.role'=>'coordinator',
+                            'space_id'=>  $this->session->userdata['space_id']
+                        );
+                        $this->load->model('non_student_model');
+                        $coordinator=$this->non_student_model->get_non_student($values_non_c);
+                        $creator_id=$coordinator[0]['user_id'];
                     }
                     
                     $data_doc= array(
                         'doc_status' =>1,//status of the document submitted
-                        'name'=>$config['file_name'],
+                        'name'=>$_POST['file_name'],
                         'space_id' => $this->session->userdata['space_id'],
                         'creator_id' => $creator_id,
-                        'creator_role' => $_POST['group'],
+                        'creator_role' =>$_POST['group'],
                         'due_date'=>date("Y-m-d",time()+(60*60*24*30)),
                         'group_no'=>$this->session->userdata['group_no'],
+                        'req_status'=>0,
                         );
+                    $this->load->model('document_model');    
+                    $result = $this->document_model->new_doc($data_doc);
+                    if($result!=NULL){ 
+                        $data_rev = array(
+                            'rev_date_upload'=>date("Y-m-d",time()),
+                            'rev_status'=>0,//status of the revision if approved or not
+                            'rev_file_name'=>$config['file_name'],
+                            'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
+                            'rev_no'=>$rev_no
+                        );
+                        $data_doc_update= array(
+                            'doc_status' =>1,
+                        );
+
+                        $result_update = $this->document_model->update_document($result[0]['rev_id'],$result[0]['doc_id'],$data_doc_update,$data_rev);
+                        if($result_update!=NULL){
+                            $response['status'] = 'success';
+                        }
+
+                        }else{
+                            $response['status'] = 'not_valid';
+
+                        }
                     
-                    $data_rev = array(
-                        'doc_id'=>$_POST['doc_id'],
-                        'rev_date_upload'=>date("Y-m-d",time()),
-                        'rev_status'=>0,//status of the revision if approved or not
-                        'rev_file_name'=>$config['file_name'],
-                        'rev_file_path'=>$config['upload_path'].$config['file_name'].'.'.$extension,
-                        'rev_no'=>$rev_no
-                    );
-                    //controlling number existing version of the document to be only 2
-                    if(($_POST['rev_status']==0)){
-                        $result = $this->document_model->update_document($_POST['rev_id'],$_POST['doc_id'],$data_doc,$data_rev);
-                    }else if($_POST['rev_status']==1){
-                        $result = $this->document_model->insert_new_revision($data_rev);
-                    }
-                    
-                    if($result !== NULL){
-                        $response['status'] = 'success';
-                    }
-            
                     }//end else file uploaded successfully
             
                     }
