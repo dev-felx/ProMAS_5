@@ -12,6 +12,8 @@ class Request_title extends CI_Controller{
     
         $roles = array('superuser','administrator','coordinator','supervisor', 'student');
         check_session_roles($roles);
+        
+        $this->load->model('project_model');
     }
     
     public function index(){
@@ -20,8 +22,9 @@ class Request_title extends CI_Controller{
     }
     
     public function request(){
+        
         $this->form_validation->set_rules("title","Project Title", "required");
-        $this->form_validation->set_rules("desription","Project Description","required");
+        $this->form_validation->set_rules("description","Project Description","required");
         
         if ($this->form_validation->run() == FALSE){
             $response['status'] = 'false';
@@ -33,8 +36,10 @@ class Request_title extends CI_Controller{
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
             );
+            $this->project_model->request_title($this->session->userdata('project_id'), $data);
         }
         
-    }
-        
+        $data['views']= array('project/request_title');    
+        page_load($data);
+    }      
 }
