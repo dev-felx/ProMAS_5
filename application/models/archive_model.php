@@ -110,7 +110,7 @@ class Archive_model extends CI_Model {
     public function explore(){
         $this->db->select('*');
         $this->db->from('project_profile');
-        $this->db->order_by('project_profile_id', 'desc');
+        $this->db->order_by("project_profile_id", "desc");
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -121,6 +121,24 @@ class Archive_model extends CI_Model {
         }else{
             return FALSE;
         }
+    }
+    
+    public function get_academic_year(){
+        $q = "SELECT DISTINCT academic_year FROM project_profile";
+        $query = $this->db->query($q);
+        foreach ($query->result() as $row) {
+            $response[] = $row;
+        }
+        return $response;
+    }
+    
+    public function get_department(){
+        $q = "SELECT DISTINCT shortform FROM departments INNER JOIN project_profile WHERE departments.department_id = project_profile.department_id";
+        $query = $this->db->query($q);
+        foreach ($query->result() as $row) {
+            $response[] = $row;
+        }
+        return $response;
     }
     
     public function explore_filter($ft){
