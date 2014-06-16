@@ -84,13 +84,13 @@ class Add_group extends CI_Controller{
                     foreach($content as $field){
                         $values = array(
                                 'group_no' =>$field['Group no'],
+                                'space_id'=>$this->session->userdata['space_id']
                             );
                         $table = 'student_projects';
                             //checking if the group no exist in the db
                         $result = $this->manage_users->check_value_exists($table, $values);
                         //if the group does not exist
                         if(!$result){
-                           $values['space_id']=$this->session->userdata['space_id'];
                            $result = $this->manage_users->add_group($values);
                         }//end if the value does not exist
                     }//foreach($content as $field)

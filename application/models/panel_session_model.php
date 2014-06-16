@@ -49,6 +49,10 @@ class Panel_session_model extends CI_Model{
             return FALSE;
         }
     }
+    public function delete_member($data){
+            return  $this->db->delete('panel_member', $data); 
+        }
+        
     public function delete_project($data){
             return  $this->db->delete('assess_pres', $data); 
         }

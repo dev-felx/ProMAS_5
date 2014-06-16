@@ -1,7 +1,6 @@
 <div>
     <h4 class="col-sm-3 pull-left"><?php echo $sub_title; ?></h4> 
-    <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/student'); ?>">Manage Students</a>
-    <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/supervisor'); ?>">Manage Supervisors</a>
+    <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/panel_session/members/panel_member'); ?>">Manage Panel Members</a>
     <a class="btn btn-success pull-right" href="<?php echo site_url('manage_users/manage/users/panel_head'); ?>">Manage Panel Heads</a>
 </div>
 <div class="clearfix"></div>
@@ -48,11 +47,11 @@
                     <button id="can_project" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
                     </div>
                 </div>
-                
+                <div class="clearfix"></div>
                 <div class="form-group hidden detail" >
                     <label class="control-label">Panel members</label>
                     <ul id="members" class="list-group"></ul>
-                    <button id='show_member_add' class="btn btn-primary btn-sm col-sm-2"><span class="glyphicon glyphicon-plus"></span>Add Panel members</button>
+                    <button id='show_member_add' class="btn btn-primary btn-sm col-sm-2"><span class=""></span>Change Panel members</button>
                     <div class="clearfix bottom_10"></div>
                     <div class="hidden" id='member_add_cont'>
                     <div class="col-sm-7">
@@ -111,13 +110,14 @@
                         $('#msg_frm').hide();
                         //populate students
                         $('#projects').html('');
+                        $('#members').html('');
                         for(var i = 0; i < data['projects'].length; i++){
                             var x = data['projects'][i].group_no+" - "+data['projects'][i].project_name;
                             $('#projects').append('<li id="'+data['projects'][i].project_id+'" class="project_btn list-group-item">'+x+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
                          }
                          for(var i = 0; i < data['members'].length; i++){
                             var y = data['members'][i].first_name+" "+data['members'][i].last_name;
-                            $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
+                            $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'</li>');
                          }
                          
                          $('#venue').html(data.session_details[0].venue+' '+data.session_details[0].time);      
@@ -191,9 +191,9 @@
          $('#member_add_now').click(function(){
              var member_id = $('#member_add_val').val();
              var panel_head_id = $('#project').val();
-             if(confirm('Warning: ')){
+             if(confirm('Warning: This member will be removed from other panel head group')){
                  var t = "<?php echo site_url(); ?>";
-                 var c = t+"/manage_users/panel_session/add_member";
+                 var c = t+"/manage_users/panel_session/update_member";
                  $.post( c, {member_id: member_id, panel_head_id: panel_head_id}).done(function(data) {
                      if(data.status === 'true'){
                          $('#project').trigger('change');

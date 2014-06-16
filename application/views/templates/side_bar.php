@@ -72,6 +72,7 @@
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel Members' => 'manage_users/panel_session/members/panel_member'),
                                     array('Panel Head' => 'manage_users/manage/users/student'),
                                     array('Archive Users' => 'archive/users'),
                                     
@@ -106,6 +107,7 @@
         'Manage users' => array(
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel Members' => 'manage_users/panel_session/members/panel_member'),
                                     array('Panel Head' => 'manage_users/manage/users/panel_head'),
                                     array('Archive Users' => 'archive/users'),
                                     
