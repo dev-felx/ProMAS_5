@@ -33,6 +33,22 @@ class Panel_session_model extends CI_Model{
         $result = $this->db->insert('assess_pres', $data);
         return $result;
     }
+    public function add_member($data){
+        $result = $this->db->insert('panel_member', $data);
+        return $result;
+    }
+    
+    public function update_member($id,$data){
+        
+        $this->db->where('panel_member_id', $id);
+        $result_doc = $this->db->update('panel_member', $data);
+        
+        if($result_doc){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
     public function delete_project($data){
             return  $this->db->delete('assess_pres', $data); 
         }

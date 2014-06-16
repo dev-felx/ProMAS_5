@@ -49,25 +49,27 @@
                     </div>
                 </div>
                 
-                <div class="clearfix"></div>
-                <div class="form-group hidden detail">
-                    <label>Panel members<span><button id="show_member_add" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
-                    <p id='members' class="form-control-static"></p>
-                    <div class="" id='member_ch_cont'>
+                <div class="form-group hidden detail" >
+                    <label class="control-label">Panel members</label>
+                    <ul id="members" class="list-group"></ul>
+                    <button id='show_member_add' class="btn btn-primary btn-sm col-sm-2"><span class="glyphicon glyphicon-plus"></span>Add Panel members</button>
+                    <div class="clearfix bottom_10"></div>
+                    <div class="hidden" id='member_add_cont'>
                     <div class="col-sm-7">
-                        <select class="hidden" id="member_ch" class="form-control col-sm-7">
+                        <select id="member_add_val" class="form-control col-sm-7">
                             <?php
                                 foreach ($all_members as $value) {
                                    echo '<option value="'.$value['panel_member_id'].'">'.$value[first_name].' '.$value['last_name'];
                                    echo '</option>';
                                 }
-//                            ?>
+                                ?>
                         </select>  
                     </div>
-                            <button id='member_ch_now' class="btn btn-success btn-sm col-sm-1">Change</button>
+                    <button id='member_add_now' class="btn btn-success btn-sm col-sm-1">Add</button>
                     <button id="can_member" class="btn btn-warning btn-sm col-sm-1 push_left_bit">Cancel</button>
                     </div>
                 </div>
+                
                         <div class="clearfix"></div>
                 <div class="form-group hidden detail">
                     <label>Venue and Time<span><button id="show_super_add" class="btn btn-link btn-sm"><span class="glyphicon glyphicon-refresh push_right_bit"></span>Change</button></span></label>
@@ -115,7 +117,7 @@
                          }
                          for(var i = 0; i < data['members'].length; i++){
                             var y = data['members'][i].first_name+" "+data['members'][i].last_name;
-                            $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="project_btn list-group-item">'+y+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
+                            $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
                          }
                          
                          $('#venue').html(data.session_details[0].venue+' '+data.session_details[0].time);      
@@ -145,6 +147,10 @@
             $('#project_add_cont').removeClass('hidden');
             return false;
          });
+         $('#show_member_add').click(function(){
+            $('#member_add_cont').removeClass('hidden');
+            return false;
+         });
          $('#show_super_add').click(function(){
             $('#super_ch_cont').removeClass('hidden');
             $('#super').hide();
@@ -155,18 +161,12 @@
             $('#super').show();
             return false;
          });
-         $('#can_member').click(function(){
-            $('#member_ch_cont').addClass('hidden');
-            $('#members').show();
-            return false;
-         });
-         $('#show_member_add').click(function(){
-            $('#member_ch_cont').removeClass('hidden');
-            $('#members').hide();
-            return false;
-         });
          $('#can_project').click(function(){
            $('#project_add_cont').addClass('hidden');
+            return false;
+         });
+         $('#can_member').click(function(){
+           $('#member_add_cont').addClass('hidden');
             return false;
          });
          
@@ -185,6 +185,22 @@
                  },'json');
              }else{
                 $('#msg_frm').html('<div class="alert alert-danger">Error Adding Project</div>');
+             }
+             return false;
+         });
+         $('#member_add_now').click(function(){
+             var member_id = $('#member_add_val').val();
+             var panel_head_id = $('#project').val();
+             if(confirm('Warning: ')){
+                 var t = "<?php echo site_url(); ?>";
+                 var c = t+"/manage_users/panel_session/add_member";
+                 $.post( c, {member_id: member_id, panel_head_id: panel_head_id}).done(function(data) {
+                     if(data.status === 'true'){
+                         $('#project').trigger('change');
+                     }
+                 },'json');
+             }else{
+                $('#msg_frm').html('<div class="alert alert-danger">Error Adding Member</div>');
              }
              return false;
          });
