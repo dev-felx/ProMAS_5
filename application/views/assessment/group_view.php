@@ -57,6 +57,7 @@
                     if (forms[i]['project_id'] == pro && forms[i]['type'] == id){
                         $('#title').html(forms[i].project_name);
                          $('#type_').html(forms[i].type);
+                         $('#sem').html(forms[i].semester);
                          
                          $('[name="abs"]', '#grp_form').attr('value',forms[i].abs);
                          $('[name="abs"]', '#grp_form').val(forms[i].abs);

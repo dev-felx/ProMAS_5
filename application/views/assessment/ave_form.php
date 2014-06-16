@@ -9,17 +9,22 @@
     <div class="form-group">
         <label for="inputName" class="col-sm-4 control-label">Student Name.</label>
         <div class="col-sm-6">
-            <p id="name" class="form-control-static">Alice Bob</p>
+            <p id="name" class="form-control-static"></p>
         </div>
         
         <label for="inputrReg.No" class="col-sm-4 control-label">Registration Number.</label>
         <div class="col-sm-6">
-            <p id="reg_no" class="form-control-static">Alice Bob</p>
+            <p id="reg_no" class="form-control-static"></p>
         </div>
 
         <label for="inputEnd Date" class="col-sm-4 control-label">Project Title.</label>
         <div class="col-sm-6">
-            <p id="pro_name" class="form-control-static">Project Management and archiving system</p>
+            <p id="pro_name" class="form-control-static"></p>
+        </div>
+        
+        <label for="inputEnd Date" class="col-sm-4 control-label">Semester</label>
+        <div class="col-sm-6">
+            <p id="sem" class="form-control-static"></p>
         </div>
         
      

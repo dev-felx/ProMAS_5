@@ -26,6 +26,11 @@
             <div class="col-sm-6">
                   <p id="wik" class="form-control-static">Project Management and archiving system</p>
             </div>
+        
+        <label for="sem" class="col-sm-4 control-label">Semester.</label>
+            <div class="col-sm-6">
+                  <p id="sem" class="form-control-static">Project Management and archiving system</p>
+            </div>
     </div>
     <div class="col-sm-10 col-sm-offset-1 bottom_10"><hr/></div>
     <div class="clearfix"></div>

@@ -29,9 +29,7 @@ class Assess_panel extends CI_Controller{
         //get data
         $data['forms'] = $this->assessment_model->get_pres($this->session->userdata('user_id'));
         
-        if($data['forms'] ==  NULL){
-            redirect('assessment/assess', 'location');
-        }
+        
         //prepare views
         $data['sub_title'] = 'Presentation Assessment';
         $data['views'] = array('/assessment/pres_view');
