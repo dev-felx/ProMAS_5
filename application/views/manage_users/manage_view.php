@@ -23,7 +23,7 @@
             <?php }else{  
                 if(($user == 'panel_head')){
                 ?>
-            <a type="button" class="btn btn-primary push_right_bit" href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>"  >Manage Panel Sessions</a>
+            <a type="button" class="btn btn-primary push_right_bit" href="<?php echo site_url(); ?>/manage_users/panel_session"  >Manage Panel Sessions</a>
                 <?php } ?>
             <a type="button" class="btn btn-success push_right_bit" href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>"  >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></a>
             <?php } ?>
