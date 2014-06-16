@@ -22,12 +22,7 @@
                     var response_brought = $("#response_brought");
                     var dataString = "search_key=" + search_key;
 		
-                    if(search_key.length > 30) {
-			$("#hide_or_show_search_results_box").show();
-			$("#search_key").val('');
-			$("#response_brought").html('<font color="red">Search term must not be greater than 30 characters.</font>');
-                    }
-                    else if(search_key.length < 1) {
+                    if(search_key.length < 1) {
 			$("#hide_or_show_search_results_box").hide();
                     }
                     else if(search_key.length > 0 && search_key.length <= 30) {	
@@ -45,13 +40,8 @@
                             }
 			}); 
                     }
-                    else {
-                        $("#response_brought").html('<font color="red">Search term must not be less than 3 or greater than 30 characters.</font>');
-                    }
                     return false;
-                });
-                
-               
+                });  
             });
         </script>
     </head>

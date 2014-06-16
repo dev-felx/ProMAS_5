@@ -90,6 +90,23 @@ class Archive_model extends CI_Model {
         }
     }
     
+    public function abst($id){
+        $this->db->select('*');
+        $this->db->from('archive_documents'); 
+        $this->db->where('project_profile_id', $id);
+        $this->db->where('document_name', 'Abstract');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            $response['error'] = 'Abstract not Found';
+            return $response;
+        }
+    }
+    
     public function explore(){
         $this->db->select('*');
         $this->db->from('project_profile');

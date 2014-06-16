@@ -2,7 +2,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div id="leftside" class="col-sm-2">
-                    <img src="<?php echo base_url(); ?>assets/images/banner.jpg" alt="sProMAS Archive" class="img-rounded col-sm-12">
+                    <a href="<?php echo site_url('archive/archive/search'); ?>"><img src="<?php echo base_url(); ?>assets/images/banner.jpg" alt="sProMAS Archive" class="img-rounded col-sm-12"></a>
                 </div>
                 <div id="maincon" class="col-sm-8">
                     <?php foreach($result as $v){?>
@@ -20,9 +20,17 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div class="tab-pane active" id="abstract">
-                            <object data="<?php echo base_url(); ?>files/uploads/documents/prospectus.pdf" type="application/pdf" width="100%" height="70%">
-                                <p>It appears you don't have a PDF plugin for this browser. <a href="">click here to download the PDF file.</a></p>
-                            </object>
+                            <?php
+                                if(!isset($abst['error'])){
+                                foreach ($abst as $a){?>
+                                    <object data="<?php print $a->document_path ?>" type="application/pdf" width="100%" height="70%">
+                                        <p>It appears you don't have a PDF plugin for this browser. <a href="<?php print $a->document_path ?>">click here to download the PDF file.</a></p>
+                                    </object>
+                                <?php
+                                } } else {?>
+                                <p><?php echo $abst['error']?></p>
+                            <?php }
+                            ?>
                         </div>
                         <div class="tab-pane" id="details">
                             <p>This project was done during the academic year, under the department of 

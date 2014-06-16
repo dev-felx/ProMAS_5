@@ -43,6 +43,7 @@ class Archive extends CI_Controller {
         $data['result'] = $this->archive_model->profile($id);
         $data['part'] = $this->archive_model->participants($id);
         $data['docu'] = $this->archive_model->documents($id);
+        $data['abst'] = $this->archive_model->abst($id);
         $this->load->view('archive/search/profile_view', $data);
     }
 
