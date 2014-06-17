@@ -6,19 +6,57 @@
 <hr/>
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <h3 class="panel-title">Session Details</h3>
+    <h3 class="panel-title text-center">Session Details</h3>
   </div>
   <div class="panel-body">
-      <form>
+      <form  class="form-horizontal" role="form">
           <div class="form-group">
-                <label class="col-sm-2 control-label text-right">Panel Head</label>
-                <div class="col-sm-10">
+                <label class="col-sm-3 control-label text-right">Panel Head</label>
+                <div class="col-sm-9">
                   <p class="form-control-static text-left">Hakit jahidk</p>
                 </div>
           </div>
           <div class="form-group">
-              <label>Venue</label>
-              <div>dbvksbdvlakj adlbvjaslbvl</div>
+                <label class="col-sm-3 control-label text-right">Coordinator</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static text-left">Hakit jahidk</p>
+                </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-3 control-label text-right">Venue</label>
+              <div class="col-sm-9">
+                  <p class="form-control-static text-left">Hakit jahidk</p>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-3 control-label text-right">Time</label>
+              <div class="col-sm-9">
+                  <p class="form-control-static text-left">Hakit jahidk</p>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-3 control-label text-right">Panel Members</label>
+              <div class="col-sm-8">
+                <ul class="list-group">
+                  <li class="list-group-item">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                  <li class="list-group-item">Porta ac consectetur ac</li>
+                  <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-3 control-label text-right">Groups Assigned</label>
+              <div class="col-sm-8">
+                <ul class="list-group">
+                  <li class="list-group-item">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                  <li class="list-group-item">Porta ac consectetur ac</li>
+                  <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+              </div>
           </div>
       </form>
   </div>
