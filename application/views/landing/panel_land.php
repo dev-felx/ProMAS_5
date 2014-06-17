@@ -11,10 +11,12 @@
     <h3 class="panel-title text-center">Session Details</h3>
   </div>
   <div class="panel-body">
+       <?php if(isset($sess_head)){ ?>
       <form  class="form-horizontal" role="form">
           <div class="form-group">
               <label class="col-sm-3 control-label text-right">Panel Head</label>
                 <div class="col-sm-9">
+                 
                   <p class="form-control-static text-left"><?php echo $sess_head[0]['first_name'].' '.$sess_head[0]['last_name'].str_repeat('&nbsp;', 20).'Email: '.$sess_head[0]['username']; ?></p>
                 </div>
           </div>
@@ -65,5 +67,8 @@
               </div>
           </div>
       </form>
+      <?php }else{ ?>
+      <p class="text-warning">You have no session set yet</p>
+      <?php }?>
   </div>
 </div>
