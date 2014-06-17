@@ -19,7 +19,7 @@ class Panel_session extends CI_Controller{
         //prepare data
         $data['projects'] = $this->project_model->get_all_project(array('space_id'=>$this->session->userdata('space_id')));
         $data['panel_heads'] = $this->manage_users->get_non_student_no_department(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'panel_head'));
-        $data['all_members'] = $this->panel_session_model->get_members(array('panel_member_id >'=>0));
+        $data['all_members'] = $this->panel_session_model->get_members(array('panel_member_id >'=>0,'space_id'=>$this->session->userdata('space_id')));
         //prepare views
         $data['views'] = array('manage_users/panel_session_view');
         $data['sub_title'] = 'Manage Panel Session';
@@ -28,9 +28,9 @@ class Panel_session extends CI_Controller{
     
     public function get_session_details(){
        $id = $_POST['id'];
-       $response['projects'] = $this->panel_session_model->get_projects(array('owner'=>$id));
-       $response['members'] = $this->panel_session_model->get_members(array('panel_head_id'=>$id));
-       $response['session_details'] = $this->panel_session_model->get_session_details(array('panel_head_id'=>$id));
+       $response['projects'] = $this->panel_session_model->get_projects(array('owner'=>$id,'space_id'=>$this->session->userdata('space_id')));
+       $response['members'] = $this->panel_session_model->get_members(array('panel_head_id'=>$id,'space_id'=>$this->session->userdata('space_id')));
+       $response['session_details'] = $this->panel_session_model->get_session_details(array('panel_head_id'=>$id,'space_id'=>$this->session->userdata('space_id')));
         
        $response['status'] = 'true';
        header('Content-type: application/json');
@@ -46,18 +46,19 @@ class Panel_session extends CI_Controller{
            );
        $data_exist = array(
            'panel_head_id'=>$panel_head,
+           'space_id'=>$this->session->userdata('space_id')
            );
         $table = 'panel_session';
         //checking if the user exist in the db
         $result_exist = $this->manage_users->check_value_exists($table, $data_exist);
         if(!$result_exist){
             $data['panel_head_id']=$panel_head;
+            $data['space_id']=$this->session->userdata('space_id');
             $result = $this->panel_session_model->add_session_details($data);
             if($result!=NULL){
                 $response['status'] = 'true';
-            }  else {
+            }else{
                $response['status'] = 'false';
-
             }
         }else{
             $result = $this->panel_session_model->update_session_details($panel_head,$data);
@@ -101,11 +102,9 @@ class Panel_session extends CI_Controller{
        }else{
            $response['status'] = 'fail';
        }   
-           
         header('Content-type: application/json');
         exit(json_encode($response));
-       
-   }
+    }
    
    public function update_member(){
         $member_id = $_POST['member_id'];
@@ -146,6 +145,45 @@ class Panel_session extends CI_Controller{
         page_load($data);
     }// end function users
     
+    public function notify(){
+        $panel_head_id = $_POST['panel_head_id'];
+        
+        $members = $this->panel_session_model->get_members(array('panel_head_id'=>$panel_head_id,'space_id'=>$this->session->userdata('space_id')));
+            
+        
+                   
+        foreach ($members as $value){
+            
+            $subject = "ProMAS | Account registration";
+                       $message = " 
+                            <html>
+                            <head>
+                            <title>ProMAS | Account Registration</title>
+                            </head>
+                            <body>
+                                    <h4>Hello $fname,</h4>
+                                     <p>Use credentials below to login into the system and complete registration</p>   
+                                     <p>Username : $email </p>   
+                                     <p>Password : $lname  </p>
+                                     <p>Click the link below</p>    
+                                     <a href='$site_url/access/login'>Login into promas</a>
+                                    <p>Sincerely,</p>
+                                    <p>ProMAS admin.</p>
+                            </body>
+                            </html>";
+            $send_email_member =  send($from,$value['email'],$subject,$message);
+        }
+        
+        if($send_email_panel && $send_email_member){
+            $response['status'] = 'true';
+        }else{
+            $response['status'] = 'fail';
+        }
+        header('Content-type: application/json');
+        exit(json_encode($response));
+    }
+
+
     public function add_member($message=NULL){
         $values = array(
                 'student_projects.project_id >'=>0, 
