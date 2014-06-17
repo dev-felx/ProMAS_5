@@ -3,6 +3,7 @@
     <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/student'); ?>">Manage Students</a>
     <a class="btn btn-success pull-right push_left_bit" href="<?php echo site_url('manage_users/manage/users/supervisor'); ?>">Manage Supervisors</a>
     <a class="btn btn-success pull-right" href="<?php echo site_url('manage_users/manage/users/panel_head'); ?>">Manage Panel Heads</a>
+    <a class="btn btn-success pull-right" href="<?php echo site_url('manage_users/manage/users/panel_head'); ?>">Manage Panel Members</a>
 </div>
 <div class="clearfix"></div>
 <hr/>
