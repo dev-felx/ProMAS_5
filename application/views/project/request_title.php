@@ -18,18 +18,68 @@
                 <h3 class="panel-title text-center">Fill In your Project Details</h3>
             </div>
             <div class="panel-body">
-                <form role="form" action="<?php echo site_url(); ?>/project/request_title/request" method="POST">
+                
+                    <?php if($this->session->userdata('type') == 'coordinator' || $this->session->userdata('type') == 'supervisor'){?>
                     <div class="form-group">
+                        <label class="control-label">Select a project group</label>
+                        <select class="form-control" name="project" id="project">
+                            <option></option>
+                            <?php 
+                                foreach ($projects as $value) {
+                                    echo '<option value="'.$value['project_id'].'">Group ';
+                                    echo $value['group_no'].' - '.$value['title'];
+                                    echo '</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group hidden detail">
                         <label>Project Title</label>
-                        <input type="text" name="title" class="form-control" placeholder="Enter project Title...">
+                        <p id="title" class="form-control-static"></p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hidden detail">
                         <label>Project Description</label>
-                        <textarea name="description" class="form-control" rows="4" placeholder="Enter project Title..."></textarea>
+                        <p id="desc" class="form-control-static"></p>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                    <?php }elseif ($this->session->userdata('type') == 'student') {?>
+                        <form role="form" action="<?php echo site_url(); ?>/project/request_title/update" method="POST">
+                            
+                            <div class="form-group detail">
+                                <label>Project Title</label>
+                                <input type="text" name="title" class="form-control" value="<?php echo $title['title']; ?>" placeholder="<?php echo $title['title']; ?>">
+                            </div>
+                            <div class="form-group detail">
+                                <label>Project Description</label>
+                                <textarea name="description" class="form-control" rows="4" placeholder="Enter project Title..."><?php echo $title['description']; ?></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                <?php   } ?>
+                
             </div>
         </div>
     </div>  
 </div>
+<script>
+  $('#project').change(function(){
+            var id = $(this).val();
+            $('.detail').addClass('hidden'); 
+            $('#msg_frm').show();
+            $('#msg_frm').html('<img style="height: 30px;" class="col-sm-offset-5 push_right_bit" src="<?php echo base_url(); ?>/assets/images/ajax-loader.gif">Fetching Details....');
+            setTimeout(function(){
+                 var t = "<?php echo site_url(); ?>";
+                 var c = t+"/project/request_title/get_details/"+id;
+                 $.post(c).done(function(data) {
+                     if(data.status === 'true'){
+                        // alert(data.pro.title);
+                        //populate students
+                        $('#title').html(data.pro.title);
+                        $('#desc').html(data.pro.description);      
+                        $('.detail').removeClass('hidden');
+                     }else{
+                        $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
+                     }
+                 },'json');
+             },400);
+        });
+        </script>

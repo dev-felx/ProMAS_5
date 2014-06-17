@@ -17,11 +17,15 @@ class Request_title extends CI_Controller{
     }
     
     public function index(){
-        $data['views']= array('project/request_title');    
+        $data['views'] = array('project/request_title');
+        $data['projects'] = $this->project_model->get_all_project(array('space_id'=>$this->session->userdata('space_id')));
+        if($this->session->userdata('type') == 'student'){
+            $data['title'] = $this->project_model->get_title($this->session->userdata('project_id'));
+        }
         page_load($data);
     }
     
-    public function request(){
+    public function update(){
         
         $this->form_validation->set_rules("title","Project Title", "required");
         $this->form_validation->set_rules("description","Project Description","required");
@@ -36,10 +40,18 @@ class Request_title extends CI_Controller{
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
             );
-            $this->project_model->request_title($this->session->userdata('project_id'), $data);
+            $this->project_model->update_title($this->session->userdata('project_id'), $data);
         }
         
+        $data['title'] = $this->project_model->get_title($this->session->userdata('project_id'));
         $data['views']= array('project/request_title');    
         page_load($data);
-    }      
+    }
+    
+    public function get_details($id){
+        $data['pro'] = $this->project_model->get_title($id);
+        $data['status'] = 'true';
+        header('Content-type: application/json');
+        exit(json_encode($data));
+    }    
 }
