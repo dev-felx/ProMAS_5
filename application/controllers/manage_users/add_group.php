@@ -150,7 +150,7 @@ class Add_group extends CI_Controller{
                                     </html>";
                                 //sending email
                                 $send_email =  send($from,$to,$subject,$message);
-                                if($send_email == TRUE){
+                            if($send_email == TRUE){
                                 $data['results'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Registration no'=> $field['Registration no']);
                                 $i++;
                             }
