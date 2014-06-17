@@ -27,6 +27,7 @@ class Assess extends CI_Controller{
         }
         
         //load view
+        $data['title'] = 'sProMAS | Assessment';
         page_load($data);
     }
     
@@ -119,6 +120,7 @@ class Assess extends CI_Controller{
         //prepare views
         $data['sub_title'] = 'Weekly Assessment';
         $data['views'] = array('/assessment/assess_view','/assessment/weekly_view');
+        $data['title'] = 'sProMAS | Assessment';
         //load view
         page_load($data);
         
@@ -144,6 +146,7 @@ class Assess extends CI_Controller{
         //prepare views
         $data['sub_title'] = 'Report Assessment';
         $data['views'] = array('/assessment/assess_view','/assessment/group_view');
+        $data['title'] = 'sProMAS | Assessment';
         //load view
         page_load($data);
         
@@ -168,6 +171,7 @@ class Assess extends CI_Controller{
         //prepare views
         $data['sub_title'] = 'Average for weekly Assessment';
         $data['views'] = array('/assessment/ave_view');
+        $data['title'] = 'sProMAS | Assessment';
         //load view
         page_load($data);
         
@@ -244,6 +248,7 @@ class Assess extends CI_Controller{
         
         $data['sub_title'] = 'Export Assessment Documents';
         $data['views'] = array('/assessment/export_view');
+        $data['title'] = 'sProMAS | Assessment';
         //load view
         page_load($data);
     }

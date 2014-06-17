@@ -78,7 +78,7 @@ class Home extends CI_Controller{
             page_load($data);
         }else if($this->session->userdata['type']=='panel_head'){
             
-            redirect('assessment/assess_panel/pres', 'location');
+            redirect('assessment/assess_panel/', 'location');
             
         }else{
            

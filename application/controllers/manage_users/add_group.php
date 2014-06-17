@@ -83,7 +83,8 @@ class Add_group extends CI_Controller{
                 if($user == 'student'){
                     foreach($content as $field){
                         $values = array(
-                                'group_no' =>$field['Group no']
+                                'group_no' =>$field['Group no'],
+                                'space_id'=>$this->session->userdata['space_id']
                             );
                         $table = 'student_projects';
                             //checking if the group no exist in the db

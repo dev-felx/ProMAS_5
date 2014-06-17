@@ -65,9 +65,10 @@ class Login extends CI_Controller{
     
     
     public function non_student_login($username,$password){
+       
         // sets the session variables upon positive results from db         
         $data['user_data'] = $this->manage_users->match_non_student($username,$password);
-            
+             
         $roles = array();
 
         for($i = 0; $i < count($data['user_data']);$i++){
@@ -87,6 +88,7 @@ class Login extends CI_Controller{
                    'roles' => $roles,
                     'space_id' => $data['user_data'][0]['space_id']
                     );
+                
                 if($user_data['type'] == 'superuser'){
                     $this->session->set_userdata($user_data);
                     
@@ -102,7 +104,7 @@ class Login extends CI_Controller{
                    }//end $user_data['type'] == super 
                    
                    //if non student user has completed registration
-                   else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor')) && $user_data['status']== 1){
+                   else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor'||'panel_head')) && $user_data['status']== 1){
                         $this->session->set_userdata($user_data);
                         //creating cookie or renewing cookie
                         if(($_POST['keep_logged'] == 1) || isset($_COOKIE['remember_promas']) ){
@@ -114,7 +116,7 @@ class Login extends CI_Controller{
                    }//end $user_data['type'] == admin||coordinator||supervisor 
                    
                 //if non-student user has not completed registration
-                else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor')) && $user_data['status']== 0){
+                else if(($user_data['type'] == ('administrator'||'coordinator'||'supervisor'||'panel_head')) && $user_data['status']== 0){
                         $this->session->set_userdata($user_data);
                         //creating cookie or renewing cookie
                         if(($_POST['keep_logged'] == 1) || isset($_COOKIE['remember_promas'])){

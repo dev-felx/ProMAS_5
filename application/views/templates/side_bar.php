@@ -32,7 +32,7 @@
 
     //for superuser
     $accordion['superuser'] = array(
-        'Users' => array(
+        'Manage users' => array(
                                     array('Administrator' => 'manage_users/manage/users/administrator'),
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
@@ -72,6 +72,7 @@
                                     array('Coordinator' => 'manage_users/manage/users/coordinator'),
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel Members' => 'manage_users/panel_session/members/panel_member'),
                                     array('Panel Head' => 'manage_users/manage/users/student'),
                                     array('Archive Users' => 'archive/users'),
                                     
@@ -106,6 +107,7 @@
         'Manage users' => array(
                                     array('Supervisor' => 'manage_users/manage/users/supervisor'),
                                     array('Student' => 'manage_users/manage/users/student'),
+                                    array('Panel Members' => 'manage_users/panel_session/members/panel_member'),
                                     array('Panel Head' => 'manage_users/manage/users/panel_head'),
                                     array('Archive Users' => 'archive/users'),
                                     
@@ -182,6 +184,7 @@
     $accordion['panel_head'] = array(
         
        'Assesment' => array(
+                                    array('Session' => 'home'),
                                     array('Presentation' => 'assessment/assess_panel/pres'),
                         )
         
