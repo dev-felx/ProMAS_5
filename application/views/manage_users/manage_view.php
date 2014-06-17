@@ -86,9 +86,6 @@
             </table>
     </div>
     </div>
-    <div class="row">
-        <div style="text-align:center"><?php// echo $links; ?></div>
-    </div>
     
 </div>
   <script>
