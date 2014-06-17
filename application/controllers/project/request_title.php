@@ -20,7 +20,7 @@ class Request_title extends CI_Controller{
         $data['views'] = array('project/request_title');
         $data['projects'] = $this->project_model->get_all_project(array('space_id'=>$this->session->userdata('space_id')));
         if($this->session->userdata('type') == 'student'){
-            $data['title'] = $this->project_model->get_title($this->session->userdata('project_id'));
+            $data['pro_t'] = $this->project_model->get_title($this->session->userdata('project_id'));
         }
         page_load($data);
     }
@@ -43,7 +43,7 @@ class Request_title extends CI_Controller{
             $this->project_model->update_title($this->session->userdata('project_id'), $data);
         }
         
-        $data['title'] = $this->project_model->get_title($this->session->userdata('project_id'));
+        $data['pro_t'] = $this->project_model->get_title($this->session->userdata('project_id'));
         $data['views']= array('project/request_title');    
         page_load($data);
     }

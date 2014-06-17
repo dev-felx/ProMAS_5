@@ -46,11 +46,11 @@
                             
                             <div class="form-group detail">
                                 <label>Project Title</label>
-                                <input type="text" name="title" class="form-control" value="<?php echo $title['title']; ?>" placeholder="<?php echo $title['title']; ?>">
+                                <input type="text" name="title" class="form-control" value="<?php echo $pro_t['title']; ?>" placeholder="<?php echo $pro_t['title']; ?>">
                             </div>
                             <div class="form-group detail">
                                 <label>Project Description</label>
-                                <textarea name="description" class="form-control" rows="4" placeholder="Enter project Title..."><?php echo $title['description']; ?></textarea>
+                                <textarea name="description" class="form-control" rows="4" placeholder="Enter project Title..."><?php echo $pro_t['description']; ?></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
