@@ -150,10 +150,9 @@ class Add_group extends CI_Controller{
                                     </html>";
                                 //sending email
                                 $send_email =  send($from,$to,$subject,$message);
-                            if($send_email == TRUE){
+                            
                                 $data['results'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Registration no'=> $field['Registration no']);
                                 $i++;
-                            }
                             }   
                         }else{
                                 $data['exists'][$j] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Registration no'=> $field['Registration no']);
@@ -225,12 +224,9 @@ class Add_group extends CI_Controller{
                                     //sending email
                                     $send_email =  send($from,$to,$subject,$message);
                             
-                                    if($send_email == TRUE){
                                         $data['results'][$i] = array('Firstname'=> $field['Firstname'],'Lastname'=>$field['Lastname'],'Username'=> $field['Email']);
                                         $i++;
 
-                                        }// end if $send_email == TRUE
-                            
                                     }// end if $userdata!=NULL if user was added successfully 
                                     
                                     
