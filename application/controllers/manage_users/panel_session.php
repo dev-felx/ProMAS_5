@@ -149,32 +149,52 @@ class Panel_session extends CI_Controller{
         $panel_head_id = $_POST['panel_head_id'];
         
         $members = $this->panel_session_model->get_members(array('panel_head_id'=>$panel_head_id,'space_id'=>$this->session->userdata('space_id')));
-            
-        
-                   
-        foreach ($members as $value){
-            
-            $subject = "ProMAS | Account registration";
-                       $message = " 
+        $panel_head = $this->manage_users->get_non_student_no_department(array('non_student_users.space_id'=>$this->session->userdata('space_id'),'roles.role'=> 'panel_head','non_student_users.user_id'=>$panel_head_id));
+         
+        $from = "admin@promas.com";
+        $site_url = site_url();
+        $to = $panel_head[0]['email'];
+        $fname = $panel_head[0]['first_name'];
+        $user_id= $panel_head_id;
+        $subject = "sProMAS | Panel head notification email";
+        $message = " 
                             <html>
                             <head>
-                            <title>ProMAS | Account Registration</title>
+                            <title>sProMAS | Panel Head notification email</title>
                             </head>
                             <body>
                                     <h4>Hello $fname,</h4>
-                                     <p>Use credentials below to login into the system and complete registration</p>   
-                                     <p>Username : $email </p>   
-                                     <p>Password : $lname  </p>
-                                     <p>Click the link below</p>    
-                                     <a href='$site_url/access/login'>Login into promas</a>
+                                     <p>Use the following link to view your panel session details </p>    
+                                     <a href='$site_url/assessment/assess_panel/index/$user_id'>View panel session details</a>
                                     <p>Sincerely,</p>
-                                    <p>ProMAS admin.</p>
+                                    <p>sProMAS admin.</p>
+                            </body>
+                            </html>";
+        $send_email_panel =  send($from,$to,$subject,$message);
+                   
+        foreach ($members as $value){
+            $from = "admin@promas.com";
+            $site_url = site_url();
+            $fname = $value['first_name'];
+            $user_id= $value['panel_member_id'];
+            $subject = "sProMAS | Panel member notification email";
+            $message = " 
+                            <html>
+                            <head>
+                            <title>sProMAS | Panel member notification email</title>
+                            </head>
+                            <body>
+                                    <h4>Hello $fname,</h4>
+                                     <p>Use the following link to view your panel session details </p>    
+                                     <a href='$site_url/assessment/no_session/sess_mem/$user_id'>View panel session details</a>
+                                    <p>Sincerely,</p>
+                                    <p>sProMAS admin.</p>
                             </body>
                             </html>";
             $send_email_member =  send($from,$value['email'],$subject,$message);
         }
         
-        if($send_email_panel && $send_email_member){
+        if($send_email_member && $send_email_panel){
             $response['status'] = 'true';
         }else{
             $response['status'] = 'fail';
