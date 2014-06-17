@@ -49,19 +49,22 @@ class Assess extends CI_Controller{
             );
             
             $data2['type'] = 'Project proposal';
+            $data2['semester'] = 1;
             $this->assessment_model->new_group($data2);
             
             $data2['type'] = 'Project progress report';
+            $data2['semester'] = 1;
             $this->assessment_model->new_group($data2);
             
             $data2['type'] = 'Final Project report';
+            $data2['semester'] = 2;
             $this->assessment_model->new_group($data2);
             
             
             $students = $this->assessment_model->get_project_stu($value['project_id']);
             //create weekly forms 
             foreach ($students as $value2) {
-                for($i = $st; $i <= 30;$i = $i + $stepper){
+                for($i = $st; $i <= 15;$i = $i + $stepper){
                     if($i == 0){
                         continue;
                     }
@@ -72,7 +75,27 @@ class Assess extends CI_Controller{
                         'project_name' => $value['title'],
                         'owner' => $this->session->userdata('user_id'),
                         'week_no' => $i,
-                        'space_id' => $this->session->userdata('space_id')
+                        'space_id' => $this->session->userdata('space_id'),
+                         'semester' => 1,
+                    );
+                    $res = $this->assessment_model->new_weekly($data);
+                }
+            }
+            
+            foreach ($students as $value2) {
+                for($i = $st; $i <= 15;$i = $i + $stepper){
+                    if($i == 0){
+                        continue;
+                    }
+                    $data = array(
+                        'student' => $value2['registration_no'],
+                        'student_name' => ($value2['first_name'].' '.$value2['last_name']),
+                        'project_id' => $value['project_id'],
+                        'project_name' => $value['title'],
+                        'owner' => $this->session->userdata('user_id'),
+                        'week_no' => $i,
+                        'space_id' => $this->session->userdata('space_id'),
+                        'semester' => 2,
                     );
                     $res = $this->assessment_model->new_weekly($data);
                 }
@@ -141,50 +164,7 @@ class Assess extends CI_Controller{
         if($data['forms'] ==  NULL){
             redirect('assessment/assess', 'location');
         }
-        //compute the average
-        $ave_forms = array();
-        foreach ($data['projects'] as $value) {
-            $students = $this->assessment_model->get_project_stu($value['project_id']);
 
-            foreach ($students as $sub_value) {
-                $student_forms = $this->assessment_model->get_stu_form($sub_value['registration_no']);
-                //average fields
-                $form = array(
-                    'student' => null,
-                    'student_name' => null,
-                    'project_id' => null,
-                    'project_name' => null,
-                    'initiative' => 0,
-                    'understand' => 0,
-                    'contribution' => 0,
-                    'qna' => 0,
-                );
-                
-                //sum all
-                foreach ($student_forms as $sub_sub_value) {
-                    $form['student'] = $sub_sub_value['student'];
-                    $form['student_name'] = $sub_sub_value['student_name']; 
-                    $form['project_id'] = $sub_sub_value['project_id']; 
-                    $form['project_name'] = $sub_sub_value['project_name']; 
-                    $form['initiative'] =  $form['initiative'] + $sub_sub_value['initiative'];
-                    $form['understand'] =  $form['understand'] + $sub_sub_value['understand'];
-                    $form['contribution'] = $form['contribution'] + $sub_sub_value['contribution'];
-                    $form['qna'] = $form['qna'] + $sub_sub_value['qna'];
-                }
-                
-                //average
-                $num  = count($student_forms);
-                $form['initiative'] =  $form['initiative'] / $num;
-                $form['understand'] =  $form['understand'] / $num;
-                $form['contribution'] = $form['contribution'] / $num;
-                $form['qna'] = $form['qna'] / $num;
-                    
-                array_push($ave_forms, $form);
-            }
-            
-            
-        }
-        $data['forms'] = $ave_forms;
         //prepare views
         $data['sub_title'] = 'Average for weekly Assessment';
         $data['views'] = array('/assessment/ave_view');
@@ -286,9 +266,9 @@ class Assess extends CI_Controller{
                 foreach ($students as $sub_value) {
                     $x = implode(',',array_values($sub_value));
                     $x = $x.','.$value['group_no'].','.$value['title'];
-                    $y = $this->get_stu_week_total($sub_value['registration_no']);
-                    $z = $this->get_stu_report_total($value['project_id']);
-                    $k = $this->get_stu_pres_total($value['project_id']);
+                    $y = $this->get_stu_week_total($sub_value['registration_no'],$_POST['time']);
+                    $z = $this->get_stu_report_total($value['project_id'],$_POST['time']);
+                    $k = $this->get_stu_pres_total($value['project_id'],$_POST['time']);
                     $m = $y+$z+$k;
                     $x = $x.','.$y.','.$z.','.$k.','.$m;
                     fputs($fp, $x);
@@ -316,9 +296,9 @@ class Assess extends CI_Controller{
                 foreach ($students as $sub_value) {
                     $x = implode(',',array_values($sub_value));
                     $x = $x.','.$value['group_no'].','.$value['title'];
-                    $y = $this->get_stu_week_total($sub_value['registration_no']);
-                    $z = $this->get_stu_report_total($value['project_id']);
-                    $k = $this->get_stu_pres_total($value['project_id']);
+                    $y = $this->get_stu_week_total($sub_value['registration_no'],$_POST['time']);
+                    $z = $this->get_stu_report_total($value['project_id'],$_POST['time']);
+                    $k = $this->get_stu_pres_total($value['project_id'],$_POST['time']);
                     $m = $y+$z+$k;
                     $x = $x.','.$y.','.$z.','.$k.','.$m;
                     fputs($fp, $x);
@@ -329,8 +309,13 @@ class Assess extends CI_Controller{
         fclose($fp);
     }
     
-      public function get_stu_week_total($reg){
-          $student_forms = $this->assessment_model->get_stu_form($reg);
+      public function get_stu_week_total($reg,$sc){
+          if($sc <= 2){
+                    $student_forms = $this->assessment_model->get_stu_form_ave($reg,$sc);
+                }else{
+                    $student_forms = $this->assessment_model->get_stu_form($reg);
+                }
+
                 //average fields
                 $form = array(
                     'initiative' => 0,
@@ -370,10 +355,17 @@ class Assess extends CI_Controller{
       }
       
       
-      public function get_stu_report_total($project_id) {
+      public function get_stu_report_total($project_id,$sc) {
           $this->db->select('abs,ack,t_content,intro,main,ref');
           $this->db->from('assess_groups');
-          $this->db->where(array('project_id' => $project_id,'type' => 'Final Project report'));
+          if($sc == 1){
+                $this->db->where(array('project_id' => $project_id,'type' => 'Project proposal'));
+          }else if($sc == 2){
+                $this->db->where(array('project_id' => $project_id,'type' => 'Final Project report'));
+          }else{
+                $this->db->where(array('project_id' => $project_id));
+          }
+          
           $query = $this->db->get();
           $result =  $query->result_array();
           $total = 0;
@@ -386,10 +378,16 @@ class Assess extends CI_Controller{
    
       }
       
-      public function get_stu_pres_total($project_id){
+      public function get_stu_pres_total($project_id,$sc){
           $this->db->select('im,pq,ptc,sc,sf');
           $this->db->from('assess_pres');
-          $this->db->where(array('project_id' => $project_id));
+          if($sc == 1){
+                $this->db->where(array('project_id' => $project_id,'semester' => 1));
+          }else if($sc == 2){
+              $this->db->where(array('project_id' => $project_id,'semester' => 2));
+          }else{
+              $this->db->where(array('project_id' => $project_id));
+          }
           $query = $this->db->get();
           $result =  $query->result_array();
           $total = 0;
@@ -399,6 +397,63 @@ class Assess extends CI_Controller{
             }
           }
             return $total;
+      }
+      
+      
+      public function calc_ave() {
+        $data['projects'] = $this->announcement_model->get_grps($this->session->userdata('user_id'));
+        //compute the average
+        $ave_forms = array();
+        foreach ($data['projects'] as $value) {
+            $students = $this->assessment_model->get_project_stu($value['project_id']);
+
+            foreach ($students as $sub_value) {
+                if($_POST['sc'] <= 2){
+                    $student_forms = $this->assessment_model->get_stu_form_ave($sub_value['registration_no'],$_POST['sc']);
+                }else{
+                    $student_forms = $this->assessment_model->get_stu_form($sub_value['registration_no']);
+                }
+                //average fields
+                $form = array(
+                    'student' => null,
+                    'student_name' => null,
+                    'project_id' => null,
+                    'project_name' => null,
+                    'initiative' => 0,
+                    'understand' => 0,
+                    'contribution' => 0,
+                    'qna' => 0,
+                );
+                
+                //sum all
+                foreach ($student_forms as $sub_sub_value) {
+                    $form['student'] = $sub_sub_value['student'];
+                    $form['student_name'] = $sub_sub_value['student_name']; 
+                    $form['project_id'] = $sub_sub_value['project_id']; 
+                    $form['project_name'] = $sub_sub_value['project_name']; 
+                    $form['initiative'] =  $form['initiative'] + $sub_sub_value['initiative'];
+                    $form['understand'] =  $form['understand'] + $sub_sub_value['understand'];
+                    $form['contribution'] = $form['contribution'] + $sub_sub_value['contribution'];
+                    $form['qna'] = $form['qna'] + $sub_sub_value['qna'];
+                }
+                
+                //average
+                $num  = count($student_forms);
+                $form['initiative'] =  $form['initiative'] / $num;
+                $form['understand'] =  $form['understand'] / $num;
+                $form['contribution'] = $form['contribution'] / $num;
+                $form['qna'] = $form['qna'] / $num;
+                    
+                array_push($ave_forms, $form);
+            }
+            
+            
+        }
+        //print_r($ave_forms);die();
+        $response['forms'] = $ave_forms;
+        
+        header('Content-type: application/json');
+        exit(json_encode($response));
       }
       
 }

@@ -6,6 +6,14 @@
         <div class="col-sm-6">
             <p id="title" name="title" class="form-control-static">Project Title</p>
         </div>
+        <label for="title" class="col-sm-4 control-label">Presentation type</label>
+        <div class="col-sm-6">
+            <p id="type" class="form-control-static"></p>
+        </div>
+        <label for="title" class="col-sm-4 control-label">Semester</label>
+        <div class="col-sm-6">
+            <p id="sem" class="form-control-static"></p>
+        </div>
     </div>
     
     <div class="bottom_10 col-sm-10 col-sm-offset-1"><hr /></div>

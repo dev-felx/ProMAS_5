@@ -43,16 +43,25 @@ class Archive extends CI_Controller {
         $data['result'] = $this->archive_model->profile($id);
         $data['part'] = $this->archive_model->participants($id);
         $data['docu'] = $this->archive_model->documents($id);
+        $data['abst'] = $this->archive_model->abst($id);
         $this->load->view('archive/search/profile_view', $data);
     }
 
     public function explore(){
+        $data['a_y'] = $this->archive_model->get_academic_year();
+        $data['dep'] = $this->archive_model->get_department();
         $data['res'] = $this->archive_model->explore();
         $this->load->view('archive/search/explore', $data);
     }
     
-    public function explore_filter($term){
-        $data['res'] = $this->archive_model->explore_filter($term);
-        $this->load->view('archive/search/explore', $data);
+    public function explore_filter(){
+        $term = $this->input->post('filter_cat');
+        $did = $this->archive_model->get_department_id($term);
+        $data['res'] = $this->archive_model->filter_alpha($term);
+        $data['res'] = $this->archive_model->filter_year($term);
+        if(isset($did['department_id'])){
+            $data['res'] = $this->archive_model->filter_department($did['department_id']);
+        }
+        $this->load->view('archive/search/filter', $data);
     }
 }

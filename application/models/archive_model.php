@@ -90,10 +90,27 @@ class Archive_model extends CI_Model {
         }
     }
     
+    public function abst($id){
+        $this->db->select('*');
+        $this->db->from('archive_documents'); 
+        $this->db->where('project_profile_id', $id);
+        $this->db->where('document_name', 'Project abstract');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            $response['error'] = 'Abstract not Found';
+            return $response;
+        }
+    }
+    
     public function explore(){
         $this->db->select('*');
         $this->db->from('project_profile');
-        $this->db->order_by('project_profile_id', 'desc');
+        $this->db->order_by("project_profile_id", "desc");
         $query = $this->db->get();
         
         if ($query->num_rows() > 0){
@@ -106,7 +123,25 @@ class Archive_model extends CI_Model {
         }
     }
     
-    public function explore_filter($ft){
+    public function get_academic_year(){
+        $q = "SELECT DISTINCT academic_year FROM project_profile";
+        $query = $this->db->query($q);
+        foreach ($query->result() as $row) {
+            $response[] = $row;
+        }
+        return $response;
+    }
+    
+    public function get_department(){
+        $q = "SELECT DISTINCT shortform FROM departments INNER JOIN project_profile WHERE departments.department_id = project_profile.department_id";
+        $query = $this->db->query($q);
+        foreach ($query->result() as $row) {
+            $response[] = $row;
+        }
+        return $response;
+    }
+    
+    public function filter_alpha($ft){
         $this->db->select('*');
         $this->db->from('project_profile');
         $this->db->order_by('project_name', $ft);
@@ -121,6 +156,49 @@ class Archive_model extends CI_Model {
             //return FALSE;
         }
     }
+    
+    public function filter_year($ft){
+        $this->db->select('*');
+        $this->db->from('project_profile');
+        $this->db->where('academic_year', $ft);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            //return FALSE;
+        }
+    }
+    
+    public function filter_department($ft){
+        $this->db->select('*');
+        $this->db->from('project_profile');
+        $this->db->where('department_id', $ft);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $response[] = $row;
+            }
+            return $response; 
+        }else{
+            //return FALSE;
+        }
+    }
+    
+    public function get_department_id($name){
+        $this->db->select('department_id');
+        $this->db->from('departments');
+        $this->db->where('shortform', $name);
+        $query =  $this->db->get();
+        $result = $query->row_array();
+        return $result;
+    }
+    
+    
     
     /*========================================
      * Access functions
