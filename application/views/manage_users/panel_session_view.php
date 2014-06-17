@@ -97,8 +97,14 @@
                 </div>
                 
             </form>
-        </div>
+            <div id="notify" class="hidden">
+                <div class="row-fluid hr"><hr/></div>
+                <div class="row-fluid">
+                    <div ><a id="notify_btn" type="button" class="btn btn-success">Send Notification</a></div>
+                </div>
+            </div>
     </div>
+</div>
 </div>
 <script>
     $(document).ready(function(){
@@ -133,6 +139,7 @@
                          
                          $('#venue').html('<p class="">Venue : '+data.session_details[0].venue+'</p><p class="">Date & Time : '+data.session_details[0].time+'</p>');      
                          $('.detail').removeClass('hidden');
+                         $('#notify').removeClass('hidden');
                      }else{
                         $('#msg_frm').html('<div class="alert alert-danger">Error Fetching Data</div>');
                      }
@@ -237,16 +244,19 @@
                 return false;
          });
          
-         $('#member_ch_now').click(function(){
-                var pro_id = $('#project').val();
-                var user_id = $('#member_ch').val();
-                if(confirm('Warning: This panel head will be added this group')){
+         
+         $('#notify_btn').click(function(){
+                var panel_head_id = $('#project').val();
+                if(confirm('Warning: Notification will be sent to panel members and panel head of this session')){
                     var t = "<?php echo site_url(); ?>";
-                    var c = t+"/manage_users/group/ch_panel";
-                    $.post( c, {id: user_id, pro_id: pro_id}).done(function(data) {
+                    var c = t+"/manage_users/panel_session/notify";
+                    $.post( c, { panel_head_id: panel_head_id}).done(function(data) {
                         if(data.status === 'true'){
                             $('#project').trigger('change');
-                            $('#can_member').trigger('click');
+                            $('#msg_frm').html('<div class="alert alert-success">Notification has been sent to Panel head and panel members</div>');
+                        }else{
+                            $('#project').trigger('change');
+                            $('#msg_frm').html('<div class="alert alert-danger">Notification has not been sent</div>');
                         }
                     },'json');
                 }else{
