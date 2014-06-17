@@ -39,7 +39,7 @@ class File extends CI_Controller{
         
         }elseif ($this->session->userdata['type']=='student'){
             $values= array(
-                'group_no'=>  $this->session->userdata['project_id'],
+                'group_no'=>  $this->session->userdata['group_no'],
             );
             
             $data['documents']=  $this->document_model->get_document($values);

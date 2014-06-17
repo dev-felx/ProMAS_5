@@ -68,7 +68,7 @@
                        echo '<div  class="alert alert-info text-center">No files have been uploded</div>';
                    }
                 ?>
-               <p><?php// echo $links; ?></p>
+
 
                <!--end upload form-->
                   
