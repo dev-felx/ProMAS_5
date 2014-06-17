@@ -47,6 +47,7 @@ $('body').on('hidden.bs.modal', '.modal', function () {
             <tbody>
                 
             <?php $i=1; 
+            if($documents!=NULL){
                foreach ($documents as $row){
                    if(($row[0]['doc_status'])==2){//skip rows with shared files
                        continue;
@@ -99,7 +100,9 @@ $('body').on('hidden.bs.modal', '.modal', function () {
                    echo '</tr>'; 
                    $i++;
                 }
-            ?>
+            }else{?>
+            <div class="alert alert-info">No documents submitted </div>
+            <?php } ?>
             </tbody>
             </table>
            </div>

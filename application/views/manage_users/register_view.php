@@ -7,10 +7,34 @@
 ?>
 
 <div class='container-fluid'>
+    
+    <div class='row' style="margin-bottom: -5px; ">
+        <div class='pull-left'><h4>Manage Users - <?php echo ucfirst(str_replace('_',' ', $user));   ?></h4></div>
+        <?php if(($user == 'student') || ($user =='supervisor') ){ ?>
+            <div class=" pull-right">
+            <button type="button" class="btn btn-success dropdown-toggle push_right_bit" data-toggle="dropdown" >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>">Single</a></li>
+                <li class="divider"></li>
+                <li><a href="<?php echo site_url(); ?>/manage_users/add_group/group/<?php echo $user; ?>">Multiple</a></li>
+            </ul>
+            </div>
+        <?php }else{  ?>
+            <div class=" pull-right" >
+            <a type="button" class="btn btn-success push_right_bit" href="<?php echo site_url(); ?>/manage_users/add_user/individual/<?php echo $user; ?>"  >Add <?php echo ucfirst(str_replace('_',' ', $user));   ?></a>
+            </div>
+        <?php } ?>
+        
+    </div>
+    
+    <div class="row">
+    <div class=""><div class="hr" ><hr/></div></div>
+</div>
  <?php 
-    $this->load->view('manage_users/manage_user_head_view');
-           
+    //$this->load->view('manage_users/manage_user_head_view');
+          
     if(isset($results) && !isset($exists)){
+        
     ?>
     <div class="row">
         <div class="table-responsive col-md-8">
@@ -43,7 +67,7 @@
                
  <?php }//end if
  elseif(isset($exists) && !isset($results)){
-    ?>           
+      ?>           
     <div class="row">
         <div class="table-responsive col-md-8" >
             <?php if($user == 'student'){ ?>
@@ -76,7 +100,9 @@
            ?></table>
         </div>
      </div>
-    <?php }elseif( isset($results) && isset($exists)){?>
+    <?php }elseif( isset($results) && isset($exists)){
+        ?>
+    
     <div class="row">
         <div class="table-responsive col-md-8">
             <table class="table table-striped table-bordered table-condensed">
@@ -136,4 +162,5 @@
         </div>
      </div>
     <?php } ?>
+    <a class="btn btn-warning" href="<?php echo site_url(); ?>/manage_users/manage/users/<?php echo $user; ?>" onclick="" role="button" >Cancel</a>
 </div>
