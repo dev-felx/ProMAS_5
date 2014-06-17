@@ -142,7 +142,7 @@
                             $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'</li>');
                          }
                          }else{
-                            $('#members').append('<div class="alert alert-warning">No panel members added</div>');
+                            $('#members').append('<li class="alert alert-warning">No panel members added</li>');
                          }
                          if(data.session_details[0]!=null){
                             $('#venue').html('<p class="">Venue : '+data.session_details[0].venue+'</p><p class="">Date & Time : '+data.session_details[0].time+'</p>');      
