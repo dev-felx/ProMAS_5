@@ -72,7 +72,16 @@ class Project_model extends CI_Model{
         }
     }
     
-    public function request_title($id, $data){
+    public function get_title($id){
+        $this->db->select('*');
+        $this->db->from('student_projects');
+        $this->db->where('project_id', $id);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        return $result;
+    }
+    
+    public function update_title($id, $data){
         $this->db->where('project_id', $id);
         return $this->db->update('student_projects', $data);
     }

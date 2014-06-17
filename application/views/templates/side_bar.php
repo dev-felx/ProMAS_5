@@ -113,6 +113,7 @@
                                     
                                ),
         'Project' => array(
+                                    array('Title' => 'project/request_title'),
                                     array('Groups' => 'manage_users/group'),
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
@@ -142,6 +143,7 @@
      //for supervisor
     $accordion['supervisor'] = array(
         'Project' => array(
+                                    array('Title' => 'project/request_title'),
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
@@ -166,7 +168,7 @@
     
     $accordion['student'] = array(
         'Project' => array(
-                                    array('Request Title' => 'project/request_title'),
+                                    array('Title' => 'project/request_title'),
                                     array('Documents' => 'project/file'),
                                     array('Announcements' => 'project/announce'),
                                     array('Notifications' => 'project/notify'),
