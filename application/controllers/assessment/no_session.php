@@ -30,7 +30,7 @@ class No_session extends CI_Controller{
         $data['views'] = array('/landing/panel_land');
         $data['sub_title'] = 'My Presentation Assessment Session';
         //load view
-        
+        $data['title'] = 'sProMAS | Assessment Panels';
         $this->load->view('templates/header_out',$data);
         $this->load->view('landing/no_sess_cont');
         $this->load->view('templates/footer');

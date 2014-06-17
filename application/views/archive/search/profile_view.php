@@ -23,7 +23,7 @@
                             <?php
                                 if(!isset($abst['error'])){
                                 foreach ($abst as $a){?>
-                                    <object data="<?php print $a->document_path ?>" type="application/pdf" width="100%" height="70%">
+                            <object data="<?php echo base_url(); ?><?php print $a->document_path ?>" type="application/pdf" width="100%" height="70%">
                                         <p>It appears you don't have a PDF plugin for this browser. <a href="<?php print $a->document_path ?>">click here to download the PDF file.</a></p>
                                     </object>
                                 <?php
