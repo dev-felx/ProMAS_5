@@ -15,9 +15,38 @@ class Assess_panel extends CI_Controller{
         check_session_roles($roles);
         $this->load->model('assessment_model');
         $this->load->model('announcement_model');
+        $this->load->model('panel_session_model');
+        $this->load->model('access/manage_users');
     }
     
-    public function index(){
+    public function index($user_id){
+        //prepare data
+        $data['sess_det']=$this->panel_session_model->get_session_details(array('panel_head_id' => $user_id));
+        
+        if($data['sess_det'] != null){
+            $data['sess_head']=$this->manage_users->get_non_student_no_role(array('user_id'=>$user_id));
+            $data['sess_mem']=$this->panel_session_model->get_members(array('panel_head_id' => $user_id));
+            $data['sess_grp']=$this->panel_session_model->get_projects(array('owner' => $user_id));
+            
+        }
+        
+        //prepare view
+        $data['views'] = array('/landing/panel_land');
+        $data['sub_title'] = 'My Presentation Assessment Session';
+        //load view
+        
+        page_load($data);
+    }
+    
+    public function sess_mem($user_id){
+        $exist=$this->panel_session_model->get_members(array('panel_member_id' => $user_id));
+        if($exist){
+            $data['sess_det']=$this->panel_session_model->get_session_details(array('panel_head_id' =>  $exist[0]['panel_head_id']));
+            $data['sess_head']=$this->manage_users->get_non_student_no_role(array('user_id'=>$exist[0]['panel_head_id']));
+            $data['sess_mem']=$this->panel_session_model->get_members(array('panel_head_id' => $exist[0]['panel_head_id']));
+            $data['sess_grp']=$this->panel_session_model->get_projects(array('owner' => $exist[0]['panel_head_id']));
+        }
+        
         //prepare view
         $data['views'] = array('/landing/panel_land');
         $data['sub_title'] = 'My Presentation Assessment Session';
