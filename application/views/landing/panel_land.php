@@ -13,9 +13,9 @@
   <div class="panel-body">
       <form  class="form-horizontal" role="form">
           <div class="form-group">
-                <label class="col-sm-3 control-label text-right">Panel Head</label>
+              <label class="col-sm-3 control-label text-right">Panel Head</label>
                 <div class="col-sm-9">
-                  <p class="form-control-static text-left"><?php echo $sess_head[0]['first_name'].' '.$sess_head[0]['last_name']; ?></p>
+                  <p class="form-control-static text-left"><?php echo $sess_head[0]['first_name'].' '.$sess_head[0]['last_name'].str_repeat('&nbsp;', 20).'Email: '.$sess_head[0]['username']; ?></p>
                 </div>
           </div>
           <div class="form-group">
@@ -43,7 +43,7 @@
                     <?php 
                         foreach ($sess_mem as $value) {
                             echo '<li class="list-group-item">';
-                            echo $value['first_name'].' '.$value['last_name'];
+                            echo $value['first_name'].' '.$value['last_name'].str_repeat('&nbsp;', 20).'Email: '.$value['email'];
                             echo '</li>';
                         }
                      ?>               
