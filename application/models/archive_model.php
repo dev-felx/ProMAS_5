@@ -133,7 +133,7 @@ class Archive_model extends CI_Model {
     }
     
     public function get_department(){
-        $q = "SELECT DISTINCT shortform FROM departments INNER JOIN project_profile WHERE departments.department_id = project_profile.department_id";
+        $q = "SELECT DISTINCT name FROM departments INNER JOIN project_profile WHERE departments.department_id = project_profile.department_id";
         $query = $this->db->query($q);
         foreach ($query->result() as $row) {
             $response[] = $row;
@@ -192,12 +192,20 @@ class Archive_model extends CI_Model {
     public function get_department_id($name){
         $this->db->select('department_id');
         $this->db->from('departments');
-        $this->db->where('shortform', $name);
+        $this->db->where('name', $name);
         $query =  $this->db->get();
         $result = $query->row_array();
         return $result;
     }
     
+    public function get_department_name($id){
+        $this->db->select('name');
+        $this->db->from('departments');
+        $this->db->where('department_id', $id);
+        $query =  $this->db->get();
+        $result = $query->row_array();
+        return $result;
+    }
     
     
     /*========================================
