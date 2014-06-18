@@ -128,16 +128,27 @@
                         //populate students
                         $('#projects').html('');
                         $('#members').html('');
+                        if(data['projects']!=null){
                         for(var i = 0; i < data['projects'].length; i++){
                             var x = data['projects'][i].group_no+" - "+data['projects'][i].project_name;
                             $('#projects').append('<li id="'+data['projects'][i].project_id+'" class="project_btn list-group-item">'+x+'<span class="remove text-danger glyphicon glyphicon-remove pull-right"><span></li>');
                          }
+                         }else{
+                            $('#projects').append('<div class="alert alert-warning">No projects added</div>');
+                         }
+                         if(data['members']!=null){
                          for(var i = 0; i < data['members'].length; i++){
                             var y = data['members'][i].first_name+" "+data['members'][i].last_name;
                             $('#members').append('<li id="'+data['members'][i].panel_member_id+'" class="member_btn list-group-item">'+y+'</li>');
                          }
-                         
-                         $('#venue').html('<p class="">Venue : '+data.session_details[0].venue+'</p><p class="">Date & Time : '+data.session_details[0].time+'</p>');      
+                         }else{
+                            $('#members').append('<li class="alert alert-warning">No panel members added</li>');
+                         }
+                         if(data.session_details[0]!=null){
+                            $('#venue').html('<p class="">Venue : '+data.session_details[0].venue+'</p><p class="">Date & Time : '+data.session_details[0].time+'</p>');      
+                         }else{
+                            $('#venue').html('<p>Venue and Time not defined</p>'); 
+                         }
                          $('.detail').removeClass('hidden');
                          $('#notify').removeClass('hidden');
                      }else{
