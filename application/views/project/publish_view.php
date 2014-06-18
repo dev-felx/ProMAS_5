@@ -36,7 +36,7 @@
                         <label>Choose project</label>
                         <select class="form-control" id="projects" name="projects">
                             <?php foreach ($groups as $group){ 
-                             echo "<option value='".$group['project_id']."'>".$group['title']."</option>";   
+                             echo "<option value='".$group['group_no']."'>".$group['title']."</option>";   
                             }
                             ?>
                         </select>

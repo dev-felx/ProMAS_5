@@ -161,6 +161,7 @@ class Add_user extends CI_Controller {
                                     $project = $this->project_model->get_project_row($value);
                                     $data = array(
                                         'project_id' => $value,
+                                        'group_no' => $project['group_no'],
                                         'owner' => $userdata[0]['user_id'],
                                         'space_id' => $this->session->userdata('space_id'),
                                         'project_name'=> $project['title']

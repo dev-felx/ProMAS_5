@@ -8,8 +8,13 @@
 class Panel_session extends CI_Controller{
     
     function __construct() {
-         
+        
+        
         parent::__construct();
+        
+        $roles = array('superuser','administrator','coordinator');
+        check_session_roles($roles);
+        
         $this->load->model('project_model');
         $this->load->model('panel_session_model');
         $this->load->model('access/manage_users');
