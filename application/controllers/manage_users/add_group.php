@@ -92,7 +92,7 @@ class Add_group extends CI_Controller{
                         //if the group does not exist
                         if(!$result){
                             $this->load->model('college_department_model');
-                            $resoo = $this->college_department_model->get_all_depart(array('college'=>1));
+                            $resoo = $this->college_department_model->get_all_depart(array('department_id >'=>0));
                             $values['department_id'] = $resoo[0]['department_id'];
                             $result = $this->manage_users->add_group($values);
                         }//end if the value does not exist
