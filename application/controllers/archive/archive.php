@@ -64,4 +64,14 @@ class Archive extends CI_Controller {
         }
         $this->load->view('archive/search/filter', $data);
     }
+    
+    public function download($file_path){
+        
+        $this->load->helper('file');
+        $this->load->helper('download');
+        
+        $data = file_get_contents(base64_decode($file_path));
+        force_download(basename(base64_decode($file_path)), $data);
+        
+    }
 }

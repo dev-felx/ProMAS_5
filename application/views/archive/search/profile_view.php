@@ -13,8 +13,10 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#abstract" data-toggle="tab">Abstract</a></li>
                         <li><a href="#details" data-toggle="tab">Details</a></li>
-                        <li><a href="#documents" data-toggle="tab">Documents</a></li>
-                        <li><a href="#participants" data-toggle="tab">Participants</a></li>
+                        <?php if($this->session->userdata('archive_level') == 2 || $this->session->userdata('archive_level') == 3) {?>
+                            <li><a href="#documents" data-toggle="tab">Documents</a></li>
+                            <li><a href="#participants" data-toggle="tab">Participants</a></li>
+                        <?php }?>
                         <li><a href="#permission" data-toggle="tab">Request more Info</a></li>
                     </ul>
                     <!-- Tab panes -->
@@ -24,7 +26,7 @@
                                 if(!isset($abst['error'])){
                                 foreach ($abst as $a){?>
                             <object data="<?php echo base_url().$a->document_path; ?>" width="100%" height="70%">
-                                        <p>It appears you don't have a PDF plugin for this browser. <a href="<?php print $a->document_path ?>">click here to download the PDF file.</a></p>
+                                        <p>It appears you don't have a PDF plugin for this browser. <a href="<?php echo site_url(); ?>/archive/archive/download/<?php print $a->document_path; ?>">click here to download the PDF file.</a></p>
                                     </object>
                                 <?php
                                 } } else {?>
@@ -33,20 +35,22 @@
                             ?>
                         </div>
                         <div class="tab-pane" id="details">
-                            <p>This project was done during the academic year, under the department of 
+                            <p>This project was done during the academic year <?php print $v->academic_year?>, under the department of 
                                  at University of Dar es Salaam.</p>
                         </div>
                         <div class="tab-pane" id="documents">
                             <div class="list-group col-sm-8">
-                            <?php
-                                if(!isset($docu['error'])){
-                                foreach ($docu as $d){?>
-                                <li class="list-group-item list-group-item-info"><?php print $d->document_name; ?><a href="<?php print $d->document_path ?>" class="btn btn-xs btn-primary pull-right">Download</a></li>
-                                <?php
-                                } } else {?>
+                            <?php if(!isset($docu['error'])){
+                                foreach ($docu as $d){
+                                    if ($this->session->userdata('archive_level') == 2 && $d->document_name == 'Final Report' ){?>
+                                        <li class="list-group-item list-group-item-info"><?php print $d->document_name; ?><a href="<?php echo site_url(); ?>/archive/archive/download/<?php print $a->document_path; ?>" class="btn btn-xs btn-primary pull-right">Download</a></li>
+                                    <?php }else { ?>
+                                        <li class="list-group-item list-group-item-info"><?php print $d->document_name; ?><a href="<?php echo site_url(); ?>/archive/archive/download/<?php print $a->document_path; ?>" class="btn btn-xs btn-primary pull-right">Download</a></li>
+                                    <?php } ?>
+                                <?php } 
+                            } else {?>
                                 <p><?php echo $docu['error']?></p>
-                            <?php }
-                            ?>
+                            <?php } ?>
                             </div>
                         </div>
                         <div class="tab-pane" id="participants">
