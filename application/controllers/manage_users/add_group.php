@@ -31,8 +31,8 @@ class Add_group extends CI_Controller{
     
     public function download($user){
         $this->load->helper('download');
-        $acc_yr = str_replace('/','-' ,  $this->acc_year[0]['academic_year']);
-        $filename= './sProMAS_documents/'.$acc_yr.'/registration_templates/'.$user.'.csv';
+        //$acc_yr = str_replace('/','-' ,  $this->acc_year[0]['academic_year']);
+        $filename= './sProMAS_documents/registration_templates/'.$user.'.csv';
         $name = $user.'.csv';
         //reading the file content
         $data = file_get_contents($filename);
